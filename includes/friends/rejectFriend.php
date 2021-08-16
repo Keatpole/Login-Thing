@@ -1,0 +1,29 @@
+<?php
+
+session_start();
+
+require_once "../other/dbh.php";
+require_once "../other/functions.php";
+
+if (!isset($_SESSION["uid"]) || !isset($_POST["submit"])) {
+    header("location: ../../.");
+    exit();
+}
+
+$sql = "DELETE FROM friendreq WHERE id=?;";
+
+$stmt = mysqli_stmt_init($conn);
+if (!mysqli_stmt_prepare($stmt, $sql)) {
+    header("location: ../../friendreq?error=stmtfailed");
+    exit();
+}
+
+mysqli_stmt_bind_param($stmt, "s", $_POST["id"]);
+mysqli_stmt_execute($stmt);
+mysqli_stmt_close($stmt);
+
+if ($_POST["return"]) {
+    header("location: ../../" . $_POST["return"] . "error=none");
+} else {
+    header("location: ../../friendreq?error=none");
+}
