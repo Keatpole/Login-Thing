@@ -15,7 +15,7 @@ foreach (explode(",", getTable($conn, "groups", ["id", $_POST["groupid"]])["memb
     if ($v == $_SESSION["id"]) $access = true;
 }
 if (!$access) {
-    header("location: groups");
+    header("location: ../../groups");
     exit();
 }
 

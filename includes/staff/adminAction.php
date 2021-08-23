@@ -13,6 +13,8 @@ if ($_SESSION["rank"] < 2 || !isset($_POST["submit"]) || !$settings->enable_admi
 $username = $_POST["username"];
 $action = $_POST["action"];
 
+$user = getTable($conn, "users", ["uid", $username]);
+
 if ($action == "3") {
 
     $msgInfo = getTable($conn, "messages", ["id", $username]);
@@ -47,7 +49,7 @@ if ($action == "3") {
     $action = "Admin";
     $type = "DeleteComment";
     session_start();
-    mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["uid"], $username, $action, $type);
+    mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["id"], $user["id"], $action, $type);
     mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
 
@@ -78,17 +80,84 @@ elseif ($action == "4") {
         exit();
     }
     $action = "Admin";
-    $type = "Verify";
+    $type = "(Un)Verify";
     session_start();
-    mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["uid"], $username, $action, $type);
+    mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["id"], $user["id"], $action, $type);
     mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
 
     header("location: ../../moderation?error=none");
     exit();
 }
+elseif ($action == "5") {
 
-$user = getTable($conn, "users", ["uid", $username]);
+    $muted = null;
+
+    foreach (getTable($conn, "mutes", "", true) as $v) {
+        if ($v["target"] == $user["id"]) $muted = $v;
+    }
+
+    if ($muted) {
+
+        $sql = "DELETE FROM mutes WHERE id = ?;";
+        $stmt = mysqli_stmt_init($conn);
+        if (!mysqli_stmt_prepare($stmt, $sql)) {
+            header("location: ../../moderation?error=stmtfailed");
+            exit();
+        }
+        mysqli_stmt_bind_param($stmt, "i", $v["id"]);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+
+        $sql = "INSERT INTO log (uid, targetsUid, action, type) VALUES (?, ?, ?, ?);";
+        $stmt = mysqli_stmt_init($conn);
+        if (!mysqli_stmt_prepare($stmt, $sql)) {
+            header("location: ../../moderation?error=stmtfailed");
+            exit();
+        }
+        $action = "Admin";
+        $type = "UnMute";
+        session_start();
+        mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["id"], $user["id"], $action, $type);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+
+        header("location: ../../moderation?error=none");
+        exit();
+
+    }
+    else {
+
+        $sql = "INSERT INTO mutes (muter, target) VALUES (?, ?);";
+        $stmt = mysqli_stmt_init($conn);
+        if (!mysqli_stmt_prepare($stmt, $sql)) {
+            header("location: ../../moderation?error=stmtfailed");
+            exit();
+        }
+        mysqli_stmt_bind_param($stmt, "ss", $_SESSION["id"], $user["id"]);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+
+        $sql = "INSERT INTO log (uid, targetsUid, action, type) VALUES (?, ?, ?, ?);";
+        $stmt = mysqli_stmt_init($conn);
+        if (!mysqli_stmt_prepare($stmt, $sql)) {
+            header("location: ../../moderation?error=stmtfailed");
+            exit();
+        }
+        $action = "Admin";
+        $type = "Mute";
+        session_start();
+        mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["id"], $user["id"], $action, $type);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+
+        header("location: ../../moderation?error=none");
+        exit();
+
+    }
+
+}
+
 
 if ($user == null) {
     header("location: ../../moderation?error=usernotfound");
@@ -120,7 +189,7 @@ if (!mysqli_stmt_prepare($stmt, $sql)) {
 }
 $type = "Admin";
 session_start();
-mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["uid"], $username, $type, $action);
+mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["id"], $user["id"], $type, $action);
 mysqli_stmt_execute($stmt);
 mysqli_stmt_close($stmt);
 

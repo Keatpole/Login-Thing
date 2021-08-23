@@ -13,7 +13,34 @@ if ($_SESSION["rank"] < 1 || !isset($_POST["submit"]) || !$settings->enable_mod_
 $username = $_POST["username"];
 $action = $_POST["action"];
 
-if (getUser($conn, $username) != null) {
+$user = getTable($conn, "users", ["uid", $username]);
+
+if ($action == 4) {
+
+    $sql = "INSERT INTO modsuggestions (suggester, targetsUid, type) VALUES (?, ?, ?);";
+    $stmt = mysqli_stmt_init($conn);
+    if (!mysqli_stmt_prepare($stmt, $sql)) {
+        header("location: ../../moderation?error=stmtfailed");
+        exit();
+    }
+    $action = "(Un)Mute";
+    mysqli_stmt_bind_param($stmt, "sss", $_SESSION["id"], $username, $action);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+
+    $sql = "INSERT INTO log (uid, targetsUid, action, type) VALUES (?, ?, ?, ?);";
+    $stmt = mysqli_stmt_init($conn);
+    if (!mysqli_stmt_prepare($stmt, $sql)) {
+        header("location: ../../moderation?error=stmtfailed");
+        exit();
+    }
+    $type = "Mod";
+    mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["uid"], $username, $type, $action);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+
+}
+elseif ($user != null) {
 
     $sql = "INSERT INTO modsuggestions (suggester, targetsUid, type) VALUES (?, ?, ?);";
     $stmt = mysqli_stmt_init($conn);
@@ -32,7 +59,7 @@ if (getUser($conn, $username) != null) {
         exit();
     }
     $type = "Mod";
-    mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["uid"], $username, $type, $action);
+    mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["uid"], $user["id"], $type, $action);
     mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
 }

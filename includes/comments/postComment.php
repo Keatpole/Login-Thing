@@ -10,6 +10,13 @@ if (!isset($_SESSION["rank"]) || !isset($_POST["submit"]) || !$settings->enable_
     exit();
 }
 
+foreach (getTable($conn, "mutes", "", true) as $v) {
+    if ($v["target"] == $_SESSION["id"]) {
+        header("location: ../../.");
+        exit();
+    }
+}
+
 if (isset($_POST["replyid"])) {
     $sql = "INSERT INTO `messages`(`message`, `author`, `replyTo`) VALUES (?, ?, ?)";
 } else {

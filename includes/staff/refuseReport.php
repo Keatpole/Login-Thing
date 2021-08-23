@@ -28,7 +28,7 @@ if (!mysqli_stmt_prepare($stmt, $sql)) {
 }
 $action = "RefuseReport";
 session_start();
-mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["uid"], getUser($conn, "", "", $_GET["target"])["uid"], $action, $_GET["reason"]);
+mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["uid"], $_GET["target"], $action, $_GET["reason"]);
 mysqli_stmt_execute($stmt);
 mysqli_stmt_close($stmt);
 

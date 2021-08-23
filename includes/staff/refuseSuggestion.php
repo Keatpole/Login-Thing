@@ -20,6 +20,8 @@ mysqli_stmt_bind_param($stmt, "s", $_GET["id"]);
 mysqli_stmt_execute($stmt);
 mysqli_stmt_close($stmt);
 
+$user = getTable($conn, "users", ["uid", $_GET["uid"]]);
+
 $sql = "INSERT INTO log (uid, targetsUid, action, type) VALUES (?, ?, ?, ?);";
 $stmt = mysqli_stmt_init($conn);
 if (!mysqli_stmt_prepare($stmt, $sql)) {
@@ -28,7 +30,7 @@ if (!mysqli_stmt_prepare($stmt, $sql)) {
 }
 $action = "RefuseSuggestion";
 session_start();
-mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["uid"], $_GET["uid"], $action, $_GET["type"]);
+mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["uid"], $user["id"], $action, $_GET["type"]);
 mysqli_stmt_execute($stmt);
 mysqli_stmt_close($stmt);
 

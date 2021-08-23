@@ -14,26 +14,37 @@
             if (!isset($_GET["includefromprofile"])) {
                 echo "<h4 class='center'>Welcome back, " . $_SESSION["uid"] . "</h4>";
 
+                $muted = null;
+
+                foreach (getTable($conn, "mutes", "", true) as $v) {
+                    if ($v["target"] == $_SESSION["id"]) $muted = $v;
+                }
+
                 if ($settings->enable_posting_comments) {
 
-
-                    ?>
-
-                    <form action="includes/comments/postComment" method="post">
-                        <?php
-
-                            if (isset($_GET["reply"])) {
-                                echo "<input name=\"replyid\" type=hidden value=\"" . $_GET["reply"] . "\" /><input name=\"message\" id=\"inputmsg\" style=\"line-height: 3.3em\" placeholder=\"Reply...\" />";
-                            } else {
-                                echo "<input name=\"message\" id=\"inputmsg\" style=\"line-height: 3.3em\" placeholder=\"What's on your mind?\" />";
-                            }
+                    if ($muted) {
+                        echo "<p>You have been muted by " . getTable($conn, "users", ["id", $muted["muter"]])["uid"]  . " at " . $muted["date"] . "</p>";
+                    } else {
 
                         ?>
 
-                        <button class="button" type="submit" name="submit">Post</button>
-                    </form>
+                        <form action="includes/comments/postComment" method="post">
+                            <?php
 
-                    <?php
+                                if (isset($_GET["reply"])) {
+                                    echo "<input name=\"replyid\" type=hidden value=\"" . $_GET["reply"] . "\" /><input name=\"message\" id=\"inputmsg\" style=\"line-height: 3.3em\" placeholder=\"Reply...\" />";
+                                } else {
+                                    echo "<input name=\"message\" id=\"inputmsg\" style=\"line-height: 3.3em\" placeholder=\"What's on your mind?\" />";
+                                }
+
+                            ?>
+
+                            <button class="button" type="submit" name="submit">Post</button>
+                        </form>
+
+                        <?php
+
+                    }
 
 
                 }
@@ -82,6 +93,13 @@
                         }
                     } else {
                         $user = getTable($conn, "users", ["id", $res[2]]);
+
+                        $muted = "";
+
+                        foreach (getTable($conn, "mutes", "", true) as $v) {
+                            if ($v["target"] == $user["id"]) $muted = " (Muted)";
+                        }
+
                         if ($_SESSION["rank"] > 0) {
 
                             if ($user["verified"] == 0) {
@@ -92,14 +110,14 @@
 
                                     <h2>
                                         [<?= $res[0] ?>]
-                                        <a style="color: green;" href="user?u=<?= $res[2] ?>"><?= $user["uid"] ?></a>:
+                                        <a style="color: green;" href="user?u=<?= $res[2] ?>"><?= $user["uid"] ?></a><?= $muted ?>:
                                     </h2>
 
                                 <?php
 
                             }
                             elseif ($user["verified"] == 1) {
-                                echo "<h2>[" . $res[0] . "] <a style=\"color: green;\" href=\"user?u=" . $res[2] . "\">" . $user["uid"] . "</a><p style=\"display: inline;color: #ccaa00;\" title=\"Verified\">✔</p>:</h2>";
+                                echo "<h2>[" . $res[0] . "] <a style=\"color: green;\" href=\"user?u=" . $res[2] . "\">" . $user["uid"] . "</a><p style=\"display: inline;color: #ccaa00;\" title=\"Verified\">✔</p>" . $muted . ":</h2>";
                             }
                         } else {
                             if ($user["verified"] == 0) {

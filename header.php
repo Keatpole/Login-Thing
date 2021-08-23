@@ -154,13 +154,29 @@
                     $say = "Fill in a proper username!";
                     break;
                 case 'targetisimmune':
-                    $say = "The target is immune! (You can only affect rank 1 and below)";
+                    $say = "The target is immune!";
                     break;
                 case 'authfailed':
                     $say = "Could not authorize access to this command! Make sure you are logged in to the right account.";
                     break;
                 case 'stmtfailed':
                     $say = "Something went wrong! (error code: stmtfailed-" . $_GET["webname"] . ")";
+                    break;
+                # gcf = group command failed
+                case 'gcfdelete':
+                    $say = "To delete a group, please type: !delete (Group name)";
+                    break;
+                case 'gcfkick':
+                    $say = "That user is not in this group!";
+                    break;
+                case 'gcdone':
+                    echo "<p style='color: green;'>Command executed!</p>";
+                    break;
+                case'gcnotfound':
+                    $say = "Command not found!";
+                    break;
+                case 'gchelp':
+                    echo "<p style='color: green;'>Commands: !kick (Username), !delete (Group name), !help</p>";
                     break;
                 default:
                     if ($_GET["webname"] == "index") {

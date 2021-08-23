@@ -38,7 +38,7 @@
                         <option value="3">Threats</option>
                         <option value="4">Spam</option>
                         <option value="5">Scam</option>
-                        <option value="6">Other</option>
+                        <option value="9">Other</option>
                     </select></br></br>
                     <textarea name="otherreason" placeholder='If you chose "Other" or any comments'></textarea>
                     </br><button type="submit" name="submit" class="button">Confirm</button>

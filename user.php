@@ -134,7 +134,7 @@
             }
 
             if ($type == "friend") {
-                echo "<a href=\"groups?u=" . $_GET["u"] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Group</a></br>";
+                echo "</br><a href=\"groups?u=" . $_GET["u"] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Group</a></br>";
             }
 
             if ($settings->enable_report) {

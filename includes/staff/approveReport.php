@@ -53,7 +53,7 @@ if (!mysqli_stmt_prepare($stmt, $sql)) {
 }
 $action = "ApproveReport - " . rankFromNum($action);
 session_start();
-mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["uid"], getTable($conn, "users", ["id", $target])["uid"], $action, $reason);
+mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["id"], $target, $action, $reason);
 mysqli_stmt_execute($stmt);
 mysqli_stmt_close($stmt);
 

@@ -31,7 +31,7 @@ switch ($_POST["reason"]) {
     case 5:
         $reason = "Scam";
         break;
-    case 6:
+    case 9:
         $reason = "Other";
         break;
     default:

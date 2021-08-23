@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 23. Aug, 2021 13:07 PM
+-- Generation Time: 23. Aug, 2021 17:33 PM
 -- Tjener-versjon: 10.4.20-MariaDB
 -- PHP Version: 8.0.9
 
@@ -169,6 +169,19 @@ CREATE TABLE `modsuggestions` (
 -- --------------------------------------------------------
 
 --
+-- Tabellstruktur for tabell `mutes`
+--
+
+CREATE TABLE `mutes` (
+  `id` int(11) NOT NULL,
+  `muter` int(255) NOT NULL,
+  `target` int(255) NOT NULL,
+  `date` date NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Tabellstruktur for tabell `reports`
 --
 
@@ -262,6 +275,12 @@ ALTER TABLE `modsuggestions`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `mutes`
+--
+ALTER TABLE `mutes`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `reports`
 --
 ALTER TABLE `reports`
@@ -335,6 +354,12 @@ ALTER TABLE `messages`
 -- AUTO_INCREMENT for table `modsuggestions`
 --
 ALTER TABLE `modsuggestions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `mutes`
+--
+ALTER TABLE `mutes`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
