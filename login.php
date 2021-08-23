@@ -18,12 +18,12 @@
             echo "<p>Login is temporarily disabled.</p>";
         } else {
             ?>
-            <form action="includes/account/login" method="post">
-                <input type="text" name="uid" placeholder="Username/Email..."></br>
-                <input type="password" name="pwd" placeholder="Password..."></br></br>
-                <span>Remember Me</span> <input type="checkbox" name="remember">
-                </br></br><button type="submit" name="submit" class="button">Log In</button>
-            </form>
+                <form action="includes/account/login" method="post">
+                    <input type="text" name="uid" placeholder="Username/Email..."></br>
+                    <input type="password" name="pwd" placeholder="Password..."></br></br>
+                    <span>Remember Me</span> <input type="checkbox" name="remember">
+                    </br></br><button type="submit" name="submit" class="button">Log In</button>
+                </form>
             <?php
         }
 

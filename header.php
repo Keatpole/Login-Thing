@@ -42,6 +42,15 @@
 
                     $_SESSION["rank"] = getTable($conn, "users", ["uid", $_SESSION["uid"]])["rank"];
 
+                    $user = getTable($conn, "users", ["id", $_SESSION["id"]]);
+
+                    if (isset($_SESSION["passtoken"]) && $_SESSION["passtoken"][2] && strtotime(date("F j, Y, H:i")) >= strtotime($_SESSION["passtoken"][2])) {
+                        $_SESSION["passtoken"] = null;
+                        if ($_GET["webname"] == "resetpass") {
+                            header("location: login?error=invalidtoken");
+                        }
+                    }
+
                     if ($_SESSION["rank"] <= -1) {
                         if (!isset($_GET["banned"]) || $_GET["webname"] !== "index") {
                             header("location: .?banned");
@@ -59,7 +68,20 @@
                         }
                         echo "<li><a href='.' " . $style . ">Home</a></li>";
                         echo "<li><a href='user' " . $style . ">Profile</a></li>";
-                        echo "<li><a href='friends' " . $style . ">Friends</a></li>";
+
+                        $has = false;
+                        foreach (mysqli_fetch_all(getTable($conn, "friendreq")) as $res) {
+                            if ($res[2] == $_SESSION["id"]) {
+                                if (getTable($conn, "users", ["id", $res[1]]) != null) {
+                                    echo "<li><a href='friends' style=\"font: 400 13.3333px Arial; font-size: 16px; background-color: darkred;\">Friends</a></li>";
+                                    $has = true;
+                                }
+                            }
+                        }
+                        if (!$has) {
+                            echo "<li><a href='friends' style=\"font: 400 13.3333px Arial; font-size: 16px;\">Friends</a></li>";
+                        }
+                        echo "<li><a href='groups' " . $style . ">Groups</a></li>";
                         echo "<li><a href='search' " . $style . ">Search</a></li>";
                         if ($_SESSION["rank"] >= 1) {
                             echo "<li><a href='moderation' " . $style . ">Moderation</a></li>";
@@ -151,13 +173,6 @@
             echo "<p style='color: red;'>" . $say . "</p>";
 
         }
-
-        if (isset($_SESSION["passtoken"]) && $_SESSION["passtoken"][2] && strtotime(date("F j, Y, H:i")) >= strtotime($_SESSION["passtoken"][2])) {
-            $_SESSION["passtoken"] = null;
-            if ($_GET["webname"] == "resetpass") {
-                header("location: login?error=invalidtoken");
-            }
-        }
-    
+        if (isset($_GET["refresh"])) header("refresh: " . $_GET["refresh"]);
     ?>
 </body>

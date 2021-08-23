@@ -166,7 +166,7 @@
                 }
 
                 if (!$has) {
-                    $say = "</br>You have no comments";
+                    $say = "</br>There are no comments";
                     if (isset($_GET["includefromprofile"])) {
                         if ($_GET["includefromprofile"] == $_SESSION["id"]) $say = "You have no comments";
                         else $say = "This user has no comments";

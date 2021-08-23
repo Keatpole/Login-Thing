@@ -36,7 +36,7 @@ function getTable($conn, $table, $where="", $multiple=false) {
         $sql = "SELECT * FROM " . $table . ";";
         $stmt = mysqli_stmt_init($conn);
         if (!mysqli_stmt_prepare($stmt, $sql)) {
-            header("location: signup?error=stmtfailed");
+            header("location: .?error=stmtfailed");
             exit();
         }
         mysqli_stmt_execute($stmt);
@@ -46,7 +46,7 @@ function getTable($conn, $table, $where="", $multiple=false) {
         $sql = "SELECT * FROM " . $table . " WHERE " . $where[0] . " = ?;";
         $stmt = mysqli_stmt_init($conn);
         if (!mysqli_stmt_prepare($stmt, $sql)) {
-            header("location: signup?error=stmtfailed");
+            header("location: .?error=stmtfailed");
             exit();
         }
         mysqli_stmt_bind_param($stmt, "s", $where[1]);

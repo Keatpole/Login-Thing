@@ -133,6 +133,10 @@
                 echo "<form action=\"includes/friends/rejectFriend\" method=\"post\"><input type=hidden name=\"user\" value=" . $res[1] . "></input><input type=hidden name=\"id\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\"user?u=" . $_GET["u"] . "&\"><button type=\"submit\" name=\"submit\" class=\"button\">Reject</button></form></br>";
             }
 
+            if ($type == "friend") {
+                echo "<a href=\"groups?u=" . $_GET["u"] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Group</a></br>";
+            }
+
             if ($settings->enable_report) {
                 echo "</br><a href=\"report?u=" . $_GET["u"] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Report</a>";
             } else {

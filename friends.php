@@ -15,7 +15,20 @@
             require_once 'includes/other/dbh.php';
             require_once 'includes/other/functions.php';
             
-            echo "<h3><a style=\"color: DarkGreen;\" href=\"friendreq\">Friend Requests</a></h3>";
+            $num = 0;
+
+            foreach (mysqli_fetch_all(getTable($conn, "friendreq")) as $res) {
+                
+                if ($res[2] == $_SESSION["id"]) {
+                    $num += 1;
+                }
+
+            }
+
+            if ($num == 0) $num = "";
+            else $num = " - " . $num;
+
+            echo "<h3><a style=\"color: DarkGreen;\" href=\"friendreq\">Friend Requests" . $num . "</a></h3>";
 
             $has = false;
 
