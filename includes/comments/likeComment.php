@@ -10,13 +10,13 @@ if (!isset($_SESSION["rank"])) {
     exit();
 }
 
+$msgInfo = getTable($conn, "messages", ["id", $_POST["commentId"]]);
+
 if (isset($_POST["delete"])) {
-    
-    if ($_SESSION["id"] == $_POST["commentAuthor"] || $_SESSION["rank"] >= 2) {
+        
+    if ($_SESSION["id"] == $_POST["commentAuthor"] && $msgInfo["author"] == $_POST["commentAuthor"] || $_SESSION["rank"] >= 2) {
 
-        $msgInfo = getTable($conn, "messages", ["id", $_POST["commentId"]]);
-
-        $sql = "INSERT INTO `deletedmessages`(`msgid`, `message`, `author`, `likes`, `replyTo`, `createdate`) VALUES (?, ?, ?, ?, ?, ?);";
+        $sql = "INSERT INTO deletedmessages(msgid, message, author, likes, replyTo, createdate) VALUES (?, ?, ?, ?, ?, ?);";
         $stmt = mysqli_stmt_init($conn);
         if (!mysqli_stmt_prepare($stmt, $sql)) {
             header("location: ../../.?error=stmtfailed");
@@ -58,7 +58,7 @@ if (isset($_POST["delete"])) {
     }
     elseif ($_SESSION["rank"] == 1) {
 
-        $sql = "INSERT INTO `modsuggestions`(`targetsUid`, `type`) VALUES (?, ?);";
+        $sql = "INSERT INTO modsuggestions(targetsUid, type) VALUES (?, ?);";
         $stmt = mysqli_stmt_init($conn);
         if (!mysqli_stmt_prepare($stmt, $sql)) {
             header("location: ../../". $_POST["return"] ."error=stmtfailed");
@@ -109,7 +109,7 @@ foreach ($commentLikesInfo as $result) {
     }
 }
 
-$sql = "INSERT INTO `messagelikes`(`msgid`, `userid`) VALUES (?, ?);";
+$sql = "INSERT INTO messagelikes (msgid, userid) VALUES (?, ?);";
 $stmt = mysqli_stmt_init($conn);
 if (!mysqli_stmt_prepare($stmt, $sql)) {
     header("location: ../../.?error=stmtfailed");

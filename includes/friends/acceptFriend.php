@@ -10,7 +10,12 @@ if (!isset($_SESSION["uid"]) || !isset($_POST["submit"])) {
     exit();
 }
 
-$sql = "INSERT INTO `friends`(`user1`, `user2`) VALUES (?, ?);";
+if ($_SESSION["id"] != getTable($conn, "friendreq", ["id", $_POST["id"]])["user2"]) {
+    header("location: ../../friendreq?error=authfailed");
+    exit();
+}
+
+$sql = "INSERT INTO friends(user1, user2) VALUES (?, ?);";
 
 $stmt = mysqli_stmt_init($conn);
 if (!mysqli_stmt_prepare($stmt, $sql)) {

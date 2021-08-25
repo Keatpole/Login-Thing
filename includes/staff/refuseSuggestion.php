@@ -5,7 +5,7 @@ session_start();
 require_once "../other/functions.php";
 require_once "../other/dbh.php";
 
-if ($_SESSION["rank"] < 2 || !isset($_GET["uid"]) || !$settings->enable_suggestions) {
+if (!isset($_SESSION["rank"]) || $_SESSION["rank"] < 2 || !isset($_GET["uid"]) || !$settings->enable_suggestions) {
     header("location: ../../moderation?suggestions");
     exit();
 }

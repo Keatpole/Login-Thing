@@ -18,9 +18,9 @@ foreach (getTable($conn, "mutes", "", true) as $v) {
 }
 
 if (isset($_POST["replyid"])) {
-    $sql = "INSERT INTO `messages`(`message`, `author`, `replyTo`) VALUES (?, ?, ?)";
+    $sql = "INSERT INTO messages(message, author, replyTo) VALUES (?, ?, ?)";
 } else {
-    $sql = "INSERT INTO `messages`(`message`, `author`) VALUES (?, ?)";
+    $sql = "INSERT INTO messages(message, author) VALUES (?, ?)";
 }
 
 $stmt = mysqli_stmt_init($conn);

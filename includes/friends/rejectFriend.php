@@ -9,6 +9,10 @@ if (!isset($_SESSION["uid"]) || !isset($_POST["submit"])) {
     header("location: ../../.");
     exit();
 }
+if ($_SESSION["id"] != getTable($conn, "friendreq", ["id", $_POST["id"]])["user2"]) {
+    header("location: ../../friendreq?error=authfailed");
+    exit();
+}
 
 $sql = "DELETE FROM friendreq WHERE id=?;";
 

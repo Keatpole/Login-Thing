@@ -12,6 +12,17 @@ if (!isset($_SESSION["rank"]) || !isset($_POST["submit"])) {
 
 $group = getTable($conn, "groups", ["id", $_POST["group"]]);
 
+$exit = true;
+
+foreach (getTable($conn, "friends", "", True) as $v) {
+    if ($v["user1"] == $_POST["user"] || $v["user2"] == $_POST["user"]) $exit = false;
+}
+
+if ($exit) {
+    header("location: ../../groups?error=authfailed");
+    exit();
+}
+
 if ($group["author"] != $_SESSION["id"]) {
     header("location: ../../groups");
     exit();

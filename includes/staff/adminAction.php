@@ -19,7 +19,7 @@ if ($action == "3") {
 
     $msgInfo = getTable($conn, "messages", ["id", $username]);
 
-    $sql = "INSERT INTO `deletedmessages`(`msgid`, `message`, `author`, `likes`, `createdate`) VALUES (?, ?, ?, ?, ?);";
+    $sql = "INSERT INTO deletedmessages(msgid, message, author, likes, createdate) VALUES (?, ?, ?, ?, ?);";
     $stmt = mysqli_stmt_init($conn);
     if (!mysqli_stmt_prepare($stmt, $sql)) {
         header("location: ../../moderation?error=stmtfailed");

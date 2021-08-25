@@ -23,7 +23,7 @@ if ($_SESSION["id"] == $_POST["commentAuthor"] || $_SESSION["rank"] >= 2 || getT
 
     $msgInfo = getTable($conn, "groupmessages", ["id", $_POST["commentId"]]);
 
-    $sql = "INSERT INTO `deletedgroupmessages`(`msgid`, `message`, `author`, `replyTo`, `groupId`, `createdate`) VALUES (?, ?, ?, ?, ?, ?);";
+    $sql = "INSERT INTO deletedgroupmessages(msgid, message, author, replyTo, groupId, createdate) VALUES (?, ?, ?, ?, ?, ?);";
     $stmt = mysqli_stmt_init($conn);
     if (!mysqli_stmt_prepare($stmt, $sql)) {
         header("location: ../../groups?g=" . $_POST["groupid"] . "&error=stmtfailed");

@@ -40,7 +40,7 @@ switch ($_POST["reason"]) {
 }
 
 
-if (getTable($conn, "users" ["uid", $_POST["user"]]) != null) {
+if (getTable($conn, "users", ["uid", $_POST["user"]]) != null) {
 
     $sql = "INSERT INTO reports (reporter, target, reason, otherreason) VALUES (?, ?, ?, ?);";
     $stmt = mysqli_stmt_init($conn);

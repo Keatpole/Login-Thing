@@ -3,7 +3,7 @@
 require_once "settings.php";
 
 if (!$settings->enable_public && $_SERVER['HTTP_HOST'] != "localhost") {
-    echo "<link rel=\"stylesheet\" href=\"../../style.css\">";
+    #echo "<link rel=\"stylesheet\" href=\"../../style.css\">";
     die("<h1>This website is not public at the moment.</h1>");
 }
 

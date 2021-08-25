@@ -43,8 +43,6 @@ if (!mysqli_stmt_prepare($stmt, $sql)) {
 
 $hashedPwd = password_hash($pwd, PASSWORD_DEFAULT);
 
-$rng = bin2hex(random_bytes(5));
-
 mysqli_stmt_bind_param($stmt, "sss", $email, $username, $hashedPwd);
 mysqli_stmt_execute($stmt);
 mysqli_stmt_close($stmt);

@@ -15,7 +15,7 @@ if (!$settings->enable_friends) {
     exit();
 }
 
-$sql = "INSERT INTO `friendreq`(`user1`, `user2`) VALUES (?, ?);";
+$sql = "INSERT INTO friendreq(user1, user2) VALUES (?, ?);";
 
 $stmt = mysqli_stmt_init($conn);
 if (!mysqli_stmt_prepare($stmt, $sql)) {

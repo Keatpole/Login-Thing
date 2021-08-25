@@ -10,7 +10,7 @@ if (!isset($_SESSION["rank"]) || !isset($_POST["submit"])) {
     exit();
 }
 
-$sql = "INSERT INTO `groups`(`name`, `author`, `members`) VALUES (?, ?, ?)";
+$sql = "INSERT INTO groups(name, author, members) VALUES (?, ?, ?)";
 
 $stmt = mysqli_stmt_init($conn);
 if (!mysqli_stmt_prepare($stmt, $sql)) {

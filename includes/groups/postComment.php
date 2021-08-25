@@ -113,9 +113,9 @@ if (str_starts_with($_POST["message"], "!")) {
 
 
 if (isset($_POST["replyid"])) {
-    $sql = "INSERT INTO `groupmessages`(`message`, `author`, `replyTo`, `groupId`) VALUES (?, ?, ?, ?);";
+    $sql = "INSERT INTO groupmessages(message, author, replyTo, groupId) VALUES (?, ?, ?, ?);";
 } else {
-    $sql = "INSERT INTO `groupmessages`(`message`, `author`, `groupId`) VALUES (?, ?, ?)";
+    $sql = "INSERT INTO groupmessages(message, author, groupId) VALUES (?, ?, ?)";
 }
 
 $stmt = mysqli_stmt_init($conn);
