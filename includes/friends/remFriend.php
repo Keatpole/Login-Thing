@@ -11,14 +11,14 @@ if (!isset($_SESSION["uid"])) {
 }
 
 $exit = true;
-if ($_SESSION["id"] == getTable($conn, "friendreq", ["id", $_POST["id"]])["user2"] || $_SESSION["id"] == getTable($conn, "friendreq", ["id", $_POST["id"]])["user1"]) {
+if ($_SESSION["id"] == getTable($conn, "friendreq", ["id", $_GET["i"]])["user2"] || $_SESSION["id"] == getTable($conn, "friendreq", ["id", $_GET["i"]])["user1"]) {
     $exit = false;
 }
-if ($_SESSION["id"] == getTable($conn, "friends", ["id", $_POST["id"]])["user2"] || $_SESSION["id"] == getTable($conn, "friends", ["id", $_POST["id"]])["user1"]) {
+if ($_SESSION["id"] == getTable($conn, "friends", ["id", $_GET["i"]])["user2"] || $_SESSION["id"] == getTable($conn, "friends", ["id", $_GET["i"]])["user1"]) {
     $exit = false;
 }
 
-if (!$exit) {
+if ($exit) {
     header("location: ../../friendreq?error=authfailed");
     exit();
 }
