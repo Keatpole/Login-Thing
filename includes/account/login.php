@@ -26,11 +26,11 @@ if ($user === null) {
 $pwdHashed = $user["pwd"];
 $checkPwd = password_verify($pwd, $pwdHashed);
 
-if ($checkPwd === false) {
+if (!$checkPwd) {
     header("location: ../../login?error=wronglogin");
     exit();
 }
-else if ($checkPwd === true) {
+else {
     session_start();
 
     $_SESSION["uid"] = $user["uid"];

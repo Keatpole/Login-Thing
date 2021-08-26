@@ -176,7 +176,7 @@
                     $say = "Command not found!";
                     break;
                 case 'gchelp':
-                    echo "<p style='color: green;'>Commands: !kick (Username), !delete (Group name), !help</p>";
+                    echo "<p>Commands: !kick (Username) - Kicks a user, !delete (Group name) - Deletes the group, !members - Displays a list of members</p>";
                     break;
                 default:
                     if ($_GET["webname"] == "index") {

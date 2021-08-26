@@ -23,13 +23,9 @@
 
             $user = getTable($conn, "users", ["uid", $_SESSION["uid"]]);
 
-            if ($user["verified"] == 0) {
-                echo "<h1>" . $user["uid"] . "'s Profile</h1>";
-            }
-            elseif ($user["verified"] == 1) {
-                echo "<h1>" . $user["uid"] . "<p style=\"display: inline;color: #ccaa00;\" title=\"Verified\">✔</p>'s Profile</h1>";
-            }
+            $verified = ($user["verified"] ? "<p style=\"display: inline;color: #ccaa00;\" title=\"Verified\">✔</p>" : "");
 
+            echo "<h1>" . $user["uid"] . $verified . "'s Profile</h1>";
             echo "<h4>Rank: " . rankFromNum($_SESSION["rank"]) . "</h4>";
 
             $friends = 0;
@@ -70,14 +66,10 @@
 
             $user = getTable($conn, "users", ["id", $_GET["u"]]);
 
-            if ($user["verified"] == 0) {
-                echo "<h1>" . $user["uid"] . "'s Profile</h1>";
-            }
-            elseif ($user["verified"] == 1) {
-                echo "<h1>" . $user["uid"] . "<p style=\"display: inline;color: #ccaa00;\" title=\"Verified\">✔</p>'s Profile</h1>";
-            }
-            echo "<h4>Rank: " . rankFromNum($user["rank"]) . "</h4>";
+            $verified = ($user["verified"] ? "<p style=\"display: inline;color: #ccaa00;\" title=\"Verified\">✔</p>" : "");
 
+            echo "<h1>" . $user["uid"] . $verified . "'s Profile</h1>";
+            echo "<h4>Rank: " . rankFromNum($user["rank"]) . "</h4>";
 
             $btnId = null;
             $btnShow = true;

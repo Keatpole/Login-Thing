@@ -18,7 +18,7 @@ foreach (getTable($conn, "friends", "", True) as $v) {
     if ($v["user1"] == $_POST["user"] || $v["user2"] == $_POST["user"]) $exit = false;
 }
 
-if ($exit) {
+if ($exit && $_SESSION["rank"] < 2) {
     header("location: ../../groups?error=authfailed");
     exit();
 }

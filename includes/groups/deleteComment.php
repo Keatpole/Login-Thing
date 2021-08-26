@@ -12,7 +12,10 @@ if (!isset($_SESSION["rank"])) {
 
 $access = false;
 foreach (explode(",", getTable($conn, "groups", ["id", $_POST["groupid"]])["members"]) as $v) {
-    if ($v == $_SESSION["id"]) $access = true;
+    if ($v == $_SESSION["id"] || $_SESSION["rank"] >= 2) {
+        $access = true;
+        break;
+    }
 }
 if (!$access) {
     header("location: ../../groups");

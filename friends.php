@@ -77,7 +77,7 @@
                 echo "<h4>You have no friends :(</h4>";
             }
 
-        } else if (!isset($_SESSION["uid"])) {
+        } elseif (!isset($_SESSION["uid"])) {
             header("location: .?error=nologin");
             exit();
         }

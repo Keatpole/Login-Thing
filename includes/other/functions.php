@@ -69,9 +69,9 @@ function rankFromNum($num) {
         case 0:
             return "User";
         case 1:
-            return "Moderator";
+            return "Mod";
         case 2:
-            return "Administrator";
+            return "Admin";
         case 3:
             return "Owner";
         default:
