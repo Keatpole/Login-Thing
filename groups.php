@@ -30,7 +30,7 @@
     ?>
 
     <h2>Create a Group</h2>
-    <form action="includes/groups/createGroup" method="post">
+    <form action="includes/groups/create" method="post">
         <input type="text" name="name" placeholder="Name..."></br>
         </br><button type="submit" name="submit" class="button">Create</button>
     </form>
@@ -101,7 +101,7 @@
             
             ?>
 
-                <form action="includes/groups/addToGroup" method="post">
+                <form action="includes/groups/add" method="post">
                     <input type="hidden" name="group" value="<?= $i["id"] ?>">
                     <input type="hidden" name="user" value="<?= $_GET["u"] ?>">
                     <button type="submit" name="submit" class="button">Add <?= getTable($conn, "users", ["id", $_GET["u"]])["uid"] ?> to group <?= $i["name"] ?>.</button>

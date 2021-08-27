@@ -57,11 +57,11 @@
 
                     if (getTable($conn, "users", ["id", $res[1]]) == null) {
                         echo "<h2>[Account Deleted] sent a friend request at " . $res[3] . "</h2>";
-                        echo "<form action=\"includes/friends/rejectFriend\" method=\"post\"><input type=hidden name=\"user\" value=" . $res[1] . "></input><input type=hidden name=\"id\" value=" . $res[0] . "></input><button type=\"submit\" name=\"submit\" class=\"button\">Reject</button></form>";
+                        echo "<form action=\"includes/friends/reject\" method=\"post\"><input type=hidden name=\"user\" value=" . $res[1] . "></input><input type=hidden name=\"id\" value=" . $res[0] . "></input><button type=\"submit\" name=\"submit\" class=\"button\">Reject</button></form>";
                     } else {
                         echo "<h2><a style=\"color: green;\" href=\"user?u=" . $res[1] . "\">" . getTable($conn, "users", ["id", $res[1]])["uid"] . "</a>" . " (" . rankFromNum(getTable($conn, "users", ["id", $res[1]])["rank"]) . ") sent a friend request at " . $res[3] . "</h2>";
-                        echo "<form action=\"includes/friends/acceptFriend\" method=\"post\"><input type=hidden name=\"user\" value=" . $res[1] . "></input><input type=hidden name=\"id\" value=" . $res[0] . "></input><button type=\"submit\" name=\"submit\" class=\"button\">Accept</button></form>";
-                        echo "<form action=\"includes/friends/rejectFriend\" method=\"post\"><input type=hidden name=\"user\" value=" . $res[1] . "></input><input type=hidden name=\"id\" value=" . $res[0] . "></input><button type=\"submit\" name=\"submit\" class=\"button\">Reject</button></form>";
+                        echo "<form action=\"includes/friends/accept\" method=\"post\"><input type=hidden name=\"user\" value=" . $res[1] . "></input><input type=hidden name=\"id\" value=" . $res[0] . "></input><button type=\"submit\" name=\"submit\" class=\"button\">Accept</button></form>";
+                        echo "<form action=\"includes/friends/reject\" method=\"post\"><input type=hidden name=\"user\" value=" . $res[1] . "></input><input type=hidden name=\"id\" value=" . $res[0] . "></input><button type=\"submit\" name=\"submit\" class=\"button\">Reject</button></form>";
                         $has = true;
                     }
 

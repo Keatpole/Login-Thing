@@ -29,8 +29,47 @@ $message = strtolower($_POST["message"]);
 // Commands
 if (str_starts_with($message, "!")) {
 
-    if ($group["author"] != $_SESSION["id"] && $_SESSION["rank"] < 3) {
-        header("location: ../../groups?g=" . $_POST["groupid"] . "&error=authfailed");
+    if (str_starts_with($message, "!members")) {
+
+        if (isset($_POST["replyid"])) {
+            $sql = "INSERT INTO groupmessages(message, author, replyTo, groupId) VALUES (?, ?, ?, ?);";
+        } else {
+            $sql = "INSERT INTO groupmessages(message, author, groupId) VALUES (?, ?, ?)";
+        }
+        
+        $stmt = mysqli_stmt_init($conn);
+        if (!mysqli_stmt_prepare($stmt, $sql)) {
+            header("location: ../../groups?g=" . $_POST["groupid"] . "&error=stmtfailed");
+            exit();
+        }
+        
+        session_start();
+    
+        $users = "";
+        foreach (explode(",", $group["members"]) as $v) {
+            $user = getTable($conn, "users", ["id", $v]);
+            if ($user && $user["id"] != $group["author"]) $users .= $user["uid"] . ", ";
+        }
+        $users = "Members: " . ($users == "" ? "None" : substr($users, 0, -2));    
+        
+        $message = htmlspecialchars($users, ENT_QUOTES, 'UTF-8');
+        
+        if (isset($_POST["replyid"])) {
+            mysqli_stmt_bind_param($stmt, "ssss", $message, $_SESSION["id"], $_POST["replyid"], $_POST["groupid"]);
+        } else {
+            mysqli_stmt_bind_param($stmt, "sss", $message, $_SESSION["id"], $_POST["groupid"]);
+        }
+        
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+        
+        header("location: ../../groups?g=" . $_POST["groupid"] . "&error=none");
+        exit();
+    
+    }
+
+    elseif ($group["author"] != $_SESSION["id"] && $_SESSION["rank"] < 3) {
+        header("location: ../../groups?g=" . $_POST["groupid"] . "&error=gfcauthfailed");
         exit();
     }
 
@@ -113,47 +152,6 @@ if (str_starts_with($message, "!")) {
 
     header("location: ../../groups?g=" . $_POST["groupid"] . "&error=gcdone");
     exit();
-}
-elseif (str_starts_with($message, "!members")) {
-
-    if (isset($_POST["replyid"])) {
-        $sql = "INSERT INTO groupmessages(message, author, replyTo, groupId) VALUES (?, ?, ?, ?);";
-    } else {
-        $sql = "INSERT INTO groupmessages(message, author, groupId) VALUES (?, ?, ?)";
-    }
-    
-    $stmt = mysqli_stmt_init($conn);
-    if (!mysqli_stmt_prepare($stmt, $sql)) {
-        header("location: ../../groups?g=" . $_POST["groupid"] . "&error=stmtfailed");
-        exit();
-    }
-    
-    session_start();
-
-    $users = "";
-    foreach (explode(",", $group["members"]) as $v) {
-        $user = getTable($conn, "users", ["id", $v]);
-        if ($user && $user["id"] != $group["author"]) $users .= $user["uid"] . ", ";
-    }
-    $users = ($users == "" ? "None" : substr($users, 0, -2));
-    $users = "Members: " . $users;
-    
-
-    
-    $message = htmlspecialchars($users, ENT_QUOTES, 'UTF-8');
-    
-    if (isset($_POST["replyid"])) {
-        mysqli_stmt_bind_param($stmt, "ssss", $message, $_SESSION["id"], $_POST["replyid"], $_POST["groupid"]);
-    } else {
-        mysqli_stmt_bind_param($stmt, "sss", $message, $_SESSION["id"], $_POST["groupid"]);
-    }
-    
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_close($stmt);
-    
-    header("location: ../../groups?g=" . $_POST["groupid"] . "&error=none");
-    exit();
-
 }
 
 

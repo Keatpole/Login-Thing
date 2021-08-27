@@ -111,18 +111,18 @@
             if ($btnShow) {
                 if (!$btnId) {
                     if ($settings->enable_friends) {
-                        echo "<form action=\"includes/friends/addFriend\" method=\"post\"><input type=\"hidden\" name=\"user\" value=\"" . $_GET["u"] . "\"><button type=\"submit\" name=\"submit\" class=\"button\">Friend</button></form>";
+                        echo "<form action=\"includes/friends/add\" method=\"post\"><input type=\"hidden\" name=\"user\" value=\"" . $_GET["u"] . "\"><button type=\"submit\" name=\"submit\" class=\"button\">Friend</button></form>";
                     } else {
                         echo "<p>Sending friend requests is temporarily disabled.</p>";
                     }
                 } else {
-                    echo "<button name=\"submit\" class=\"button\"><a style=\"color: white; text-decoration: none;\" href=\"includes/friends/remFriend?u=" . $_GET["u"] . "&i=" . $btnId ."&t=" . $type . "\">Remove Friend</a></button></br>";
+                    echo "<button name=\"submit\" class=\"button\"><a style=\"color: white; text-decoration: none;\" href=\"includes/friends/remove?u=" . $_GET["u"] . "&i=" . $btnId ."&t=" . $type . "\">Remove Friend</a></button></br>";
                 }
             }
             elseif ($sentReq != null) {
                 echo "<h3>This user sent a friend request at " . $res[3] . "</h3>";
-                echo "<form action=\"includes/friends/acceptFriend\" method=\"post\"><input type=hidden name=\"user\" value=" . $res[1] . "></input><input type=hidden name=\"return\" value=\"user?u=" . $_GET["u"] . "&\"><input type=hidden name=\"id\" value=" . $res[0] . "></input><button type=\"submit\" name=\"submit\" class=\"button\">Accept</button></form>";
-                echo "<form action=\"includes/friends/rejectFriend\" method=\"post\"><input type=hidden name=\"user\" value=" . $res[1] . "></input><input type=hidden name=\"id\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\"user?u=" . $_GET["u"] . "&\"><button type=\"submit\" name=\"submit\" class=\"button\">Reject</button></form></br>";
+                echo "<form action=\"includes/friends/accept\" method=\"post\"><input type=hidden name=\"user\" value=" . $res[1] . "></input><input type=hidden name=\"return\" value=\"user?u=" . $_GET["u"] . "&\"><input type=hidden name=\"id\" value=" . $res[0] . "></input><button type=\"submit\" name=\"submit\" class=\"button\">Accept</button></form>";
+                echo "<form action=\"includes/friends/reject\" method=\"post\"><input type=hidden name=\"user\" value=" . $res[1] . "></input><input type=hidden name=\"id\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\"user?u=" . $_GET["u"] . "&\"><button type=\"submit\" name=\"submit\" class=\"button\">Reject</button></form></br>";
             }
 
             if ($type == "friend") {

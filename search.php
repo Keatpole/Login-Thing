@@ -17,7 +17,7 @@
     ?>
 
     <h1>Search for User</h1>
-    <form action="includes/account/searchUser" method="post">
+    <form action="includes/account/search" method="post">
         <input type="text" name="username" placeholder="Username / ID..."></br></br>
         <button type="submit" name="submit" class="button">Search</button>
     </form>

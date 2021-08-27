@@ -10,7 +10,7 @@
         $_GET["webname"] = basename(__FILE__, '.php');
         include_once 'header.php';
 
-        if (isset($_SESSION["uid"]) && $_SESSION["rank"] >= 0) {
+        if (isset($_SESSION["uid"])) {
 
             require_once 'includes/other/dbh.php';
             require_once 'includes/other/functions.php';
@@ -39,7 +39,7 @@
                     $user = getTable($conn, "users", ["id", $res[2]]);
 
                     if ($user["uid"] == null) {
-                        echo "<h2><a style=\"color: black;\" href=\"includes/friends/remFriend?u=" . $res[2] . "&i=" . $res[0] ."&t=friend&return=friends\">[Account Deleted]</a></h2>";
+                        echo "<h2><a style=\"color: black;\" href=\"includes/friends/remove?u=" . $res[2] . "&i=" . $res[0] ."&t=friend&return=friends\">[Account Deleted]</a></h2>";
                     } else {
 
                         if ($user["verified"] == 0) {
@@ -58,7 +58,7 @@
                     $user = getTable($conn, "users", ["id", $res[1]]);
 
                     if ($user["uid"] == null) {
-                        echo "<h2><a style=\"color: black;\" href=\"includes/friends/remFriend?u=" . $res[1] . "&i=" . $res[0] ."&t=friend&return=friends\">[Account Deleted]</a></h2>";
+                        echo "<h2><a style=\"color: black;\" href=\"includes/friends/remove?u=" . $res[1] . "&i=" . $res[0] ."&t=friend&return=friends\">[Account Deleted]</a></h2>";
                     } else {
                         if ($user["verified"] == 0) {
                             echo "<h2><a style=\"color: green;\" href=\"user?u=" . $res[1] . "\">" . $user["uid"] . "</a></h2>";
@@ -77,7 +77,7 @@
                 echo "<h4>You have no friends :(</h4>";
             }
 
-        } elseif (!isset($_SESSION["uid"])) {
+        } else {
             header("location: .?error=nologin");
             exit();
         }

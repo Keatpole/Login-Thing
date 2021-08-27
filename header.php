@@ -121,7 +121,7 @@
                     $say = "Page not found!";
                     break;
                 case '404r':
-                    header("location: .?error=404");
+                    header("location: http://{$_SERVER['HTTP_HOST']}/LoginThing/.?error=404");
                     break;
                 case 'alreadyliked':
                     $say = "You already liked this comment!";
@@ -163,6 +163,9 @@
                     $say = "Something went wrong! (error code: stmtfailed-" . $_GET["webname"] . ")";
                     break;
                 # gcf = group command failed
+                case 'gcfauthfailed':
+                    $say = "You can not use commands in this group.";
+                    break;
                 case 'gcfdelete':
                     $say = "To delete a group, please type: !delete (Group name)";
                     break;

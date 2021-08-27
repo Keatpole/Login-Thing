@@ -17,13 +17,13 @@ if ($user == null) {
     exit();
 }
 
-$rng = bin2hex(random_bytes(128));
+$rng = bin2hex(random_bytes(36));
 
 session_start();
 
 $_SESSION["passtoken"] = [password_hash($rng, PASSWORD_DEFAULT), $user["id"], date("F j, Y, H:i", strtotime('+1 hour'))];
 
-$msg = wordwrap("You have requested a password or username reset.\nClick here to reset it.\n\nhttp://{$_SERVER['HTTP_HOST']}/LoginThing/resetpass?t=" . $rng . "\n\nIf you did not request this reset, don't worry.\nThey have a 1 in 340 undecillion (340 followed by 36 zeroes) chance of guessing this token.\n\nRemember to open this link in the same window as the one you requested the password reset.", 70);
+$msg = wordwrap("You have requested a password or username reset.\nClick here to reset it.\n\nhttp://{$_SERVER['HTTP_HOST']}/LoginThing/resetpass?t=" . $rng . "\n\nIf you did not request this reset, don't worry.\nThey have a 1 in 521 Octillion (521 followed by 26 zeroes) chance of guessing this token.\n\nRemember to open this link in the same window as the one you requested the password reset.", 70);
 mail($user["email"], "Password Reset", $msg);
 
 header("location: ../../login?error=noneemail");

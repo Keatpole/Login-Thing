@@ -14,8 +14,8 @@
             if (isset($_GET["invalidate"])) {
                 $_SESSION["passtoken"] = null;
                 header("location: login?error=none");
+                exit();
             }
-            exit();
         }
         else {
             header("location: login?error=invalidtoken");

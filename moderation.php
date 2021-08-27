@@ -21,7 +21,8 @@
         }
 
         echo "<h1>Moderation Tools</h1>";
-        echo "<p>You are currently a / an " . rankFromNum($_SESSION["rank"]) . ".</p></br>";
+
+        echo "<p>You are currently " . (strpos("aeiou", strtolower(rankFromNum($_SESSION["rank"])[0])) !== false ? "an" : "a") . " " . rankFromNum($_SESSION["rank"]) . ".</p></br>";
 
         if ($_SESSION["rank"] == 1) {
 
@@ -31,7 +32,7 @@
 
                 ?>
 
-                    <form action="includes/staff/modAction" method="post">
+                    <form action="includes/staff/mod" method="post">
                         <input type="text" name="username" placeholder="Username..."></br></br>
                         <select name="action" size="6">
                             <option value="0">Set User</option>
@@ -165,7 +166,7 @@
             if ($settings->enable_admin_panel) {
                 ?>
 
-                    <form action="includes/staff/adminAction" method="post">
+                    <form action="includes/staff/admin" method="post">
                         <input type="text" name="username" placeholder="Username..."></br></br>
                         <select name="action" size="<?= $size ?>">
                             <option value="0">Set User</option>

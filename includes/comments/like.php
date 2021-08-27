@@ -100,7 +100,7 @@ $commentLikesInfo = getTable($conn, "messagelikes", ["msgid", $_POST["commentId"
 
 foreach ($commentLikesInfo as $result) {
     if ($result["userid"] == $_SESSION["id"]) {
-        if ($_POST["return"]) {
+        if (isset($_POST["return"])) {
             header("location: ../../" . $_POST["return"] . "error=alreadyliked");
         } else {
             header("location: ../../.?error=alreadyliked");
@@ -135,7 +135,7 @@ mysqli_stmt_bind_param($stmt, "ii", $newLikes, $_POST["commentId"]);
 mysqli_stmt_execute($stmt);
 mysqli_stmt_close($stmt);
 
-if ($_POST["return"]) {
+if (isset($_POST["return"])) {
     header("location: ../../" . $_POST["return"] . "error=none");
 } else {
     header("location: ../../.?error=none");
