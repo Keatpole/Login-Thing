@@ -210,12 +210,24 @@ if (str_starts_with($message, "!")) {
     }
     elseif (str_starts_with($message, "!delete")) {
         
-        if ($message != "!delete " . $group["name"]) {
+        if ($_POST["message"] != "!delete " . $group["name"]) {
             header("location: ../../groups?g=" . $_POST["groupid"] . "&error=gcfdelete");
             exit();
         }
 
         $sql = "DELETE FROM groups WHERE id=?;";
+
+        $stmt = mysqli_stmt_init($conn);
+        if (!mysqli_stmt_prepare($stmt, $sql)) {
+            header("location: ../../groups?g=" . $_POST["groupid"] . "&error=stmtfailed");
+            exit();
+        }
+        
+        mysqli_stmt_bind_param($stmt, "i", $_POST["groupid"]);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+
+        $sql = "DELETE FROM groupmessages WHERE groupId=?;";
 
         $stmt = mysqli_stmt_init($conn);
         if (!mysqli_stmt_prepare($stmt, $sql)) {
