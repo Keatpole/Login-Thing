@@ -10,11 +10,70 @@
         $_GET["webname"] = basename(__FILE__, '.php');
         include_once 'header.php';
 
-        if (isset($_SESSION["uid"])) {
+        if (!isset($_SESSION["uid"])) {
+            header("location: .?error=nologin");
+            exit();
+        }
 
-            require_once 'includes/other/dbh.php';
-            require_once 'includes/other/functions.php';
-            
+        require_once 'includes/other/dbh.php';
+        require_once 'includes/other/functions.php';
+
+        if (isset($_GET["req"])) {
+            $has = false;
+
+            if (isset($_GET["outgoing"])) {
+
+                $result = mysqli_fetch_all(getTable($conn, "friendreq"));
+
+                foreach ($result as $res) {
+
+                    
+                    if ($res[1] == $_SESSION["id"]) {
+
+                        if (getTable($conn, "users", ["id", $res[2]]) == null) {
+                            echo "<h2>[Account Deleted] sent a friend request at " . $res[3] . "</h2>";
+                        } else {
+                            echo "<h2>Sent a friend request to <a style=\"color: green;\" href=\"user?u=" . $res[2] . "\">" . getTable($conn, "users", ["id", $res[2]])["uid"] . "</a>" . " (" . rankFromNum(getTable($conn, "users", ["id", $res[2]])["rank"]) . ") at " . $res[3] . "</h2>";
+                            $has = true;
+                        }
+
+                    }
+
+                }
+
+                if (!$has) {
+                    echo "<h4>You have 0 outgoing friend requests.</h4>";
+                }
+
+            } else {
+                echo "<h3><a style=\"color: DarkGreen;\" href=\"?req&outgoing\">Outgoing</a></h3>";
+
+                $result = mysqli_fetch_all(getTable($conn, "friendreq"));
+
+                foreach ($result as $res) {
+                    
+                    if ($res[2] == $_SESSION["id"]) {
+
+                        if (getTable($conn, "users", ["id", $res[1]]) == null) {
+                            echo "<h2>[Account Deleted] sent a friend request at " . $res[3] . "</h2>";
+                            echo "<form action=\"includes/friends/reject\" method=\"post\"><input type=hidden name=\"user\" value=" . $res[1] . "></input><input type=hidden name=\"id\" value=" . $res[0] . "></input><button type=\"submit\" name=\"submit\" class=\"button\">Reject</button></form>";
+                        } else {
+                            echo "<h2><a style=\"color: green;\" href=\"user?u=" . $res[1] . "\">" . getTable($conn, "users", ["id", $res[1]])["uid"] . "</a>" . " (" . rankFromNum(getTable($conn, "users", ["id", $res[1]])["rank"]) . ") sent a friend request at " . $res[3] . "</h2>";
+                            echo "<form action=\"includes/friends/accept\" method=\"post\"><input type=hidden name=\"user\" value=" . $res[1] . "></input><input type=hidden name=\"id\" value=" . $res[0] . "></input><button type=\"submit\" name=\"submit\" class=\"button\">Accept</button></form>";
+                            echo "<form action=\"includes/friends/reject\" method=\"post\"><input type=hidden name=\"user\" value=" . $res[1] . "></input><input type=hidden name=\"id\" value=" . $res[0] . "></input><button type=\"submit\" name=\"submit\" class=\"button\">Reject</button></form>";
+                            $has = true;
+                        }
+
+                    }
+
+                }
+
+                if (!$has) {
+                    echo "<h4>You have 0 friend requests.</h4>";
+                }
+            }
+        } else {
+        
             $num = 0;
 
             foreach (mysqli_fetch_all(getTable($conn, "friendreq")) as $res) {
@@ -28,7 +87,7 @@
             if ($num == 0) $num = "";
             else $num = " - " . $num;
 
-            echo "<h3><a style=\"color: DarkGreen;\" href=\"friendreq\">Friend Requests" . $num . "</a></h3>";
+            echo "<h3><a style=\"color: DarkGreen;\" href=\"?req\">Friend Requests" . $num . "</a></h3>";
 
             $has = false;
 
@@ -77,10 +136,8 @@
                 echo "<h4>You have no friends :(</h4>";
             }
 
-        } else {
-            header("location: .?error=nologin");
-            exit();
         }
+
     ?>
 </body>
 </html>
