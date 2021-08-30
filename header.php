@@ -172,14 +172,26 @@
                 case 'gcfkick':
                     $say = "That user is not in this group!";
                     break;
+                case 'gcfaddin':
+                    $say = "That user is already in this group!";
+                    break;
+                case 'gcfaddfriend':
+                    $say = "That user is not your friend! To add someone to a group, add them as a friend then if they accept it, try this again.";
+                    break;
+                case 'gcfleaveauthor':
+                    $say = "You can not leave as you created this group. In order to leave you need to type \"!delete (group name)\". WARNING: This will delete the group.";
+                    break;
                 case 'gcdone':
                     echo "<p style='color: green;'>Command executed!</p>";
                     break;
                 case'gcnotfound':
                     $say = "Command not found!";
                     break;
-                case 'gchelp':
-                    echo "<p>Commands: !kick (Username) - Kicks a user, !delete (Group name) - Deletes the group, !members - Displays a list of members</p>";
+                case 'gchelpstaff':
+                    echo "<p>Commands: !kick (Username) - Kicks a user, !add (Username) - Adds a user to the group, !delete (Group name) - Deletes the group, !members - Displays a list of members</p>";
+                    break;
+                case 'gchelpmember':
+                    echo "<p>Commands: !leave - Leaves the group, !members - Displays a list of members</p>";
                     break;
                 default:
                     if ($_GET["webname"] == "index") {

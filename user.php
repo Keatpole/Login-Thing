@@ -85,7 +85,7 @@
                         $type = "req";
                     }
                 }
-                if ($res[2] == $_SESSION["id"]) {
+                if ($res[2] == $_SESSION["id"] && $res[1] == $_GET["u"]) {
                     $btnShow = false;
                 }
                 if ($res[1] == $_GET["u"]) {

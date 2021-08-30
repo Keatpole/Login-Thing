@@ -29,6 +29,7 @@ $message = strtolower($_POST["message"]);
 // Commands
 if (str_starts_with($message, "!")) {
 
+    // User commands:
     if (str_starts_with($message, "!members")) {
 
         if (isset($_POST["replyid"])) {
@@ -67,13 +68,102 @@ if (str_starts_with($message, "!")) {
         exit();
     
     }
+    elseif (str_starts_with($message, "!leave")) {
 
+        if ($_SESSION["id"] == $group["author"]) {
+            header("location: ../../groups?g=" . $_POST["groupid"] . "&error=gcfleaveauthor");
+            exit();
+        }
+
+        $sql = "UPDATE groups SET members=? WHERE id=?;";
+
+        $stmt = mysqli_stmt_init($conn);
+        if (!mysqli_stmt_prepare($stmt, $sql)) {
+            header("location: ../../groups?g=" . $_POST["groupid"] . "&error=stmtfailed");
+            exit();
+        }
+
+        $newMembers = "";
+
+        foreach (explode(",", $group["members"]) as $v) {
+            if ($v != $_SESSION["id"]) $newMembers .= $v . ",";
+        }
+
+        $newMembers = substr($newMembers, 0, -1);
+        
+        mysqli_stmt_bind_param($stmt, "si", $newMembers, $_POST["groupid"]);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);  
+
+    }
+    elseif (str_starts_with($message, "!help")) {
+        if ($_SESSION["id"] == $group["author"]) {
+            header("location: ../../groups?g=" . $_POST["groupid"] . "&error=gchelpstaff");
+            exit();
+        } else {
+            header("location: ../../groups?g=" . $_POST["groupid"] . "&error=gchelpmember");
+            exit();
+        }
+    }
+
+
+    // Admin commands
     elseif ($group["author"] != $_SESSION["id"] && $_SESSION["rank"] < 3) {
-        header("location: ../../groups?g=" . $_POST["groupid"] . "&error=gfcauthfailed");
+        header("location: ../../groups?g=" . $_POST["groupid"] . "&error=gcfauthfailed");
         exit();
     }
 
-    if (str_starts_with($message, "!kick")) {
+    if (str_starts_with($message, "!add")) {
+
+        $target = getTable($conn, "users", ["uid", explode("!add ", $message)[1]]);
+
+        # Checking if user is valid.
+        if ($target == null) {
+            header("location: ../../groups?g=" . $_POST["groupid"] . "&error=usernotfound");
+            exit();
+        }
+        $in = false;
+        foreach (explode(",", $group["members"]) as $v) {
+            if ($v == $target["id"]) {
+                $in = true;
+            }
+        }
+        if ($in || $target["id"] == $group["author"]) {
+            header("location: ../../groups?g=" . $_POST["groupid"] . "&error=gcfaddin");
+            exit();
+        }
+
+        $exit = true;
+
+        foreach (getTable($conn, "friends", "", True) as $v) {
+            if ($v["user1"] == $target["id"] && $v["user2"] == $_SESSION["id"] || $v["user2"] == $target["id"] && $v["user1"] == $_SESSION["id"] || $_SESSION["rank"] > 2) {
+                $exit = false;
+                break;
+            }
+        }
+
+        if ($exit) {
+            header("location: ../../groups?g=" . $_POST["groupid"] . "&error=gcfaddfriend");
+            exit();
+        }
+        # --------------------------
+
+        $sql = "UPDATE groups SET members=? WHERE id=?;";
+
+        $stmt = mysqli_stmt_init($conn);
+        if (!mysqli_stmt_prepare($stmt, $sql)) {
+            header("location: ../../groups?g=" . $_POST["groupid"] . "&error=stmtfailed");
+            exit();
+        }
+
+        $newMembers = $group["members"] . "," . $target["id"];
+
+        mysqli_stmt_bind_param($stmt, "si", $newMembers, $_POST["groupid"]);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+        
+    }
+    elseif (str_starts_with($message, "!kick")) {
         $target = getTable($conn, "users", ["uid", explode("!kick ", $message)[1]]);
 
         # Checking if user is valid.
@@ -95,15 +185,15 @@ if (str_starts_with($message, "!")) {
             header("location: ../../groups?g=" . $_POST["groupid"] . "&error=targetisimmune");
             exit();
         }
+        # --------------------------
 
         $sql = "UPDATE groups SET members=? WHERE id=?;";
 
         $stmt = mysqli_stmt_init($conn);
         if (!mysqli_stmt_prepare($stmt, $sql)) {
-            header("location: ../../groups?error=stmtfailed");
+            header("location: ../../groups?g=" . $_POST["groupid"] . "&error=stmtfailed");
             exit();
         }
-        # --------------------------
 
         $newMembers = "";
 
@@ -129,7 +219,7 @@ if (str_starts_with($message, "!")) {
 
         $stmt = mysqli_stmt_init($conn);
         if (!mysqli_stmt_prepare($stmt, $sql)) {
-            header("location: ../../groups?error=stmtfailed");
+            header("location: ../../groups?g=" . $_POST["groupid"] . "&error=stmtfailed");
             exit();
         }
         
@@ -140,10 +230,6 @@ if (str_starts_with($message, "!")) {
         header("location: ../../groups?error=gcdone");
         exit();
 
-    }
-    elseif (str_starts_with($message, "!help")) {
-        header("location: ../../groups?g=" . $_POST["groupid"] . "&error=gchelp");
-        exit();
     }
     else {
         header("location: ../../groups?g=" . $_POST["groupid"] . "&error=gcnotfound");

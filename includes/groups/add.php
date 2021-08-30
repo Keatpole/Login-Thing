@@ -14,17 +14,32 @@ $group = getTable($conn, "groups", ["id", $_POST["group"]]);
 
 $exit = true;
 
-foreach (getTable($conn, "friends", "", True) as $v) {
-    if ($v["user1"] == $_POST["user"] || $v["user2"] == $_POST["user"]) $exit = false;
+$in = false;
+foreach (explode(",", $group["members"]) as $v) {
+    if ($v == $_POST["user"]) {
+        $in = true;
+        break;
+    }
+}
+if ($in || $target["id"] == $group["author"]) {
+    header("location: ../../groups?error=gcfaddin");
+    exit();
 }
 
-if ($exit && $_SESSION["rank"] < 2) {
-    header("location: ../../groups?error=authfailed");
+foreach (getTable($conn, "friends", "", True) as $v) {
+    if ($v["user1"] == $_POST["user"] && $v["user2"] == $_SESSION["id"] || $v["user2"] == $_POST["user"] && $v["user2"] == $_SESSION["id"] || $_SESSION["rank"] > 2) {
+        $exit = false;
+        break;
+    }
+}
+
+if ($exit) {
+    header("location: ../../groups?error=gcfaddfriend");
     exit();
 }
 
 if ($group["author"] != $_SESSION["id"]) {
-    header("location: ../../groups");
+    header("location: ../../groups?error=authfailed");
     exit();
 }
 
