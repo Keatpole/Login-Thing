@@ -1,7 +1,5 @@
 TODO:
 
-Groups that you can invite friends to and only the ppl in the group can view and create messages for that group.
-
 Nickname
 Follow system
 Display comments system

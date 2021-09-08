@@ -175,6 +175,12 @@
                 case 'gcfaddin':
                     $say = "That user is already in this group!";
                     break;
+                case 'gcfmodin':
+                    $say = "That user is already a moderator!";
+                    break;
+                case 'gcfunmodin':
+                    $say = "That user is not a moderator!";
+                    break;
                 case 'gcfaddfriend':
                     $say = "That user is not your friend! To add someone to a group, add them as a friend then if they accept it, try this again.";
                     break;
@@ -187,8 +193,11 @@
                 case'gcnotfound':
                     $say = "Command not found!";
                     break;
-                case 'gchelpstaff':
+                case 'gchelpauthor':
                     echo "<p>Commands: !kick (Username) - Kicks a user, !add (Username) - Adds a user to the group, !delete (Group name) - Deletes the group, !members - Displays a list of members</p>";
+                    break;
+                case 'gchelpstaff':
+                    echo "<p>Commands: !kick (Username) - Kicks a user, !leave - Leaves the group, !members - Displays a list of members</p>";
                     break;
                 case 'gchelpmember':
                     echo "<p>Commands: !leave - Leaves the group, !members - Displays a list of members</p>";

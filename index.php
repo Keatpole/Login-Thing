@@ -79,7 +79,7 @@
 
                 echo "<h4 class='center'>You're viewing group " . $group["name"] . "</h4>";
 
-                if ($_SESSION["id"] == $group["author"]) echo "<h6 class='center'>Comment \"!help\" for a list of commands.</h6>";
+                echo "<h6 class='center'>Comment \"!help\" for a list of commands.</h6>";
 
                 if ($settings->enable_posting_comments) {
 
@@ -146,6 +146,16 @@
                         }
                     }
 
+                    if (isset($_GET["mentions"])) {    
+                        $contin = false;
+
+                        foreach (explode(" ", $res[1]) as $v) {
+                            if (strtolower(urldecode($_GET["mentions"])) == strtolower(substr($v, 1))) {
+                                $contin = true;
+                            }
+                        }
+                    }
+
                     if (!$contin) continue;
 
                     $has = true;
@@ -175,7 +185,7 @@
                     
                     }
 
-                    $isgroup = (isset($_GET["includefromgroup"]) ? "groups?g=" . $_GET["includefromgroup"] : ".");
+                    $isgroup = (isset($_GET["includefromgroup"]) ? "groups?g=" . $_GET["includefromgroup"] . "&" : ".?");
                     
                     $result = "";
                     foreach (explode(" ", $res[1]) as $v) {
@@ -188,7 +198,7 @@
                             }
                         }
                         elseif (str_starts_with($v, "#")) {
-                            $result .= "<a style=\"color: red;\" href=\"" . $isgroup . "&hashtag=" . urlencode(strtolower(substr($v, 1))) . "\">" . $v . "</a>";
+                            $result .= "<a style=\"color: red;\" href=\"" . $isgroup . "hashtag=" . urlencode(strtolower(substr($v, 1))) . "\">" . $v . "</a>";
                         }
                         else {
                             $result .= $v;
@@ -198,6 +208,7 @@
 
                     $replyTo = "";
 
+                    $isgroup = (isset($_GET["includefromgroup"]) ? "groups?g=" . $_GET["includefromgroup"] : ".");
                     $isgroup2 = (isset($_GET["includefromgroup"]) ? 3 : 4);
 
                     if ($res[$isgroup2] != null) {
@@ -231,8 +242,16 @@
                             }
                         }
                     } else {
-                        if ($_SESSION["id"] == $res[2] || $_SESSION["rank"] >= 2 || $group["author"] == $_SESSION["id"]) echo "<form action=\"includes/groups/deleteComment\" method=\"post\"><input type=hidden name=\"groupid\" value=" . $res[4] . "><input type=hidden name=\"commentAuthor\" value=" . $res[2] . "><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><a href=\"?g=" . $_GET["includefromgroup"] . "&reply=" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a> <button type=\"submit\" name=\"delete\" class=\"button\">Delete</button></form>";
-                        else echo "<form action=\"includes/groups/deleteComment\" method=\"post\"><input type=hidden name=\"groupid\" value=" . $res[4] . "><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><a href=\"?g=" . $_GET["g"] . "&reply=" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a></form>";
+                        $mod = false;
+                        foreach (explode(",", getTable($conn, "groups", ["id", $_GET["includefromgroup"]])["mods"]) as $v) {
+                            if ($v == $_SESSION["id"]) {
+                                $mod = true;
+                                break;
+                            }
+                        }
+
+                        if ($_SESSION["id"] == $res[2] || $_SESSION["rank"] >= 2 || $group["author"] == $_SESSION["id"] || $mod) echo "<form action=\"includes/groups/deleteComment\" method=\"post\"><input type=hidden name=\"groupid\" value=" . $res[4] . "><input type=hidden name=\"commentAuthor\" value=" . $res[2] . "><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><a href=\"?g=" . $_GET["includefromgroup"] . "&reply=" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a> <button type=\"submit\" name=\"delete\" class=\"button\">Delete</button></form>";
+                        else echo "<form action=\"includes/groups/deleteComment\" method=\"post\"><input type=hidden name=\"groupid\" value=" . $res[4] . "><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><a href=\"?g=" . $_GET["includefromgroup"] . "&reply=" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a></form>";
                     }
 
                     echo "</div>";

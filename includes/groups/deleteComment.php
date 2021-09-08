@@ -22,7 +22,15 @@ if (!$access) {
     exit();
 }
 
-if ($_SESSION["id"] == $_POST["commentAuthor"] || $_SESSION["rank"] >= 2 || getTable($conn, "groups", ["id", $_POST["groupid"]])["author"] == $_SESSION["id"]) {
+$mod = false;
+foreach (explode(",", getTable($conn, "groups", ["id", $_POST["groupid"]])["mods"]) as $v) {
+    if ($v == $_SESSION["id"]) {
+        $mod = true;
+        break;
+    }
+}
+
+if ($_SESSION["id"] == $_POST["commentAuthor"] || $_SESSION["rank"] >= 2 || getTable($conn, "groups", ["id", $_POST["groupid"]])["author"] == $_SESSION["id"] || $mod) {
 
     $msgInfo = getTable($conn, "groupmessages", ["id", $_POST["commentId"]]);
 
