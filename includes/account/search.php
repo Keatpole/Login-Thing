@@ -12,16 +12,12 @@ if (!isset($_SESSION["id"]) || !isset($_POST["submit"])) {
 
 $username = $_POST["username"];
 
-$result = getTable($conn, "users", ["uid", $username]);
-$result2 = getTable($conn, "users", ["id", $username]);
+$result = getTable($conn, "users", ["id", $username]);
+$result = ($result !== null ? $result : getTable($conn, "users", ["uid", $username]));
 
 if ($result === null) {
-    if ($result2 === null) {
-        header("location: ../../search?error=usernotfound");
-        exit();
-    } else {
-        $result = $result2;
-    }
+    header("location: ../../search?error=usernotfound");
+    exit();
 }
 header("location: ../../user?u=" . $result["id"]);
 

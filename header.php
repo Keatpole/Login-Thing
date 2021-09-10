@@ -51,12 +51,22 @@
                         }
                     }
 
-                    if ($_SESSION["rank"] <= -1) {
+                    $banned = null;
+
+                    foreach (getTable($conn, "bans", "", true) as $v) {
+                        if ($v["target"] == $user["id"]) $banned = $v;
+                    }
+
+                    if ($banned) {
                         if (!isset($_GET["banned"]) || $_GET["webname"] !== "index") {
                             header("location: .?banned");
                         }
+
+                        $banner = getTable($conn, "users", ["id", $v["banner"]]);
+
                         echo "<li><a href='includes/account/logout' " . $style . ">Log out</a></li>";
-                        echo "<h1>You have been banned</h1>";
+                        echo "<h1>You have been banned by " . $banner["uid"] . " (" . rankFromNum($banner["rank"]) . ") on [" . join("/", array_reverse(explode("-", $v["date"]))) . " (D/M/Y)]</h1>";
+
                         die();
                     } else {
                         if (isset($_GET["banned"])) {
@@ -158,6 +168,9 @@
                     break;
                 case 'authfailed':
                     $say = "Could not authorize access to this command! Make sure you are logged in to the right account.";
+                    break;
+                case 'useralreadybanned':
+                    $say = "That user is already banned!";
                     break;
                 case 'stmtfailed':
                     $say = "Something went wrong! (error code: stmtfailed-" . $_GET["webname"] . ")";

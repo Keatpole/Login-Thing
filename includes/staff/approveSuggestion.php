@@ -125,6 +125,77 @@ elseif ($_GET["type"] == "(Un)Mute") {
     header("location: ../../moderation?suggestions&error=none");
     exit();
 }
+elseif ($_GET["type"] == "-1") {
+
+    $banned = null;
+
+    foreach (getTable($conn, "bans", "", true) as $v) {
+        if ($v["target"] == $user["id"]) $banned = $v;
+    }
+
+    if ($banned) {
+
+        $sql = "DELETE FROM bans WHERE id = ?;";
+        $stmt = mysqli_stmt_init($conn);
+        if (!mysqli_stmt_prepare($stmt, $sql)) {
+            header("location: ../../moderation?error=stmtfailed");
+            exit();
+        }
+        mysqli_stmt_bind_param($stmt, "i", $v["id"]);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+
+    } else {
+
+        $sql = "INSERT INTO bans (banner, target) VALUES (?, ?);";
+        $stmt = mysqli_stmt_init($conn);
+        if (!mysqli_stmt_prepare($stmt, $sql)) {
+            header("location: ../../moderation?error=stmtfailed");
+            exit();
+        }
+        mysqli_stmt_bind_param($stmt, "ss", $_SESSION["id"], $user["id"]);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+
+        $sql = "UPDATE users SET rank = ? WHERE id = ?;";
+        $stmt = mysqli_stmt_init($conn);
+        if (!mysqli_stmt_prepare($stmt, $sql)) {
+            header("location: ../../moderation?suggestions&error=stmtfailed");
+            exit();
+        }
+        $zero = "0";
+        mysqli_stmt_bind_param($stmt, "ss", $zero, $user["id"]);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+
+    }
+
+    $sql = "DELETE FROM modsuggestions WHERE id = ?;";
+    $stmt = mysqli_stmt_init($conn);
+    if (!mysqli_stmt_prepare($stmt, $sql)) {
+        header("location: ../../moderation?suggestions&error=stmtfailed");
+        exit();
+    }
+    mysqli_stmt_bind_param($stmt, "s", $id);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+
+    $sql = "INSERT INTO log (uid, targetsUid, action, type) VALUES (?, ?, ?, ?);";
+    $stmt = mysqli_stmt_init($conn);
+    if (!mysqli_stmt_prepare($stmt, $sql)) {
+        header("location: ../../moderation?suggestions&error=stmtfailed");
+        exit();
+    }
+    $action = "ApproveSuggestion";
+    $type = "(Un)Ban";
+    session_start();
+    mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["uid"], $username, $action, $type);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+
+    header("location: ../../moderation?suggestions&error=none");
+    exit();
+}
 
 if ($_GET["type"] >= 2 && $_SESSION["rank"] <= 2) {
     header("location: ../../moderation?suggestions&error=targetisimmune");

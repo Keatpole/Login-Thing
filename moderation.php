@@ -40,7 +40,7 @@
                             <option value='2'>Set Admin</option>
                             <option value='3'>Delete Comment</option>
                             <option value='4'>(Un)Mute</option>
-                            <option value="-1">Ban</option>
+                            <option value="-1">(Un)Ban</option>
                         </select></br></br>
                         <button type="submit" name="submit" class="button">Confirm</button>
                     </form>
@@ -79,6 +79,10 @@
                                 }
                                 elseif ($row["type"] == "(Un)Mute") {
                                     echo "<h4>Username: <a href=\"user?u=" . getTable($conn, "users", ["uid", $row["targetsUid"]])["id"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . $row["targetsUid"] . "</a> - Type: " . $row["type"] . " - Suggester: <a href=\"user?u=" . $row["suggester"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["suggester"]])["uid"] . "</a></h4><br>";
+                                    echo "<a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\" href='includes/staff/approveSuggestion?uid=" . $row["targetsUid"] . "&id=" . $row["id"] . "&type=" . $row["type"] . "'>Accept</a> <a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\" href='includes/staff/refuseSuggestion?uid=" . $row["targetsUid"] . "&id=" . $row["id"] . "&type=" . $row["type"] . "'>Deny</a>";
+                                }
+                                elseif ($row["type"] == "-1") {
+                                    echo "<h4>Username: <a href=\"user?u=" . getTable($conn, "users", ["uid", $row["targetsUid"]])["id"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . $row["targetsUid"] . "</a> - Type: (Un)Ban - Suggester: <a href=\"user?u=" . $row["suggester"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["suggester"]])["uid"] . "</a></h4><br>";
                                     echo "<a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\" href='includes/staff/approveSuggestion?uid=" . $row["targetsUid"] . "&id=" . $row["id"] . "&type=" . $row["type"] . "'>Accept</a> <a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\" href='includes/staff/refuseSuggestion?uid=" . $row["targetsUid"] . "&id=" . $row["id"] . "&type=" . $row["type"] . "'>Deny</a>";
                                 }
                                 else {
@@ -133,7 +137,7 @@
                             if ($row["id"] == $_GET["id"]) {
     
                                 echo "<h4>Username: <a href=\"user?u=" . $row["target"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["target"]])["uid"] . "</a> - Reason: " . $row["reason"] . " - Reporter: <a href=\"user?u=" . $row["reporter"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["reporter"]])["uid"] . "</a> " . $details . " </h4><br>";
-                                echo "<a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\" href='includes/staff/approveReport?target=" . $row["target"] . "&id=" . $row["id"] . "&reason=" . $row["reason"] . "&action=-1" . "'>Ban</a> <a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\" href='includes/staff/refuseReport?target=" . $row["target"] . "&id=" . $row["id"] . "&reason=" . $row["reason"] . "'>Ignore</a>";
+                                echo "<a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\" href='includes/staff/approveReport?target=" . $row["target"] . "&id=" . $row["id"] . "&reason=" . $row["reason"] . "&action=-1" . "'>(Un)Ban</a> <a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\" href='includes/staff/refuseReport?target=" . $row["target"] . "&id=" . $row["id"] . "&reason=" . $row["reason"] . "'>Ignore</a>";
                                 exit();
     
                             }
@@ -173,7 +177,7 @@
                             <option value="1">Set Moderator</option>
                             <option value="3">Delete Comment</option>
                             <option value="5">(Un)Mute</option>
-                            <option value="-1">Ban</option>
+                            <option value="-1">(Un)Ban</option>
                             <?php
                                 if ($_SESSION["rank"] >= 3) {
                                     echo "<option value='4'>(Un)Verify</option>";

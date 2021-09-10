@@ -175,13 +175,19 @@
                             if ($v["target"] == $user["id"]) $muted = " (Muted)";
                         }
 
+                        $banned = "";
+
+                        foreach (getTable($conn, "bans", "", true) as $v) {
+                            if ($v["target"] == $user["id"]) $banned = " (Banned)";
+                        }
+
                         if ($_SESSION["rank"] < 1) $muted = "";
 
                         $verified = ($user["verified"] ? "<p style=\"display: inline;color: #ccaa00;\" title=\"Verified\">✔</p>" : "");
                         $commentId = ($_SESSION["rank"] > 0 ? "[" . $res[0] . "] " : "");
                         $admin = ($user["rank"] >= 1 ? " <img src=\"img/admin.png\" alt=\"" . rankFromNum($user["rank"]) . "\" title=\"" . rankFromNum($user["rank"]) . "\">" : "");
 
-                        echo "<h2>" . $commentId . "<a style=\"color: green;\" href=\"user?u=" . $res[2] . "\">" . $user["uid"] . "</a>" . $admin . $verified . $muted . ":</h2>";
+                        echo "<h2>" . $commentId . "<a style=\"color: green;\" href=\"user?u=" . $res[2] . "\">" . $user["uid"] . "</a>" . $admin . $verified . $muted . $banned . ":</h2>";
                     
                     }
 

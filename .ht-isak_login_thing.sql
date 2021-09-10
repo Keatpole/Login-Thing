@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 23. Aug, 2021 17:33 PM
+-- Generation Time: 10. Sep, 2021 20:51 PM
 -- Tjener-versjon: 10.4.20-MariaDB
 -- PHP Version: 8.0.9
 
@@ -20,6 +20,19 @@ SET time_zone = "+00:00";
 --
 -- Database: `isak_login_thing`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Tabellstruktur for tabell `bans`
+--
+
+CREATE TABLE `bans` (
+  `id` int(11) NOT NULL,
+  `banner` int(255) NOT NULL,
+  `target` int(255) NOT NULL,
+  `date` date NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -106,7 +119,9 @@ CREATE TABLE `groups` (
   `id` int(11) NOT NULL,
   `name` varchar(128) NOT NULL DEFAULT 'Unnamed',
   `author` int(255) NOT NULL,
-  `members` text NOT NULL
+  `members` text NOT NULL,
+  `mods` text NOT NULL,
+  `date` date NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -204,7 +219,7 @@ CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `email` varchar(128) NOT NULL,
   `uid` varchar(128) NOT NULL,
-  `pwd` varchar(128) NOT NULL,
+  `pwd` varchar(255) NOT NULL,
   `rank` int(11) NOT NULL DEFAULT 0,
   `verified` int(1) NOT NULL DEFAULT 0,
   `date` date NOT NULL DEFAULT current_timestamp()
@@ -213,6 +228,12 @@ CREATE TABLE `users` (
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `bans`
+--
+ALTER TABLE `bans`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `deletedgroupmessages`
@@ -295,6 +316,12 @@ ALTER TABLE `users`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `bans`
+--
+ALTER TABLE `bans`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `deletedgroupmessages`

@@ -5,7 +5,13 @@ session_start();
 require_once "../other/dbh.php";
 require_once "../other/functions.php";
 
-if (isset($_SESSION["rank"]) && $_SESSION["rank"] <= -1) {
+$banned = null;
+
+foreach (getTable($conn, "bans", "", true) as $v) {
+    if ($v["target"] == $user["id"]) $banned = $v;
+}
+
+if (isset($_SESSION["rank"]) && $banned) {
     header("location: ../../user");
     exit();
 }
