@@ -14,7 +14,7 @@ $msgInfo = getTable($conn, "messages", ["id", $_POST["commentId"]]);
 
 if (isset($_POST["delete"])) {
         
-    if ($_SESSION["id"] == $_POST["commentAuthor"] && $msgInfo["author"] == $_POST["commentAuthor"] || $_SESSION["rank"] >= 2) {
+    if ($_SESSION["id"] == $msgInfo["author"] || $_SESSION["rank"] >= 2) {
 
         $sql = "INSERT INTO deletedmessages(msgid, message, author, likes, replyTo, createdate) VALUES (?, ?, ?, ?, ?, ?);";
         $stmt = mysqli_stmt_init($conn);
@@ -45,7 +45,7 @@ if (isset($_POST["delete"])) {
         }
         $action = "DeleteComment";
         session_start();
-        mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["uid"], $_POST["commentAuthor"], $action, $_POST["commentId"]);
+        mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["uid"], $msgInfo["author"], $action, $_POST["commentId"]);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
 

@@ -27,7 +27,7 @@ if ($in || $target["id"] == $group["author"]) {
 }
 
 foreach (getTable($conn, "friends", "", True) as $v) {
-    if ($v["user1"] == $_POST["user"] && $v["user2"] == $_SESSION["id"] || $v["user2"] == $_POST["user"] && $v["user2"] == $_SESSION["id"] || $_SESSION["rank"] > 2) {
+    if ($v["user1"] == $_POST["user"] && $v["user2"] == $_SESSION["id"] || $v["user2"] == $_POST["user"] && $v["user1"] == $_SESSION["id"] || $_SESSION["rank"] > 2) {
         $exit = false;
         break;
     }

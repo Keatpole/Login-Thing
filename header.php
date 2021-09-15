@@ -175,6 +175,9 @@
                 case 'stmtfailed':
                     $say = "Something went wrong! (error code: stmtfailed-" . $_GET["webname"] . ")";
                     break;
+                case 'notfriend':
+                    $say = "That user is not your friend! Add them as a friend then if they accept it, try this again.";
+                    break;
                 # gcf = group command failed
                 case 'gcfauthfailed':
                     $say = "You can not use commands in this group.";

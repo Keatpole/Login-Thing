@@ -30,9 +30,9 @@ foreach (explode(",", getTable($conn, "groups", ["id", $_POST["groupid"]])["mods
     }
 }
 
-if ($_SESSION["id"] == $_POST["commentAuthor"] || $_SESSION["rank"] >= 2 || getTable($conn, "groups", ["id", $_POST["groupid"]])["author"] == $_SESSION["id"] || $mod) {
+$msgInfo = getTable($conn, "groupmessages", ["id", $_POST["commentId"]]);
 
-    $msgInfo = getTable($conn, "groupmessages", ["id", $_POST["commentId"]]);
+if ($_SESSION["id"] == $msgInfo["author"] || $_SESSION["rank"] >= 2 || getTable($conn, "groups", ["id", $_POST["groupid"]])["author"] == $_SESSION["id"] || $mod) {
 
     $sql = "INSERT INTO deletedgroupmessages(msgid, message, author, replyTo, groupId, createdate) VALUES (?, ?, ?, ?, ?, ?);";
     $stmt = mysqli_stmt_init($conn);
@@ -63,7 +63,7 @@ if ($_SESSION["id"] == $_POST["commentAuthor"] || $_SESSION["rank"] >= 2 || getT
     }
     $action = "DeleteGroupComment";
     session_start();
-    mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["uid"], $_POST["commentAuthor"], $action, $_POST["commentId"]);
+    mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["uid"], $msgInfo["author"], $action, $_POST["commentId"]);
     mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
 

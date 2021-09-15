@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 10. Sep, 2021 20:51 PM
+-- Generation Time: 15. Sep, 2021 23:15 PM
 -- Tjener-versjon: 10.4.20-MariaDB
 -- PHP Version: 8.0.9
 
@@ -31,7 +31,7 @@ CREATE TABLE `bans` (
   `id` int(11) NOT NULL,
   `banner` int(255) NOT NULL,
   `target` int(255) NOT NULL,
-  `date` date NOT NULL DEFAULT current_timestamp()
+  `date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -47,8 +47,8 @@ CREATE TABLE `deletedgroupmessages` (
   `author` int(255) NOT NULL,
   `replyTo` int(255) NOT NULL,
   `groupId` int(255) NOT NULL,
-  `createdate` date NOT NULL,
-  `date` date NOT NULL DEFAULT current_timestamp()
+  `createdate` datetime NOT NULL,
+  `date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -64,8 +64,24 @@ CREATE TABLE `deletedmessages` (
   `author` int(255) NOT NULL,
   `likes` int(255) NOT NULL DEFAULT 0,
   `replyTo` int(255) NOT NULL,
-  `createdate` date NOT NULL,
-  `date` date NOT NULL DEFAULT current_timestamp()
+  `createdate` datetime NOT NULL,
+  `date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Tabellstruktur for tabell `deletedprivatemessages`
+--
+
+CREATE TABLE `deletedprivatemessages` (
+  `id` int(11) NOT NULL,
+  `msgid` int(255) NOT NULL,
+  `message` varchar(250) NOT NULL,
+  `author` int(255) NOT NULL,
+  `receiver` int(255) NOT NULL,
+  `createdate` datetime NOT NULL,
+  `date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -78,7 +94,7 @@ CREATE TABLE `friendreq` (
   `id` int(11) NOT NULL,
   `user1` int(11) NOT NULL,
   `user2` int(11) NOT NULL,
-  `date` date NOT NULL DEFAULT current_timestamp()
+  `date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -91,7 +107,7 @@ CREATE TABLE `friends` (
   `id` int(11) NOT NULL,
   `user1` int(11) NOT NULL,
   `user2` int(11) NOT NULL,
-  `date` date NOT NULL DEFAULT current_timestamp()
+  `date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -106,7 +122,7 @@ CREATE TABLE `groupmessages` (
   `author` int(255) NOT NULL,
   `replyTo` int(255) NOT NULL,
   `groupId` int(255) NOT NULL,
-  `date` date NOT NULL DEFAULT current_timestamp()
+  `date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -121,7 +137,7 @@ CREATE TABLE `groups` (
   `author` int(255) NOT NULL,
   `members` text NOT NULL,
   `mods` text NOT NULL,
-  `date` date NOT NULL DEFAULT current_timestamp()
+  `date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -136,7 +152,7 @@ CREATE TABLE `log` (
   `targetsUid` varchar(250) NOT NULL,
   `action` varchar(128) NOT NULL,
   `type` varchar(128) NOT NULL,
-  `date` date NOT NULL DEFAULT current_timestamp()
+  `date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -149,7 +165,7 @@ CREATE TABLE `messagelikes` (
   `id` int(11) NOT NULL,
   `msgid` int(250) NOT NULL,
   `userid` int(250) NOT NULL,
-  `date` date NOT NULL DEFAULT current_timestamp()
+  `date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -164,7 +180,7 @@ CREATE TABLE `messages` (
   `author` int(255) NOT NULL,
   `likes` int(255) NOT NULL DEFAULT 0,
   `replyTo` int(255) NOT NULL,
-  `date` date NOT NULL DEFAULT current_timestamp()
+  `date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -178,7 +194,7 @@ CREATE TABLE `modsuggestions` (
   `suggester` varchar(255) NOT NULL,
   `targetsUid` varchar(128) NOT NULL,
   `type` varchar(128) NOT NULL,
-  `date` date NOT NULL DEFAULT current_timestamp()
+  `date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -191,7 +207,21 @@ CREATE TABLE `mutes` (
   `id` int(11) NOT NULL,
   `muter` int(255) NOT NULL,
   `target` int(255) NOT NULL,
-  `date` date NOT NULL DEFAULT current_timestamp()
+  `date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Tabellstruktur for tabell `privatemessages`
+--
+
+CREATE TABLE `privatemessages` (
+  `id` int(11) NOT NULL,
+  `message` varchar(250) NOT NULL,
+  `author` int(255) NOT NULL,
+  `receiver` int(255) NOT NULL,
+  `date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -206,7 +236,7 @@ CREATE TABLE `reports` (
   `target` int(255) NOT NULL,
   `reason` varchar(128) NOT NULL,
   `otherreason` text NOT NULL,
-  `date` date NOT NULL DEFAULT current_timestamp()
+  `date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -222,7 +252,7 @@ CREATE TABLE `users` (
   `pwd` varchar(255) NOT NULL,
   `rank` int(11) NOT NULL DEFAULT 0,
   `verified` int(1) NOT NULL DEFAULT 0,
-  `date` date NOT NULL DEFAULT current_timestamp()
+  `date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -245,6 +275,12 @@ ALTER TABLE `deletedgroupmessages`
 -- Indexes for table `deletedmessages`
 --
 ALTER TABLE `deletedmessages`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `deletedprivatemessages`
+--
+ALTER TABLE `deletedprivatemessages`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -302,6 +338,12 @@ ALTER TABLE `mutes`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `privatemessages`
+--
+ALTER TABLE `privatemessages`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `reports`
 --
 ALTER TABLE `reports`
@@ -333,6 +375,12 @@ ALTER TABLE `deletedgroupmessages`
 -- AUTO_INCREMENT for table `deletedmessages`
 --
 ALTER TABLE `deletedmessages`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `deletedprivatemessages`
+--
+ALTER TABLE `deletedprivatemessages`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -387,6 +435,12 @@ ALTER TABLE `modsuggestions`
 -- AUTO_INCREMENT for table `mutes`
 --
 ALTER TABLE `mutes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `privatemessages`
+--
+ALTER TABLE `privatemessages`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --

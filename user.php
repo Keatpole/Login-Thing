@@ -126,6 +126,7 @@
             }
 
             if ($type == "friend") {
+                echo "</br><a href=\"pm?u=" . $_GET["u"] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">PM</a></br>";
                 echo "</br><a href=\"groups?u=" . $_GET["u"] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Group</a></br>";
             }
 
