@@ -141,7 +141,7 @@
         echo "<h1>Comments:</h1>";
 
         $_GET["includefromprofile"] = $currentUser;
-        include_once "index.php";
+        include_once "comments.php";
             
     ?>
         

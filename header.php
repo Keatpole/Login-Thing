@@ -85,6 +85,7 @@
                                 if (getTable($conn, "users", ["id", $res[1]]) != null) {
                                     echo "<li><a href='friends' style=\"font: 400 13.3333px Arial; font-size: 16px; background-color: darkred;\">Friends</a></li>";
                                     $has = true;
+                                    break;
                                 }
                             }
                         }

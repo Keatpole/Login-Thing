@@ -21,7 +21,7 @@
         if (isset($_GET["g"])) {
 
             $_GET["includefromgroup"] = $_GET["g"];
-            include_once "index.php";
+            include_once "comments.php";
 
             exit();
 

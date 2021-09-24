@@ -38,7 +38,7 @@
         }
 
         $_GET["includefrompm"] = $_GET["u"];
-        include_once "index.php";
+        include_once "comments.php";
 
     } else {
         header("location: .?error=usernotfound");
