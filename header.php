@@ -18,20 +18,6 @@
 
                 $style = "style=\"font: 400 13.3333px Arial; font-size: 16px;\"";
 
-                if (isset($_COOKIE["userid"]) && password_verify($_COOKIE["id"], $_COOKIE["userid"]) && password_verify($_COOKIE["userid"], $_COOKIE["user"])) {
-                    $user = getTable($conn, "users", ["id", $_COOKIE["id"]]);
-
-                    if ($user == null) {
-                        $_SESSION["rank"] = 0;
-                        echo "<h1>Your account has been deleted. Press <a style=\"color: red;\" href=\"includes/account/logout\">here</a> to log out.</h1>";
-                        exit();
-                    }
-
-                    $_SESSION["id"] = $user["id"];
-                    $_SESSION["uid"] = $user["uid"];
-                    $_SESSION["rank"] = $user["rank"];
-                }
-
                 if (isset($_SESSION["uid"])) {
 
                     if (getTable($conn, "users", ["uid", $_SESSION["uid"]]) == null || $_SESSION["id"] != getTable($conn, "users", ["uid", $_SESSION["uid"]])["id"]) {

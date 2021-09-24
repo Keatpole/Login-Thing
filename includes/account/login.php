@@ -36,16 +36,7 @@ else {
     $_SESSION["uid"] = $user["uid"];
     $_SESSION["id"] = $user["id"];
     $_SESSION["rank"] = $user["rank"];
-
-    if (isset($_POST["remember"]) && $_POST["remember"] == "on") {
-        $test = password_hash($user["id"], PASSWORD_DEFAULT);
-
-        $hour = time() + 3600 * 24 * 30;
-        setcookie("userid", $test, $hour, "/");
-        setcookie("user", password_hash($test, PASSWORD_DEFAULT), $hour, "/");
-        setcookie("id", $user["id"], $hour, "/");
-    }
-
+    
     $_SESSION["passtoken"] = null;
     
     header("location: ../../.");
