@@ -16,19 +16,35 @@
                 require_once "includes/other/dbh.php";
                 require_once "includes/other/functions.php";
 
+                foreach (mysqli_fetch_all(getTable($conn, "users")) as $res) {
+                    if ($res[6] == 1) {
+                        if (strtotime(date("Y-m-d H:i:s")) >= strtotime($res[7])) {
+                            $sql = "DELETE FROM users WHERE id = ?;";
+                            $stmt = mysqli_stmt_init($conn);
+                            if (!mysqli_stmt_prepare($stmt, $sql)) {
+                                header("location: .?error=stmtfailed");
+                                exit();
+                            }
+                            mysqli_stmt_bind_param($stmt, "s", $res[0]);
+                            mysqli_stmt_execute($stmt);
+                            mysqli_stmt_close($stmt);
+                        }
+                    }
+                }
+
                 $style = "style=\"font: 400 13.3333px Arial; font-size: 16px;\"";
 
                 if (isset($_SESSION["uid"])) {
 
-                    if (getTable($conn, "users", ["uid", $_SESSION["uid"]]) == null || $_SESSION["id"] != getTable($conn, "users", ["uid", $_SESSION["uid"]])["id"]) {
+                    $user = getTable($conn, "users", ["id", $_SESSION["id"]]);
+
+                    if ($user == null || $_SESSION["id"] != $user["id"] || $user["deleted"]) {
                         $_SESSION["rank"] = 0;
                         echo "<h1>Your account has been deleted. Press <a style=\"color: red;\" href=\"includes/account/logout\">here</a> to log out.</h1>";
                         exit();
                     }
 
                     $_SESSION["rank"] = getTable($conn, "users", ["uid", $_SESSION["uid"]])["rank"];
-
-                    $user = getTable($conn, "users", ["id", $_SESSION["id"]]);
 
                     if (isset($_SESSION["passtoken"]) && $_SESSION["passtoken"][2] && strtotime(date("F j, Y, H:i")) >= strtotime($_SESSION["passtoken"][2])) {
                         $_SESSION["passtoken"] = null;
@@ -158,6 +174,9 @@
                     break;
                 case 'useralreadybanned':
                     $say = "That user is already banned!";
+                    break;
+                case 'userdeleted':
+                    $say = "That account has been deleted!";
                     break;
                 case 'stmtfailed':
                     $say = "Something went wrong! (error code: stmtfailed-" . $_GET["webname"] . ")";

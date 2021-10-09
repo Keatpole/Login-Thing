@@ -164,8 +164,8 @@
         
             echo "<h1>Admin Panel</h1>";
 
-            if ($_SESSION["rank"] >= 3) $size = 7;
-            else $size = 5;
+            if ($_SESSION["rank"] >= 3) $size = 8;
+            else $size = 6;
             
             if ($settings->enable_admin_panel) {
                 ?>
@@ -176,6 +176,7 @@
                             <option value="0">Set User</option>
                             <option value="1">Set Moderator</option>
                             <option value="3">Delete Comment</option>
+                            <option value="6">Undelete</option>
                             <option value="5">(Un)Mute</option>
                             <option value="-1">(Un)Ban</option>
                             <?php

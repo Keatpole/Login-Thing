@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 15. Sep, 2021 23:15 PM
+-- Generation Time: 09. Okt, 2021 21:03 PM
 -- Tjener-versjon: 10.4.20-MariaDB
 -- PHP Version: 8.0.9
 
@@ -62,7 +62,7 @@ CREATE TABLE `deletedmessages` (
   `msgid` int(255) NOT NULL,
   `message` varchar(250) NOT NULL,
   `author` int(255) NOT NULL,
-  `likes` int(255) NOT NULL DEFAULT 0,
+  `likes` bigint(255) NOT NULL DEFAULT 0,
   `replyTo` int(255) NOT NULL,
   `createdate` datetime NOT NULL,
   `date` datetime NOT NULL DEFAULT current_timestamp()
@@ -178,7 +178,7 @@ CREATE TABLE `messages` (
   `id` int(11) NOT NULL,
   `message` varchar(250) NOT NULL,
   `author` int(255) NOT NULL,
-  `likes` int(255) NOT NULL DEFAULT 0,
+  `likes` bigint(255) NOT NULL DEFAULT 0,
   `replyTo` int(255) NOT NULL,
   `date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -252,6 +252,8 @@ CREATE TABLE `users` (
   `pwd` varchar(255) NOT NULL,
   `rank` int(11) NOT NULL DEFAULT 0,
   `verified` int(1) NOT NULL DEFAULT 0,
+  `deleted` bit(1) DEFAULT b'0',
+  `deletedate` datetime DEFAULT NULL,
   `date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

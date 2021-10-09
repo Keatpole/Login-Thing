@@ -15,6 +15,16 @@ $action = $_POST["action"];
 
 $user = getTable($conn, "users", ["uid", $username]);
 
+if ($user == null) {
+    header("location: ../../moderation?error=usernotfound");
+    exit();
+}
+
+if ($user["rank"] >= 2 && $_SESSION["rank"] <= 2) {
+    header("location: ../../moderation?error=targetisimmune");
+    exit();
+}
+
 if ($action == "3") {
 
     $msgInfo = getTable($conn, "messages", ["id", $username]);
@@ -157,6 +167,34 @@ elseif ($action == "5") {
     }
 
 }
+elseif ($action == "6") {
+    $sql = "UPDATE `users` SET `deleted`=0,`deletedate`=NULL WHERE id = ?;";
+    $stmt = mysqli_stmt_init($conn);
+    if (!mysqli_stmt_prepare($stmt, $sql)) {
+        header("location: ../../user?error=stmtfailed");
+        exit();
+    }
+    session_start();
+    mysqli_stmt_bind_param($stmt, "s", $user["id"]);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+
+    $sql = "INSERT INTO log (uid, targetsUid, action, type) VALUES (?, ?, ?, ?);";
+    $stmt = mysqli_stmt_init($conn);
+    if (!mysqli_stmt_prepare($stmt, $sql)) {
+        header("location: ../../moderation?error=stmtfailed");
+        exit();
+    }
+    $action = "Admin";
+    $type = "Undelete";
+    session_start();
+    mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["id"], $user["id"], $action, $type);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+
+    header("location: ../../moderation?error=none");
+    exit();
+}
 elseif ($action == "-1") {
 
     $banned = null;
@@ -235,17 +273,6 @@ elseif ($action == "-1") {
 
     }
 
-}
-
-
-if ($user == null) {
-    header("location: ../../moderation?error=usernotfound");
-    exit();
-}
-
-if ($user["rank"] >= 2 && $_SESSION["rank"] <= 2) {
-    header("location: ../../moderation?error=targetisimmune");
-    exit();
 }
 
 $sql = "UPDATE users SET rank = ? WHERE uid = ?;";

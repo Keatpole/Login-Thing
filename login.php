@@ -21,7 +21,7 @@
                 <form action="includes/account/login" method="post">
                     <input type="text" name="uid" placeholder="Username/Email..."></br>
                     <input type="password" name="pwd" placeholder="Password..."></br></br>
-                    </br></br><button type="submit" name="submit" class="button">Log In</button>
+                    <button type="submit" name="submit" class="button">Log In</button>
                 </form>
             <?php
         }
