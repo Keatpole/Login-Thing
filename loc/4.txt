@@ -1,0 +1,72 @@
+‎---------------
+August ‎29, ‎2021
+---------------
+
+1. img/admin.png                           - 9 LOC
+                                           = 9 LOC
+
+2. includes/account/changeUsername.php    - 41 LOC
+3. includes/account/delete.php            - 28 LOC
+4. includes/account/forgotPass.php        - 29 LOC
+5. includes/account/login.php             - 53 LOC
+6. includes/account/logout.php            - 18 LOC
+7. includes/account/report.php            - 61 LOC
+8. includes/account/resetPassword.php     - 43 LOC
+9. includes/account/searchUser.php        - 28 LOC
+10. includes/account/signup.php           - 51 LOC
+                                         = 352 LOC
+
+11. includes/comments/like.php            - 46 LOC
+12. includes/comments/comment.php        - 143 LOC
+                                         = 189 LOC
+
+13. includes/friends/accept.php           - 46 LOC
+14. includes/friends/add.php              - 30 LOC
+15. includes/friends/reject.php           - 33 LOC
+16. includes/friends/remove.php           - 59 LOC
+                                         = 168 LOC
+
+17. includes/groups/add.php               - 47 LOC
+18. includes/groups/comment.php          - 184 LOC
+19. includes/groups/create.php            - 30 LOC
+20. includes/groups/deleteComment.php     - 65 LOC
+                                         = 326 LOC
+
+21. includes/other/dbh.php                - 12 LOC
+22. includes/other/functions.php          - 80 LOC
+23. includes/other/resetDB.php            - 46 LOC
+24. includes/other/settings.php           - 21 LOC
+                                         = 159 LOC
+ 
+25. includes/staff/admin.php             - 196 LOC
+26. includes/staff/approveReport.php      - 61 LOC
+27. includes/staff/approveSuggestion.php - 174 LOC
+28. includes/staff/mod.php                - 96 LOC
+29. includes/staff/refuseReport.php       - 36 LOC
+30. includes/staff/refuseSuggestion.php   - 38 LOC
+                                         = 601 LOC
+
+31. .ht-isak_login_thing.sql             - 380 LOC
+32. .htaccess                              - 8 LOC
+33. features.php                          - 18 LOC
+34. forgotpass.php                        - 29 LOC
+35. friendreq.php                         - 79 LOC
+36. friends.php                           - 86 LOC
+37. groups.php                           - 142 LOC
+38. header.php                           - 197 LOC
+39. index.php                            - 265 LOC
+40. login.php                             - 39 LOC
+41. moderation.php                       - 196 LOC
+42. README.md                              - 1 LOC
+43. report.php                            - 54 LOC
+44. resetpass.php                         - 60 LOC
+45. search.php                            - 25 LOC
+46. signup.php                            - 34 LOC
+47. style.css                             - 56 LOC
+48. suggestions.php                       - 79 LOC
+49. todo.txt                               - 7 LOC
+50. user.php                             - 148 LOC
+                                        = 1903 LOC
+
+3310 Written Lines Of Code
+3707 Total Lines Of Code

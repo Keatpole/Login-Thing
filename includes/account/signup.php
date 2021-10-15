@@ -17,7 +17,7 @@ if (empty($email) || empty($username) || empty($pwd) || empty($pwdRepeat)) {
     header("location: ../../signup?error=emptyinput");
     exit();
 }
-if (!preg_match("/^[a-zA-Z0-9]*$/", $username)) {
+if (!preg_match("/^[a-zA-Z0-9&-_., ]*$/", $username)) {
     header("location: ../../signup?error=invaliduid");
     exit();
 }

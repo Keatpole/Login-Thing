@@ -20,6 +20,19 @@ if (password_verify($_POST["token"], $_SESSION["passtoken"][0])) {
         exit();
     }
 
+    if (empty($uid) || empty($uidRepeat)) {
+        header("location: ../../resetpass?t=" . $_POST["token"] . "&error=emptyinput");
+        exit();
+    }
+    if (!preg_match("/^[a-zA-Z0-9&-_., ]*$/", $uid)) {
+        header("location: ../../resetpass?t=" . $_POST["token"] . "&error=invaliduid");
+        exit();
+    }
+    if (uidExists($conn, $uid, "") !== false) {
+        header("location: ../../resetpass?t=" . $_POST["token"] . "&error=usernametaken");
+        exit();
+    }
+
     $sql = "UPDATE users SET uid=? WHERE id=?;";
     $stmt = mysqli_stmt_init($conn);
     if (!mysqli_stmt_prepare($stmt, $sql)) {

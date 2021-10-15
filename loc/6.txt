@@ -1,0 +1,80 @@
+----------------
+October ‎14, ‎2021
+----------------
+
+1. img/admin.png                          -    9 LOC
+                                          =    9 LOC
+
+2. includes/account/changeUsername.php    -   41 LOC
+3. includes/account/delete.php            -   34 LOC
+4. includes/account/forgotPass.php        -   29 LOC
+5. includes/account/login.php             -   49 LOC
+6. includes/account/logout.php            -   11 LOC
+7. includes/account/report.php            -   61 LOC
+8. includes/account/resetPassword.php     -   43 LOC
+9. includes/account/search.php            -   24 LOC
+10. includes/account/signup.php           -   51 LOC
+                                          =  343 LOC
+
+11. includes/comments/comment.php         -   46 LOC
+12. includes/comments/like.php            -  143 LOC
+                                          =  189 LOC
+
+13. includes/friends/accept.php           -   46 LOC
+14. includes/friends/add.php              -   30 LOC
+15. includes/friends/reject.php           -   33 LOC
+16. includes/friends/remove.php           -   59 LOC
+                                          =  168 LOC
+
+17. includes/groups/add.php               -   62 LOC
+18. includes/groups/comment.php           -  482 LOC
+19. includes/groups/create.php            -   30 LOC
+20. includes/groups/deleteComment.php     -   73 LOC
+                                          =  647 LOC
+
+21. includes/other/dbh.php                -   12 LOC
+22. includes/other/functions.php          -   80 LOC
+23. includes/other/getUser.php            -   38 LOC
+24. includes/other/resetDB.php            -   46 LOC
+25. includes/other/settings.php           -   21 LOC
+                                          =  197 LOC
+ 
+26. includes/pm/comment.php               -   48 LOC
+27. includes/pm/deleteComment.php         -   71 LOC
+                                          =  119 LOC
+
+28. includes/staff/admin.php              -  302 LOC
+29. includes/staff/approveReport.php      -  124 LOC
+30. includes/staff/approveSuggestion.php  -  245 LOC
+31. includes/staff/mod.php                -   96 LOC
+32. includes/staff/refuseReport.php       -   36 LOC
+33. includes/staff/refuseSuggestion.php   -   38 LOC
+                                          =  841 LOC
+
+34. .ht-isak_login_thing.sql              -  459 LOC
+35. .htaccess                             -    7 LOC
+36. comments.php                          -  676 LOC
+37. features.php                          -   18 LOC
+38. forgotpass.php                        -   29 LOC
+39. friends.php                           -  143 LOC
+40. groups.php                            -  142 LOC
+41. header.php                            -  240 LOC
+42. index.php                             -   27 LOC
+43. login.php                             -   38 LOC
+44. moderation.php                        -  201 LOC
+45. pm.php                                -   51 LOC
+46. README.md                             -    1 LOC
+47. report.php                            -   54 LOC
+48. resetpass.php                         -   60 LOC
+49. search.php                            -   25 LOC
+50. signup.php                            -   34 LOC
+41. style.css                             -   56 LOC
+52. todo.txt                              -    5 LOC
+53. user.php                              -  149 LOC
+                                          = 2415 LOC
+
+-------
+RESULTS
+-------
+Written:                                  - 4460 LOC
+Total:                                    - 4928 LOC
