@@ -25,13 +25,15 @@
 
             $verified = ($user["verified"] ? "<p style=\"display: inline;color: #ccaa00;\" title=\"Verified\">✔</p>" : "");
 
-            echo "<h1>" . $user["uid"] . $verified . "'s Profile</h1>";
+            echo "<h1>" . $user["uid"] . "'s Profile</h1>";
             echo "<h4>Rank: " . rankFromNum($_SESSION["rank"]) . "</h4>";
 
             $friends = 0;
             foreach (mysqli_fetch_all(getTable($conn, "friends")) as $res) {
                 if ($res[1] == $_SESSION["id"] || $res[2] == $_SESSION["id"]) {
-                    $friends += 1;
+                    if (getTable($conn, "users", ["id", $res[1]]) != null && getTable($conn, "users", ["id", $res[2]]) != null) {
+                        $friends++;
+                    }
                 }
             }
             echo "<h4>Friends: " . strval($friends) . "</h4>";
@@ -59,12 +61,12 @@
 
             $currentUser = $_GET["u"];
 
-            if (getTable($conn, "users", ["id", $_GET["u"]]) == null) {
+            $user = getTable($conn, "users", ["id", $_GET["u"]]);
+
+            if ($user == null) {
                 header("location: user?error=usernotfound");
                 exit();
             }
-
-            $user = getTable($conn, "users", ["id", $_GET["u"]]);
 
             $verified = ($user["verified"] ? "<p style=\"display: inline;color: #ccaa00;\" title=\"Verified\">✔</p>" : "");
 

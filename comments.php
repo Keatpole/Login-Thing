@@ -348,7 +348,11 @@
                             # 1,2 = 50%    Chance
                             # 1,3 = 33.33% Chance
                             # 1,4 = 25%    Chance
-                            if (random_int(1,3) == 1 || in_array($res[0], $friend_comments)) {
+                            $rnd = random_int(1, $settings->random_comment_chance);
+
+                            $rnd = ($settings->enable_random_comments ? $rnd : 0);
+
+                            if ($rnd == 1 || in_array($res[0], $friend_comments)) {
                                 continue;
                             }
 

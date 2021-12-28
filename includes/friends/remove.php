@@ -19,7 +19,7 @@ if ($_SESSION["id"] == getTable($conn, "friends", ["id", $_GET["i"]])["user2"] |
 }
 
 if ($exit) {
-    header("location: ../../friends?req&error=authfailed");
+    header("location: ../../friends?error=authfailed");
     exit();
 }
 

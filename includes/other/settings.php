@@ -10,6 +10,9 @@ class Settings {
     public $enable_posting_comments = 1;
     public $enable_viewing_comments = 1;
     public $enable_likes = 1;
+
+    public $enable_random_comments = 0;
+    public $random_comment_chance = 3; # 1 in x chance the comment being skipped
     
     public $enable_suggestions = 1;
     public $enable_mod_panel = 1;

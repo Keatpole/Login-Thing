@@ -12,7 +12,7 @@
     ?>
     
     </br><b><code>Features: Accounts, Comments, Staff System, Friends</code></b></br>
-    </br><b><code>Todo (maybe): Nicknames, Follow, Smart Display Comments <a href="todo.txt" style="color: darkblue; text-decoration: none;">(raw)</a></code></b>
+    </br><b><code>Todo (maybe): Nicknames, Follow, Smart Display Comments <a href="ideas.txt" style="color: darkblue; text-decoration: none;">(raw)</a></code></b>
 
 </body>
 </html>

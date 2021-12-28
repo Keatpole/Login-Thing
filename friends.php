@@ -116,7 +116,7 @@
 
                     $user = getTable($conn, "users", ["id", $res[1]]);
 
-                    if ($user["uid"] == null) {
+                    if ($user == null) {
                         echo "<h2><a style=\"color: black;\" href=\"includes/friends/remove?u=" . $res[1] . "&i=" . $res[0] ."&t=friend&return=friends\">[Account Deleted]</a></h2>";
                     } else {
                         if ($user["verified"] == 0) {

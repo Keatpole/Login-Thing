@@ -24,6 +24,9 @@
 
         echo "<p>You are currently " . (strpos("aeiou", strtolower(rankFromNum($_SESSION["rank"])[0])) !== false ? "an" : "a") . " " . rankFromNum($_SESSION["rank"]) . ".</p></br>";
 
+        $usernameValue = (isset($_GET["u"]) ? $_GET["u"] : "");
+        $selectedValue = (isset($_GET["sel"]) ? $_GET["sel"] : "");
+
         if ($_SESSION["rank"] == 1) {
 
             echo "<h1>Mod Panel</h1>";
@@ -33,14 +36,14 @@
                 ?>
 
                     <form action="includes/staff/mod" method="post">
-                        <input type="text" name="username" placeholder="Username..."></br></br>
+                        <input type="text" name="username" placeholder="Username..." value="<?= $usernameValue ?>"></br></br>
                         <select name="action" size="6">
-                            <option value="0">Set User</option>
-                            <option value="1">Set Moderator</option>
-                            <option value='2'>Set Admin</option>
-                            <option value='3'>Delete Comment</option>
-                            <option value='4'>(Un)Mute</option>
-                            <option value="-1">(Un)Ban</option>
+                            <option value="0" <?php if ($selectedValue == "user"): ?> selected="selected" <?php endif; ?> >Set User</option>
+                            <option value="1" <?php if ($selectedValue == "mod"): ?> selected="selected" <?php endif; ?> >Set Moderator</option>
+                            <option value='2' <?php if ($selectedValue == "admin"): ?> selected="selected" <?php endif; ?> >Set Admin</option>
+                            <option value='3' <?php if ($selectedValue == "delc"): ?> selected="selected" <?php endif; ?> >Delete Comment</option>
+                            <option value='4' <?php if ($selectedValue == "unm"): ?> selected="selected" <?php endif; ?> >(Un)Mute</option>
+                            <option value="-1" <?php if ($selectedValue == "unb"): ?> selected="selected" <?php endif; ?> >(Un)Ban</option>
                         </select></br></br>
                         <button type="submit" name="submit" class="button">Confirm</button>
                     </form>
@@ -171,18 +174,18 @@
                 ?>
 
                     <form action="includes/staff/admin" method="post">
-                        <input type="text" name="username" placeholder="Username..."></br></br>
+                        <input type="text" name="username" placeholder="Username..." value="<?= $usernameValue ?>"></br></br>
                         <select name="action" size="<?= $size ?>">
-                            <option value="0">Set User</option>
-                            <option value="1">Set Moderator</option>
-                            <option value="3">Delete Comment</option>
-                            <option value="6">Undelete</option>
-                            <option value="5">(Un)Mute</option>
-                            <option value="-1">(Un)Ban</option>
+                            <option value="0" <?php if ($selectedValue == "user"): ?> selected="selected" <?php endif; ?> >Set User</option>
+                            <option value="1" <?php if ($selectedValue == "mod"): ?> selected="selected" <?php endif; ?>>Set Moderator</option>
+                            <option value="3" <?php if ($selectedValue == "delc"): ?> selected="selected" <?php endif; ?>>Delete Comment</option>
+                            <option value="6" <?php if ($selectedValue == "undel"): ?> selected="selected" <?php endif; ?>>Undelete</option>
+                            <option value="5" <?php if ($selectedValue == "unm"): ?> selected="selected" <?php endif; ?>>(Un)Mute</option>
+                            <option value="-1"<?php if ($selectedValue == "unb"): ?> selected="selected" <?php endif; ?>>(Un)Ban</option>
                             <?php
                                 if ($_SESSION["rank"] >= 3) {
-                                    echo "<option value='4'>(Un)Verify</option>";
-                                    echo "<option value='2'>Set Admin</option>";
+                                    echo "<option value='4' " . ($selectedValue == "unv" ? "selected=\"selected\"" : "") . ">(Un)Verify</option>";
+                                    echo "<option value='2' " . ($selectedValue == "admin" ? "selected=\"selected\"" : "") . ">Set Admin</option>";
                                 }
                             ?>
                         </select></br></br>
