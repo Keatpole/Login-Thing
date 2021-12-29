@@ -10,25 +10,23 @@ button {
 }
 .center {
     font-family: sans-serif;
-    text-align: center;
 }
 p {
     padding: 0px 12px;
     font-size: 22px;
 }
 input {
-    text-align: center;
     background-color: #999;
 }
 .button {
+    display: inline-block;
     background-color: #4CAF50;
     border: none;
     color: white;
     padding: 15px 56.2px;
-    text-align: center;
     text-decoration: none;
-    display: inline-block;
     font-size: 16px;
+    margin: 4px 1px;
 }
 .button:hover {
     background-color: #4dc452;
@@ -53,4 +51,17 @@ li a {
 }
 li a:hover {
     background-color: #111111;
+}
+.comment {
+    background-color: #404040;
+    padding: 15px 15px;
+    display: inline-block;
+    border: 1px solid;
+}
+.commentlikes {
+    font-family: sans-serif;
+}
+form {
+    padding: 0px 3px;
+    display: inline;
 }

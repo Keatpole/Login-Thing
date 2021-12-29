@@ -179,6 +179,8 @@
 
                     $friend_comments = [];
 
+                    echo "<h2>Friend Comments:</h2>";
+
                     foreach (mysqli_fetch_all(getTable($conn, "messages")) as $res) {
                         $friend_comment = false;
                         $has = true;
@@ -196,9 +198,7 @@
                             continue;
                         }
 
-                        echo "<h2>Friend Comments:</h2>";
-
-                        echo "<div id=" . $res[0] . " tabindex=\"-1\">";
+                        echo "<div id=" . $res[0] . " class=\"comment\" tabindex=\"-1\">";
 
                         $contin = true;
 
@@ -250,8 +250,9 @@
                             $verified = ($user["verified"] ? "<p style=\"display: inline;color: #ccaa00;\" title=\"Verified\">✔</p>" : "");
                             $commentId = ($_SESSION["rank"] > 0 ? "[" . $res[0] . "] " : "");
                             $admin = ($user["rank"] >= 1 ? " <img src=\"img/admin.png\" alt=\"" . rankFromNum($user["rank"]) . "\" title=\"" . rankFromNum($user["rank"]) . "\">" : "");
+                            $isyou = ($_SESSION["id"] == $res[2] ? " (You)" : "");
 
-                            echo "<h2>" . $commentId . "<a style=\"color: green;\" href=\"user?u=" . $res[2] . "\">" . $user["uid"] . "</a>" . $admin . $verified . $muted . $banned . ":</h2>";
+                            echo "<h2>" . $commentId . "<a style=\"color: green;\" href=\"user?u=" . $res[2] . "\">" . $user["uid"] . "</a>" . $admin . $verified . $muted . $banned . $isyou . ":</h2>";
                         
                         }
 
@@ -293,13 +294,13 @@
                         echo "<p>" . $replyTo . $result . "</p>";
 
                         if (!isset($_GET["includefromgroup"]) && !isset($_GET["includefrompm"])) {
-                            echo "<p>" . $res[3] . " Likes"  . "</p>";
+                            echo "<p class=\"commentlikes\">" . $res[3] . " Likes"  . "</p>";
 
                             if ($settings->enable_likes) {
                                 if ($_SESSION["id"] == $res[2] || $_SESSION["rank"] >= 2) {
                                     echo "<form action=\"includes/comments/like\" method=\"post\"><a href=\"?reply=" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"> <button type=\"submit\" name=\"submit\" class=\"button\">Like</button> <button type=\"submit\" name=\"delete\" class=\"button\">Delete</button></form>";
                                 }
-                                elseif ($_SESSION["id"] == $res[2] || $_SESSION["rank"] == 1) {
+                                elseif ($_SESSION["rank"] == 1) {
                                     echo "<form action=\"includes/comments/like\" method=\"post\"><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"><a href=\"?reply=" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a> <button type=\"submit\" name=\"submit\" class=\"button\">Like</button> <button type=\"submit\" name=\"delete\" class=\"button\">Request Delete</button></form>";
                                 }
                                 else {
@@ -309,7 +310,7 @@
                                 if ($_SESSION["id"] == $res[2] || $_SESSION["rank"] >= 2) {
                                     echo "<form action=\"includes/comments/like\" method=\"post\"><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"><a href=\"?reply=" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a> <button type=\"submit\" name=\"delete\" class=\"button\">Delete</button></form>";
                                 }
-                                elseif ($_SESSION["id"] == $res[2] || $_SESSION["rank"] == 1) {
+                                elseif ($_SESSION["rank"] == 1) {
                                     echo "<form action=\"includes/comments/like\" method=\"post\"><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"><a href=\"?reply=" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a> <button type=\"submit\" name=\"delete\" class=\"button\">Request Delete</button></form>";
                                 }
                                 else {
@@ -356,7 +357,7 @@
                                 continue;
                             }
 
-                            echo "<div id=" . $res[0] . " tabindex=\"-1\">";
+                            echo "<div id=" . $res[0] . " class=\"comment\" tabindex=\"-1\">";
 
                             $contin = true;
 
@@ -410,8 +411,9 @@
                                 $verified = ($user["verified"] ? "<p style=\"display: inline;color: #ccaa00;\" title=\"Verified\">✔</p>" : "");
                                 $commentId = ($_SESSION["rank"] > 0 ? "[" . $res[0] . "] " : "");
                                 $admin = ($user["rank"] >= 1 ? " <img src=\"img/admin.png\" alt=\"" . rankFromNum($user["rank"]) . "\" title=\"" . rankFromNum($user["rank"]) . "\">" : "");
+                                $isyou = ($_SESSION["id"] == $res[2] ? " (You)" : "");
 
-                                echo "<h2>" . $commentId . "<a style=\"color: green;\" href=\"user?u=" . $res[2] . "\">" . $user["uid"] . "</a>" . $admin . $verified . $muted . $banned . ":</h2>";
+                                echo "<h2>" . $commentId . "<a style=\"color: green;\" href=\"user?u=" . $res[2] . "\">" . $user["uid"] . "</a>" . $admin . $verified . $muted . $banned . $isyou . ":</h2>";
                             
                             }
 
@@ -453,13 +455,13 @@
                             echo "<p>" . $replyTo . $result . "</p>";
 
                             if (!isset($_GET["includefromgroup"]) && !isset($_GET["includefrompm"])) {
-                                echo "<p>" . $res[3] . " Likes"  . "</p>";
+                                echo "<p class=\"commentlikes\">" . $res[3] . " Likes"  . "</p>";
 
                                 if ($settings->enable_likes) {
                                     if ($_SESSION["id"] == $res[2] || $_SESSION["rank"] >= 2) {
                                         echo "<form action=\"includes/comments/like\" method=\"post\"><a href=\"?reply=" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"> <button type=\"submit\" name=\"submit\" class=\"button\">Like</button> <button type=\"submit\" name=\"delete\" class=\"button\">Delete</button></form>";
                                     }
-                                    elseif ($_SESSION["id"] == $res[2] || $_SESSION["rank"] == 1) {
+                                    elseif ($_SESSION["rank"] == 1) {
                                         echo "<form action=\"includes/comments/like\" method=\"post\"><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"><a href=\"?reply=" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a> <button type=\"submit\" name=\"submit\" class=\"button\">Like</button> <button type=\"submit\" name=\"delete\" class=\"button\">Request Delete</button></form>";
                                     }
                                     else {
@@ -469,7 +471,7 @@
                                     if ($_SESSION["id"] == $res[2] || $_SESSION["rank"] >= 2) {
                                         echo "<form action=\"includes/comments/like\" method=\"post\"><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"><a href=\"?reply=" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a> <button type=\"submit\" name=\"delete\" class=\"button\">Delete</button></form>";
                                     }
-                                    elseif ($_SESSION["id"] == $res[2] || $_SESSION["rank"] == 1) {
+                                    elseif ($_SESSION["rank"] == 1) {
                                         echo "<form action=\"includes/comments/like\" method=\"post\"><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"><a href=\"?reply=" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a> <button type=\"submit\" name=\"delete\" class=\"button\">Request Delete</button></form>";
                                     }
                                     else {
@@ -516,7 +518,7 @@
                             else continue;
                         }
 
-                        echo "<div id=" . $res[0] . " tabindex=\"-1\">";
+                        echo "<div id=" . $res[0] . " class=\"comment\" tabindex=\"-1\">";
 
                         $contin = true;
 
@@ -570,8 +572,9 @@
                             $verified = ($user["verified"] ? "<p style=\"display: inline;color: #ccaa00;\" title=\"Verified\">✔</p>" : "");
                             $commentId = ($_SESSION["rank"] > 0 ? "[" . $res[0] . "] " : "");
                             $admin = ($user["rank"] >= 1 ? " <img src=\"img/admin.png\" alt=\"" . rankFromNum($user["rank"]) . "\" title=\"" . rankFromNum($user["rank"]) . "\">" : "");
+                            $isyou = ($_SESSION["id"] == $res[2] ? " (You)" : "");
 
-                            echo "<h2>" . $commentId . "<a style=\"color: green;\" href=\"user?u=" . $res[2] . "\">" . $user["uid"] . "</a>" . $admin . $verified . $muted . $banned . ":</h2>";
+                            echo "<h2>" . $commentId . "<a style=\"color: green;\" href=\"user?u=" . $res[2] . "\">" . $user["uid"] . "</a>" . $admin . $verified . $muted . $banned . $isyou . ":</h2>";
                         
                         }
 
@@ -613,7 +616,7 @@
                         echo "<p>" . $replyTo . $result . "</p>";
 
                         if (!isset($_GET["includefromgroup"]) && !isset($_GET["includefrompm"])) {
-                            echo "<p>" . $res[3] . " Likes"  . "</p>";
+                            echo "<p class=\"commentlikes\">" . $res[3] . " Likes"  . "</p>";
 
                             if ($settings->enable_likes) {
                                 if ($_SESSION["id"] == $res[2] || $_SESSION["rank"] >= 2) {

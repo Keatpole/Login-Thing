@@ -45,7 +45,7 @@ if (isset($_POST["delete"])) {
         }
         $action = "DeleteComment";
         session_start();
-        mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["uid"], $msgInfo["author"], $action, $_POST["commentId"]);
+        mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["id"], $msgInfo["author"], $action, $_POST["commentId"]);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
 
@@ -58,14 +58,14 @@ if (isset($_POST["delete"])) {
     }
     elseif ($_SESSION["rank"] == 1) {
 
-        $sql = "INSERT INTO modsuggestions(targetsUid, type) VALUES (?, ?);";
+        $sql = "INSERT INTO modsuggestions(suggester, targetsUid, type) VALUES (?, ?);";
         $stmt = mysqli_stmt_init($conn);
         if (!mysqli_stmt_prepare($stmt, $sql)) {
             header("location: ../../". $_POST["return"] ."error=stmtfailed");
             exit();
         }
         $action = "DeleteComment";
-        mysqli_stmt_bind_param($stmt, "ss", $_POST["commentId"], $action);
+        mysqli_stmt_bind_param($stmt, "sss", $_SESSION["id"], $_POST["commentId"], $action);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
 
@@ -76,7 +76,7 @@ if (isset($_POST["delete"])) {
             exit();
         }
         $type = "Mod";
-        mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["uid"], $_POST["commentId"], $type, $action);
+        mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["id"], $_POST["commentId"], $type, $action);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
 

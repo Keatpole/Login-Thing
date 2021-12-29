@@ -215,6 +215,17 @@ elseif ($action == "-1") {
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
 
+        $sql = "UPDATE users SET rank = ? WHERE id = ?;";
+        $stmt = mysqli_stmt_init($conn);
+        if (!mysqli_stmt_prepare($stmt, $sql)) {
+            header("location: ../../moderation?suggestions&error=stmtfailed");
+            exit();
+        }
+        $zero = "0";
+        mysqli_stmt_bind_param($stmt, "ss", $zero, $user["id"]);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+
         $sql = "INSERT INTO log (uid, targetsUid, action, type) VALUES (?, ?, ?, ?);";
         $stmt = mysqli_stmt_init($conn);
         if (!mysqli_stmt_prepare($stmt, $sql)) {
@@ -250,7 +261,7 @@ elseif ($action == "-1") {
             header("location: ../../moderation?suggestions&error=stmtfailed");
             exit();
         }
-        $zero = "0";
+        $zero = "-1";
         mysqli_stmt_bind_param($stmt, "ss", $zero, $user["id"]);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);

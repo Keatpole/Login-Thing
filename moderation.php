@@ -140,7 +140,9 @@
                             if ($row["id"] == $_GET["id"]) {
     
                                 echo "<h4>Username: <a href=\"user?u=" . $row["target"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["target"]])["uid"] . "</a> - Reason: " . $row["reason"] . " - Reporter: <a href=\"user?u=" . $row["reporter"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["reporter"]])["uid"] . "</a> " . $details . " </h4><br>";
-                                echo "<a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\" href='includes/staff/approveReport?target=" . $row["target"] . "&id=" . $row["id"] . "&reason=" . $row["reason"] . "&action=-1" . "'>(Un)Ban</a> <a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\" href='includes/staff/refuseReport?target=" . $row["target"] . "&id=" . $row["id"] . "&reason=" . $row["reason"] . "'>Ignore</a>";
+                                echo "<a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\" href='includes/staff/approveReport?target=" . $row["target"] . "&id=" . $row["id"] . "&reason=" . $row["reason"] . "&action=-1" . "'>Ban</a> ";
+                                echo "<a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\" href='includes/staff/approveReport?target=" . $row["target"] . "&id=" . $row["id"] . "&reason=" . $row["reason"] . "&action=4" . "'>Mute</a> ";
+                                echo "<a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\" href='includes/staff/refuseReport?target=" . $row["target"] . "&id=" . $row["id"] . "&reason=" . $row["reason"] . "'>Ignore</a> ";
                                 exit();
     
                             }
@@ -155,14 +157,59 @@
                 }
     
                 exit();
+            } elseif (isset($_GET["appeals"])) {
+                if (!$settings->enable_appeal) {
+                    echo "<p>Appeals are temporarily disabled.</p>";
+                    exit();
+                }
+    
+                echo "<h1>Appeals</h1>";
+                echo "<p>Click an appeal to view it</p>";
+    
+                $result = getTable($conn, "appeals");
+    
+                if ($result->num_rows > 0) {
+                    while($row = $result->fetch_assoc()) {
+                        $details = ($row["otherreason"] != '') ? " - Details: " . $row["otherreason"] : '';
+
+                        if (isset($_GET["id"])) {
+                            if ($row["id"] == $_GET["id"]) {
+    
+                                echo "<h4>Username: <a href=\"user?u=" . $row["appealer"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["appealer"]])["uid"] . "</a> - Reason: " . $row["reason"] . "</a> " . $details . " </h4><br>";
+                                
+                                if ($row["punishment"] == "0") {
+                                    echo "<a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\" href='includes/staff/approveAppeal?target=" . $row["appealer"] . "&id=" . $row["id"] . "&reason=" . $row["reason"] . "&action=-1" . "'>Unban</a> ";
+                                } elseif ($row["punishment"] == "1") {
+                                    echo "<a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\" href='includes/staff/approveAppeal?target=" . $row["appealer"] . "&id=" . $row["id"] . "&reason=" . $row["reason"] . "&action=4" . "'>Unmute</a> ";
+                                }
+                                echo "<a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\" href='includes/staff/refuseAppeal?target=" . $row["appealer"] . "&id=" . $row["id"] . "&reason=" . $row["reason"] . "'>Ignore</a> ";
+                                exit();
+    
+                            }
+                            
+                        } else {
+                            echo "<h4><a style='color: black;text-decoration:none;' href='?appeals&id=" . $row["id"]. "'>Username: <a href=\"user?u=" . $row["appealer"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["appealer"]])["uid"] . "</a><a style='color: black;text-decoration:none;' href='?appeals&id=" . $row["id"] . "'> - Reason: " . $row["reason"] . "</a> <a style='color: black;text-decoration:none;' href='?appeals&id=" . $row["id"]. "'>" . $details . " </a></h4><br>";
+                        }
+    
+                    }
+                } else {
+                    echo "<h4>0 reports</h4>";
+                }
+
+                exit();
             } else {
                 if (!$settings->enable_report) {
                     echo "<p>Reporting is temporarily disabled.</p>";
                 } else {
-                    echo "<a href=\"?reports\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reports</a>";
+                    echo "<a href=\"?reports\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reports</a> ";
+                }
+                if (!$settings->enable_appeal) {
+                    echo "<p>Appeals are temporarily disabled.</p>";
+                } else {
+                    echo "<a href=\"?appeals\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Appeals</a> ";
                 }
     
-                echo " <a href=\"?suggestions\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Suggestions</a>";
+                echo "<a href=\"?suggestions\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Suggestions</a>";
             }
         
             echo "<h1>Admin Panel</h1>";

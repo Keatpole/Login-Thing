@@ -96,6 +96,7 @@
                         }
                         echo "<li><a href='groups' " . $style . ">Groups</a></li>";
                         echo "<li><a href='search' " . $style . ">Search</a></li>";
+                        echo "<li><a href='appeal' " . $style . ">Appeal</a></li>";
                         if ($_SESSION["rank"] >= 1) {
                             echo "<li><a href='moderation' " . $style . ">Moderation</a></li>";
                         }
@@ -174,6 +175,15 @@
                     break;
                 case 'useralreadybanned':
                     $say = "That user is already banned!";
+                    break;
+                case 'useralreadymuted':
+                    $say = "That user is already muted!";
+                    break;
+                case 'usernotmuted':
+                    $say = "That user is not muted!";
+                    break;
+                case 'usernotbanned':
+                    $say = "That user is not banned!";
                     break;
                 case 'userdeleted':
                     $say = "That account has been deleted!";

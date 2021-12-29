@@ -35,7 +35,7 @@ if ($action == 4) {
         exit();
     }
     $type = "Mod";
-    mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["uid"], $username, $type, $action);
+    mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["id"], $username, $type, $action);
     mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
 
@@ -59,7 +59,7 @@ elseif ($user != null) {
         exit();
     }
     $type = "Mod";
-    mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["uid"], $user["id"], $type, $action);
+    mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["id"], $user["id"], $type, $action);
     mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
 }
@@ -83,7 +83,7 @@ elseif ($action == 3) {
         exit();
     }
     $type = "Mod";
-    mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["uid"], $username, $type, $action);
+    mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["id"], $username, $type, $action);
     mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
 

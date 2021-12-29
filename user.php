@@ -118,22 +118,22 @@
                         echo "<p>Sending friend requests is temporarily disabled.</p>";
                     }
                 } else {
-                    echo "<button name=\"submit\" class=\"button\"><a style=\"color: white; text-decoration: none;\" href=\"includes/friends/remove?u=" . $_GET["u"] . "&i=" . $btnId ."&t=" . $type . "\">Remove Friend</a></button></br>";
+                    echo "<button name=\"submit\" class=\"button\"><a style=\"color: white; text-decoration: none;\" href=\"includes/friends/remove?u=" . $_GET["u"] . "&i=" . $btnId ."&t=" . $type . "\">Remove Friend</a></button>";
                 }
             }
             elseif ($sentReq != null) {
                 echo "<h3>This user sent a friend request at " . $res[3] . "</h3>";
                 echo "<form action=\"includes/friends/accept\" method=\"post\"><input type=hidden name=\"user\" value=" . $res[1] . "></input><input type=hidden name=\"return\" value=\"user?u=" . $_GET["u"] . "&\"><input type=hidden name=\"id\" value=" . $res[0] . "></input><button type=\"submit\" name=\"submit\" class=\"button\">Accept</button></form>";
-                echo "<form action=\"includes/friends/reject\" method=\"post\"><input type=hidden name=\"user\" value=" . $res[1] . "></input><input type=hidden name=\"id\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\"user?u=" . $_GET["u"] . "&\"><button type=\"submit\" name=\"submit\" class=\"button\">Reject</button></form></br>";
+                echo "<form action=\"includes/friends/reject\" method=\"post\"><input type=hidden name=\"user\" value=" . $res[1] . "></input><input type=hidden name=\"id\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\"user?u=" . $_GET["u"] . "&\"><button type=\"submit\" name=\"submit\" class=\"button\">Reject</button></form>";
             }
 
             if ($type == "friend") {
-                echo "</br><a href=\"pm?u=" . $_GET["u"] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">PM</a></br>";
-                echo "</br><a href=\"groups?u=" . $_GET["u"] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Group</a></br>";
+                echo "<a href=\"pm?u=" . $_GET["u"] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">PM</a>";
+                echo "<a href=\"groups?u=" . $_GET["u"] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Group</a>";
             }
 
             if ($settings->enable_report) {
-                echo "</br><a href=\"report?u=" . $_GET["u"] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Report</a>";
+                echo "<a href=\"report?u=" . $_GET["u"] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Report</a>";
             } else {
                 echo "<p>Reporting is temporarily disabled.</p>";
             }

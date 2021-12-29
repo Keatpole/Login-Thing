@@ -6,6 +6,7 @@ class Settings {
     public $enable_reset_pass = 1;
     public $enable_friends = 1;
     public $enable_report = 1;
+    public $enable_appeal = 1;
 
     public $enable_posting_comments = 1;
     public $enable_viewing_comments = 1;

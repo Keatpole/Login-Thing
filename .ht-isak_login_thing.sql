@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 09. Okt, 2021 21:03 PM
+-- Generation Time: 29. Des, 2021 18:41 PM
 -- Tjener-versjon: 10.4.20-MariaDB
 -- PHP Version: 8.0.9
 
@@ -20,6 +20,21 @@ SET time_zone = "+00:00";
 --
 -- Database: `isak_login_thing`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Tabellstruktur for tabell `appeals`
+--
+
+CREATE TABLE `appeals` (
+  `id` int(11) NOT NULL,
+  `appealer` int(255) NOT NULL,
+  `reason` varchar(255) NOT NULL,
+  `punishment` varchar(128) NOT NULL,
+  `otherreason` text NOT NULL,
+  `date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -262,6 +277,12 @@ CREATE TABLE `users` (
 --
 
 --
+-- Indexes for table `appeals`
+--
+ALTER TABLE `appeals`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `bans`
 --
 ALTER TABLE `bans`
@@ -360,6 +381,12 @@ ALTER TABLE `users`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `appeals`
+--
+ALTER TABLE `appeals`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `bans`
