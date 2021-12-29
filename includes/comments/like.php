@@ -44,8 +44,9 @@ if (isset($_POST["delete"])) {
             exit();
         }
         $action = "DeleteComment";
+        $type = "CID:" . $_POST["commentId"];
         session_start();
-        mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["id"], $msgInfo["author"], $action, $_POST["commentId"]);
+        mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["id"], $msgInfo["author"], $action, $type);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
 

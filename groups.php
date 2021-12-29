@@ -114,7 +114,7 @@
 
     if ($_SESSION["rank"] >= 2 && $has) {
         
-        echo "</br></br></br><h2>Admin</h2>";
+        $admin_h2_displayed = false;
 
         foreach ($groups as $i) {
 
@@ -126,6 +126,11 @@
                 }
             }
             if ($in) continue;
+
+            if (!$admin_h2_displayed) {
+                echo "</br></br></br><h2>Admin</h2>";
+                $admin_h2_displayed = true;
+            }
             
             ?>
     

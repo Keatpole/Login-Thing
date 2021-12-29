@@ -3,3 +3,4 @@ IDEAS:
 Nickname
 Follow system
 Display comments system
+Email verification system for signing up

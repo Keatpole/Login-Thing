@@ -49,7 +49,7 @@
 
             <?php
         } else {
-            echo "<p>Reporting is temporarily disabled.</p>";
+            echo "<p>Appealing is temporarily disabled.</p>";
         }
 
     ?>

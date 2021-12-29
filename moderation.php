@@ -193,7 +193,63 @@
     
                     }
                 } else {
-                    echo "<h4>0 reports</h4>";
+                    echo "<h4>0 appeals</h4>";
+                }
+
+                exit();
+            } elseif (isset($_GET["log"])) {
+                echo "<h1>Log</h1>";
+    
+                $result = getTable($conn, "log");
+    
+                if ($result->num_rows > 0) {
+                    while($row = $result->fetch_assoc()) {
+                        $type = "";
+
+                        switch ($row["type"]) {
+                            case '0':
+                                $type = "User";
+                                break;
+                            case '1':
+                                $type = "Mod";
+                                break;
+                            case '2':
+                                $type = "Admin";
+                                break;
+                            case '3':
+                                $type = "DeleteComment";
+                                break;
+                            case '4':
+                                $type = "(Un)Verify";
+                                break;
+                            case '5':
+                                $type = "(Un)Mute";
+                                break;
+                            case '6':
+                                $type = "Undelete";
+                                break;
+                            case '-1':
+                                $type = "(Un)Ban";
+                                break;
+                            default:
+                                $type = $row["type"];
+                                break;
+                        }
+
+                        $type_str = "Type: " . $type;
+
+                        if (str_starts_with($type, "CID:")) {
+                            $type = explode(":", $type)[1];
+
+                            $type_str = "Comment ID: " . $type;
+                        }
+
+                        $action = ltrim(preg_replace('/([A-Z])/', ' $1', $row["action"]));
+
+                        echo "<h4>[" . $row["id"] . "] Username: <a href=\"user?u=" . $row["uid"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["uid"]])["uid"] . "</a> - Target: <a href=\"user?u=" . $row["targetsUid"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["targetsUid"]])["uid"] . "</a> - Action: " . $action . "</a> - " . $type_str . " </h4>";
+                    }
+                } else {
+                    echo "<h4>Log is empty</h4>";
                 }
 
                 exit();
@@ -209,7 +265,8 @@
                     echo "<a href=\"?appeals\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Appeals</a> ";
                 }
     
-                echo "<a href=\"?suggestions\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Suggestions</a>";
+                echo "<a href=\"?suggestions\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Suggestions</a> ";
+                echo "<a href=\"?log\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Log</a> ";
             }
         
             echo "<h1>Admin Panel</h1>";

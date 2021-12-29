@@ -122,7 +122,7 @@
 
                         ?>
 
-                        <button class="button" type="submit" name="submit">Post</button>
+                        <button class="button" type="submit" name="submit">Post</button></br></br>
 
                     </form>
 
@@ -179,7 +179,7 @@
 
                     $friend_comments = [];
 
-                    echo "<h2>Friend Comments:</h2>";
+                    $friend_comments_h2_displayed = false;
 
                     foreach (mysqli_fetch_all(getTable($conn, "messages")) as $res) {
                         $friend_comment = false;
@@ -196,6 +196,11 @@
                         # Random comments
                         if (!$friend_comment) {
                             continue;
+                        }
+
+                        if (!$friend_comments_h2_displayed) {
+                            echo "<h2>Friend Comments</h2>";
+                            $friend_comments_h2_displayed = true;
                         }
 
                         echo "<div id=" . $res[0] . " class=\"comment\" tabindex=\"-1\">";
@@ -341,7 +346,7 @@
 
                     if ($has) {
 
-                        echo "<h2>Comments:</h2>";
+                        $comments_h2_displayed = false;
 
                         foreach (mysqli_fetch_all(getTable($conn, "messages")) as $res) {
 
@@ -355,6 +360,11 @@
 
                             if ($rnd == 1 || in_array($res[0], $friend_comments)) {
                                 continue;
+                            }
+
+                            if (!$comments_h2_displayed && !in_array($res[0], $friend_comments)) {
+                                echo "<h2>Comments:</h2>";
+                                $comments_h2_displayed = true;
                             }
 
                             echo "<div id=" . $res[0] . " class=\"comment\" tabindex=\"-1\">";
@@ -663,7 +673,7 @@
                 }
 
                 if (!$has) {
-                    $say = "</br>There are no comments";
+                    $say = (isset($_GET["includefromgroup"]) ? "This group has no comments" : "</br></br>There are no comments");
                     if (isset($_GET["includefromprofile"])) {
                         if ($_GET["includefromprofile"] == $_SESSION["id"]) $say = "You have no comments";
                         else $say = "This user has no comments";
