@@ -180,5 +180,7 @@ if (isset($_POST["replyid"])) {
 mysqli_stmt_execute($stmt);
 mysqli_stmt_close($stmt);
 
-header("location: ../../.?error=none");
+$return = (isset($_POST["return"]) ? $_POST["return"] : ".?");
+
+header("location: ../../" . $return . "error=none");
 exit();

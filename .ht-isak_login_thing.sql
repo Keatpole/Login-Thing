@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 29. Des, 2021 18:41 PM
--- Tjener-versjon: 10.4.20-MariaDB
--- PHP Version: 8.0.9
+-- Generation Time: Jan 11, 2022 at 03:42 PM
+-- Server version: 10.4.22-MariaDB
+-- PHP Version: 8.1.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,7 +24,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Tabellstruktur for tabell `appeals`
+-- Table structure for table `appeals`
 --
 
 CREATE TABLE `appeals` (
@@ -39,7 +39,7 @@ CREATE TABLE `appeals` (
 -- --------------------------------------------------------
 
 --
--- Tabellstruktur for tabell `bans`
+-- Table structure for table `bans`
 --
 
 CREATE TABLE `bans` (
@@ -52,7 +52,7 @@ CREATE TABLE `bans` (
 -- --------------------------------------------------------
 
 --
--- Tabellstruktur for tabell `deletedgroupmessages`
+-- Table structure for table `deletedgroupmessages`
 --
 
 CREATE TABLE `deletedgroupmessages` (
@@ -69,7 +69,7 @@ CREATE TABLE `deletedgroupmessages` (
 -- --------------------------------------------------------
 
 --
--- Tabellstruktur for tabell `deletedmessages`
+-- Table structure for table `deletedmessages`
 --
 
 CREATE TABLE `deletedmessages` (
@@ -86,7 +86,7 @@ CREATE TABLE `deletedmessages` (
 -- --------------------------------------------------------
 
 --
--- Tabellstruktur for tabell `deletedprivatemessages`
+-- Table structure for table `deletedprivatemessages`
 --
 
 CREATE TABLE `deletedprivatemessages` (
@@ -102,7 +102,7 @@ CREATE TABLE `deletedprivatemessages` (
 -- --------------------------------------------------------
 
 --
--- Tabellstruktur for tabell `friendreq`
+-- Table structure for table `friendreq`
 --
 
 CREATE TABLE `friendreq` (
@@ -115,7 +115,7 @@ CREATE TABLE `friendreq` (
 -- --------------------------------------------------------
 
 --
--- Tabellstruktur for tabell `friends`
+-- Table structure for table `friends`
 --
 
 CREATE TABLE `friends` (
@@ -128,7 +128,7 @@ CREATE TABLE `friends` (
 -- --------------------------------------------------------
 
 --
--- Tabellstruktur for tabell `groupmessages`
+-- Table structure for table `groupmessages`
 --
 
 CREATE TABLE `groupmessages` (
@@ -143,7 +143,7 @@ CREATE TABLE `groupmessages` (
 -- --------------------------------------------------------
 
 --
--- Tabellstruktur for tabell `groups`
+-- Table structure for table `groups`
 --
 
 CREATE TABLE `groups` (
@@ -158,12 +158,12 @@ CREATE TABLE `groups` (
 -- --------------------------------------------------------
 
 --
--- Tabellstruktur for tabell `log`
+-- Table structure for table `log`
 --
 
 CREATE TABLE `log` (
   `id` int(11) NOT NULL,
-  `uid` varchar(250) NOT NULL,
+  `uid` int(255) NOT NULL,
   `targetsUid` varchar(250) NOT NULL,
   `action` varchar(128) NOT NULL,
   `type` varchar(128) NOT NULL,
@@ -173,7 +173,7 @@ CREATE TABLE `log` (
 -- --------------------------------------------------------
 
 --
--- Tabellstruktur for tabell `messagelikes`
+-- Table structure for table `messagelikes`
 --
 
 CREATE TABLE `messagelikes` (
@@ -186,7 +186,7 @@ CREATE TABLE `messagelikes` (
 -- --------------------------------------------------------
 
 --
--- Tabellstruktur for tabell `messages`
+-- Table structure for table `messages`
 --
 
 CREATE TABLE `messages` (
@@ -201,7 +201,7 @@ CREATE TABLE `messages` (
 -- --------------------------------------------------------
 
 --
--- Tabellstruktur for tabell `modsuggestions`
+-- Table structure for table `modsuggestions`
 --
 
 CREATE TABLE `modsuggestions` (
@@ -215,7 +215,7 @@ CREATE TABLE `modsuggestions` (
 -- --------------------------------------------------------
 
 --
--- Tabellstruktur for tabell `mutes`
+-- Table structure for table `mutes`
 --
 
 CREATE TABLE `mutes` (
@@ -228,7 +228,7 @@ CREATE TABLE `mutes` (
 -- --------------------------------------------------------
 
 --
--- Tabellstruktur for tabell `privatemessages`
+-- Table structure for table `privatemessages`
 --
 
 CREATE TABLE `privatemessages` (
@@ -242,7 +242,7 @@ CREATE TABLE `privatemessages` (
 -- --------------------------------------------------------
 
 --
--- Tabellstruktur for tabell `reports`
+-- Table structure for table `reports`
 --
 
 CREATE TABLE `reports` (
@@ -257,7 +257,7 @@ CREATE TABLE `reports` (
 -- --------------------------------------------------------
 
 --
--- Tabellstruktur for tabell `users`
+-- Table structure for table `users`
 --
 
 CREATE TABLE `users` (
@@ -271,6 +271,13 @@ CREATE TABLE `users` (
   `deletedate` datetime DEFAULT NULL,
   `date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `email`, `uid`, `pwd`, `rank`, `verified`, `deleted`, `deletedate`, `date`) VALUES
+(1, 'test@example.com', 'Test', '$2y$10$ITp5otg2JzTEwKzErRpg6.TUEyTuTwzvPmHLH9F.SxOX3yO.CtWYK', 3, 0, b'0', NULL, '2022-01-11 15:41:59');
 
 --
 -- Indexes for dumped tables
@@ -482,7 +489,7 @@ ALTER TABLE `reports`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -144,6 +144,9 @@
                 case 'usernotfound':
                     $say = "That user does not exist!";
                     break;
+                case 'commentnotfound':
+                    $say = "That comment does not exist!";
+                    break;
                 case 'wronglogin':
                     $say = "Incorrect login details!";
                     break;
