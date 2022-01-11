@@ -78,6 +78,7 @@
                             }
                             header("location: " . $_GET["webname"]);
                         }
+                        echo "<li><a href=\"#main\" class=\"skipnavlink\" . " . $style . ">Skip Navigation</a></li>";
                         echo "<li><a href='.' " . $style . ">Home</a></li>";
                         echo "<li><a href='user' " . $style . ">Profile</a></li>";
 
@@ -247,4 +248,6 @@
         }
         if (isset($_GET["refresh"])) header("refresh: " . $_GET["refresh"]);
     ?>
+
+    <div id="main">
 </body>

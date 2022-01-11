@@ -57,9 +57,33 @@ li a:hover {
     padding: 15px 15px;
     display: inline-block;
     border: 1px solid;
+    font-family: 'Times New Roman', Times, serif;
+}
+.comments {
+    background-color: #404040;
+    padding: 15px 0px;
+    border: 1px solid;
+    display: block;
+    font-family: sans-serif;
+    /* set the width of the comment box */
+    width: 75%;
+    margin: 0 auto;
 }
 .commentlikes {
     font-family: sans-serif;
+}
+.skipnavlink {
+    position: absolute;
+    left: -1000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+.skipnavlink:focus {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
 }
 form {
     padding: 0px 3px;

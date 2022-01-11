@@ -175,6 +175,8 @@
 
                 $has = false;
 
+                echo "</br></br><div class=\"comments\">";
+
                 if (!isset($_GET["includefromprofile"]) && !isset($_GET["includefromgroup"]) && !isset($_GET["includefrompm"])) {
 
                     $friend_comments = [];
@@ -199,7 +201,7 @@
                         }
 
                         if (!$friend_comments_h2_displayed) {
-                            echo "<h2>Friend Comments</h2>";
+                            echo "<h2>Friend Comments:</h2>";
                             $friend_comments_h2_displayed = true;
                         }
 
@@ -516,6 +518,8 @@
                     $isgroup = (isset($_GET["includefromgroup"]) ? "group" : "");
                     $ispm = (isset($_GET["includefrompm"]) ? "private" : "");
 
+                    echo "<h2>Comments:</h2>";
+
                     foreach (mysqli_fetch_all(getTable($conn, $isgroup . $ispm . "messages")) as $res) {
                         if (isset($_GET["includefromprofile"]) && $res[2] != $_GET["includefromprofile"]) {
                             continue;
@@ -680,6 +684,8 @@
                     }
                     echo $say;
                 }
+
+                echo "</div>";
 
             } else {
                 echo "<p>Viewing comments is temporarily disabled.</p>";

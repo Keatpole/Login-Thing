@@ -15,7 +15,7 @@
 
     <?php
         if (!$settings->enable_reset_pass) {
-            echo "<p>Resettings your password is temporarily disabled.</p>";
+            echo "<p>Resetting your password is temporarily disabled.</p>";
         } else {
             ?>
                 <form action="includes/account/forgotPass" method="post">
