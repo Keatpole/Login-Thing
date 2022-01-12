@@ -1,5 +1,5 @@
 ----------------
-October ‎14, ‎2021
+October 14, 2021
 ----------------
 
 1. img/admin.png                          -    9 LOC
@@ -68,7 +68,7 @@ October ‎14, ‎2021
 48. resetpass.php                         -   60 LOC
 49. search.php                            -   25 LOC
 50. signup.php                            -   34 LOC
-41. style.css                             -   56 LOC
+51. style.css                             -   56 LOC
 52. todo.txt                              -    5 LOC
 53. user.php                              -  149 LOC
                                           = 2415 LOC

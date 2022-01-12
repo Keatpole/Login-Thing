@@ -48,4 +48,3 @@ if (getTable($conn, "users", ["uid", $_POST["user"]]) != null) {
     header("location: ../../appeal?error=usernotfound");
     exit();
 }
-
