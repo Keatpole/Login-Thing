@@ -28,7 +28,7 @@ if (isset($_POST["delete"])) {
     }
     elseif ($_SESSION["rank"] == 1) {
         insertTable($conn, "modsuggestions", [$_SESSION["id"], $_POST["commentId"], "DeleteComment"]);
-        logAction($conn, $_SESSION["id"], $_POST["commentId"], "Mod", $action);
+        logAction($conn, $_SESSION["id"], $_POST["commentId"], "Mod - DeleteComment", "CID:" . $_POST["commentId"]);
 
         header("location: ../../" . $_POST["return"] . "error=none");
         exit();

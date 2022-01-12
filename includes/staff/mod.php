@@ -13,7 +13,7 @@ if ($_SESSION["rank"] < 1 || !isset($_POST["submit"]) || !$settings->enable_mod_
 $username = $_POST["username"];
 $action = $_POST["action"];
 
-$user = getTable($conn, "users", ["uid", $username]);
+$user = ($action != 3 ? getTable($conn, "users", ["uid", $username]) : "blablabla");
 
 switch ($action) {
     case 3:
@@ -23,12 +23,13 @@ switch ($action) {
         $action = "(Un)Mute";
         break;
     default:
+        $action = $action;
         break;
 }
 
-if ($user != null) {
+if ($user != null || $action != "DeleteComment") {
     insertTable($conn, "modsuggestions", [$_SESSION["id"], $username, $action]);
-    logAction($conn, $_SESSION["id"], $username, $type, $action);
+    logAction($conn, $_SESSION["id"], $username, "Mod - DeleteComment", "CID:" . $username);
 } else {
     header("location: ../../moderation?error=usernotfound");
     exit();

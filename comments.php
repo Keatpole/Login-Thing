@@ -161,7 +161,7 @@
                         <form action="includes/comments/comment" method="post">
                             <input name="message" id="inputmsg" style="line-height: 3.3em" placeholder="Reply..." />
                             <input type="hidden" name="replyid" value="<?= $_GET["specific"] ?>">
-                            <input type="hidden" name="return" value="reply?c=<?= $_GET["specific"] ?>&">
+                            <input type="hidden" name="return" value="reply?c=<?= $_GET["specific"] ?>#<?= $_GET["specific"] ?>&">
                             <button class="button" type="submit" name="submit">Post</button>
                         </form>
 
@@ -179,8 +179,6 @@
             }
             
             if ($settings->enable_viewing_comments) {
-
-                $has = false;
 
                 echo "</br></br><div class=\"comments\">";
 
@@ -207,20 +205,13 @@
                             continue;
                         }
 
-                        if (!$friend_comments_h2_displayed) {
-                            echo "<h2>Friend Comments:</h2>";
-                            $friend_comments_h2_displayed = true;
-                        }
-
-                        echo "<div id=" . $res[0] . " class=\"comment\" tabindex=\"-1\">";
-
                         $contin = true;
 
                         if (isset($_GET["hashtag"])) {    
                             $contin = false;
 
                             foreach (explode(" ", $res[1]) as $v) {
-                                if (strtolower(urldecode($_GET["hashtag"])) == strtolower(substr($v, 1))) {
+                                if (strtolower(urldecode($_GET["hashtag"])) == strtolower(substr($v, 1)) && substr($v, 0, 1) == "#") {
                                     $contin = true;
                                 }
                             }
@@ -230,13 +221,24 @@
                             $contin = false;
 
                             foreach (explode(" ", $res[1]) as $v) {
-                                if (strtolower(urldecode($_GET["mentions"])) == strtolower(substr($v, 1))) {
+                                if (strtolower(urldecode($_GET["mentions"])) == strtolower(substr($v, 1)) && substr($v, 0, 1) == "@") {
                                     $contin = true;
                                 }
                             }
                         }
 
                         if (!$contin) continue;
+
+                        
+
+                        $has = true;
+
+                        if (!$friend_comments_h2_displayed) {
+                            echo "<h2>Friend Comments:</h2>";
+                            $friend_comments_h2_displayed = true;
+                        }
+
+                        echo "<div id=" . $res[0] . " class=\"comment\" tabindex=\"-1\">";
 
                         if (getTable($conn, "users", ["id", $res[2]]) == null) {
                             if ($_SESSION["rank"] > 0) {
@@ -303,9 +305,9 @@
 
                         if ($res[$isgroup2] != null && !isset($_GET["includefrompm"])) {
                             if (!isset($_GET["includefromgroup"])) {
-                                $replyTo = "[<a href=\"reply?c=" . $res[$isgroup2] . "\">Reply To</a>] ";
+                                $replyTo = "[<a href=\"reply?c=" . $res[$isgroup2] . "#" . $res[0] . "\">Reply To</a>] ";
                             } else {
-                                $replyTo = "[<a href=\"" . $isgroup . "#" . $res[$isgroup2] . "\">Reply To</a>] ";
+                                $replyTo = "[<a href=\"" . $isgroup . "#" . $res[0] . "\">Reply To</a>] ";
                             }
                         }
 
@@ -316,23 +318,23 @@
 
                             if ($settings->enable_likes) {
                                 if ($_SESSION["id"] == $res[2] || $_SESSION["rank"] >= 2) {
-                                    echo "<form action=\"includes/comments/like\" method=\"post\"><a href=\"reply?c=" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"> <button type=\"submit\" name=\"submit\" class=\"button\">Like</button> <button type=\"submit\" name=\"delete\" class=\"button\">Delete</button></form>";
+                                    echo "<form action=\"includes/comments/like\" method=\"post\"><a href=\"reply?c=" . $res[0] . "#" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"> <button type=\"submit\" name=\"submit\" class=\"button\">Like</button> <button type=\"submit\" name=\"delete\" class=\"button\">Delete</button></form>";
                                 }
                                 elseif ($_SESSION["rank"] == 1) {
-                                    echo "<form action=\"includes/comments/like\" method=\"post\"><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"><a href=\"reply?c=" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a> <button type=\"submit\" name=\"submit\" class=\"button\">Like</button> <button type=\"submit\" name=\"delete\" class=\"button\">Request Delete</button></form>";
+                                    echo "<form action=\"includes/comments/like\" method=\"post\"><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"><a href=\"reply?c=" . $res[0] . "#" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a> <button type=\"submit\" name=\"submit\" class=\"button\">Like</button> <button type=\"submit\" name=\"delete\" class=\"button\">Request Delete</button></form>";
                                 }
                                 else {
-                                    echo "<form action=\"includes/comments/like\" method=\"post\"><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"><a href=\"reply?c=" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a> <button type=\"submit\" name=\"submit\" class=\"button\">Like</button></form>";
+                                    echo "<form action=\"includes/comments/like\" method=\"post\"><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"><a href=\"reply?c=" . $res[0] . "#" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a> <button type=\"submit\" name=\"submit\" class=\"button\">Like</button></form>";
                                 }
                             } else {
                                 if ($_SESSION["id"] == $res[2] || $_SESSION["rank"] >= 2) {
-                                    echo "<form action=\"includes/comments/like\" method=\"post\"><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"><a href=\"reply?c=" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a> <button type=\"submit\" name=\"delete\" class=\"button\">Delete</button></form>";
+                                    echo "<form action=\"includes/comments/like\" method=\"post\"><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"><a href=\"reply?c=" . $res[0] . "#" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a> <button type=\"submit\" name=\"delete\" class=\"button\">Delete</button></form>";
                                 }
                                 elseif ($_SESSION["rank"] == 1) {
-                                    echo "<form action=\"includes/comments/like\" method=\"post\"><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"><a href=\"reply?c=" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a> <button type=\"submit\" name=\"delete\" class=\"button\">Request Delete</button></form>";
+                                    echo "<form action=\"includes/comments/like\" method=\"post\"><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"><a href=\"reply?c=" . $res[0] . "#" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a> <button type=\"submit\" name=\"delete\" class=\"button\">Request Delete</button></form>";
                                 }
                                 else {
-                                    echo "<form action=\"includes/comments/like\" method=\"post\"><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"><a href=\"reply?c=" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a></form>";
+                                    echo "<form action=\"includes/comments/like\" method=\"post\"><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"><a href=\"reply?c=" . $res[0] . "#" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a></form>";
                                 }
                             }
                         }
@@ -380,15 +382,13 @@
                                 $comments_h2_displayed = true;
                             }
 
-                            echo "<div id=" . $res[0] . " class=\"comment\" tabindex=\"-1\">";
-
                             $contin = true;
 
                             if (isset($_GET["hashtag"])) {    
                                 $contin = false;
 
                                 foreach (explode(" ", $res[1]) as $v) {
-                                    if (strtolower(urldecode($_GET["hashtag"])) == strtolower(substr($v, 1))) {
+                                    if (strtolower(urldecode($_GET["hashtag"])) == strtolower(substr($v, 1)) && substr($v, 0, 1) == "#") {
                                         $contin = true;
                                     }
                                 }
@@ -398,13 +398,15 @@
                                 $contin = false;
 
                                 foreach (explode(" ", $res[1]) as $v) {
-                                    if (strtolower(urldecode($_GET["mentions"])) == strtolower(substr($v, 1))) {
+                                    if (strtolower(urldecode($_GET["mentions"])) == strtolower(substr($v, 1)) && substr($v, 0, 1) == "@") {
                                         $contin = true;
                                     }
                                 }
                             }
 
                             if (!$contin) continue;
+
+                            echo "<div id=" . $res[0] . " class=\"comment\" tabindex=\"-1\">";
 
                             $has = true;
 
@@ -473,9 +475,9 @@
 
                             if ($res[$isgroup2] != null && !isset($_GET["includefrompm"])) {
                                 if (!isset($_GET["includefromgroup"])) {
-                                    $replyTo = "[<a href=\"reply?c=" . $res[$isgroup2] . "\">Reply To</a>] ";
+                                    $replyTo = "[<a href=\"reply?c=" . $res[$isgroup2] . "#" . $res[0] . "\">Reply To</a>] ";
                                 } else {
-                                    $replyTo = "[<a href=\"" . $isgroup . "#" . $res[$isgroup2] . "\">Reply To</a>] ";
+                                    $replyTo = "[<a href=\"" . $isgroup . "#" . $res[0] . "\">Reply To</a>] ";
                                 }
                             }
 
@@ -486,23 +488,23 @@
 
                                 if ($settings->enable_likes) {
                                     if ($_SESSION["id"] == $res[2] || $_SESSION["rank"] >= 2) {
-                                        echo "<form action=\"includes/comments/like\" method=\"post\"><a href=\"reply?c=" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"> <button type=\"submit\" name=\"submit\" class=\"button\">Like</button> <button type=\"submit\" name=\"delete\" class=\"button\">Delete</button></form>";
+                                        echo "<form action=\"includes/comments/like\" method=\"post\"><a href=\"reply?c=" . $res[0] . "#" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"> <button type=\"submit\" name=\"submit\" class=\"button\">Like</button> <button type=\"submit\" name=\"delete\" class=\"button\">Delete</button></form>";
                                     }
                                     elseif ($_SESSION["rank"] == 1) {
-                                        echo "<form action=\"includes/comments/like\" method=\"post\"><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"><a href=\"reply?c=" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a> <button type=\"submit\" name=\"submit\" class=\"button\">Like</button> <button type=\"submit\" name=\"delete\" class=\"button\">Request Delete</button></form>";
+                                        echo "<form action=\"includes/comments/like\" method=\"post\"><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"><a href=\"reply?c=" . $res[0] . "#" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a> <button type=\"submit\" name=\"submit\" class=\"button\">Like</button> <button type=\"submit\" name=\"delete\" class=\"button\">Request Delete</button></form>";
                                     }
                                     else {
-                                        echo "<form action=\"includes/comments/like\" method=\"post\"><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"><a href=\"reply?c=" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a> <button type=\"submit\" name=\"submit\" class=\"button\">Like</button></form>";
+                                        echo "<form action=\"includes/comments/like\" method=\"post\"><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"><a href=\"reply?c=" . $res[0] . "#" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a> <button type=\"submit\" name=\"submit\" class=\"button\">Like</button></form>";
                                     }
                                 } else {
                                     if ($_SESSION["id"] == $res[2] || $_SESSION["rank"] >= 2) {
-                                        echo "<form action=\"includes/comments/like\" method=\"post\"><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"><a href=\"reply?c=" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a> <button type=\"submit\" name=\"delete\" class=\"button\">Delete</button></form>";
+                                        echo "<form action=\"includes/comments/like\" method=\"post\"><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"><a href=\"reply?c=" . $res[0] . "#" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a> <button type=\"submit\" name=\"delete\" class=\"button\">Delete</button></form>";
                                     }
                                     elseif ($_SESSION["rank"] == 1) {
-                                        echo "<form action=\"includes/comments/like\" method=\"post\"><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"><a href=\"reply?c=" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a> <button type=\"submit\" name=\"delete\" class=\"button\">Request Delete</button></form>";
+                                        echo "<form action=\"includes/comments/like\" method=\"post\"><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"><a href=\"reply?c=" . $res[0] . "#" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a> <button type=\"submit\" name=\"delete\" class=\"button\">Request Delete</button></form>";
                                     }
                                     else {
-                                        echo "<form action=\"includes/comments/like\" method=\"post\"><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"><a href=\"reply?c=" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a></form>";
+                                        echo "<form action=\"includes/comments/like\" method=\"post\"><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"><a href=\"reply?c=" . $res[0] . "#" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a></form>";
                                     }
                                 }
                             }
@@ -673,9 +675,9 @@
 
                         if ($res[$isgroup2] != null && !isset($_GET["includefrompm"]) && !isset($_GET["specific"])) {
                             if (!isset($_GET["includefromgroup"])) {
-                                $replyTo = "[<a href=\"reply?c=" . $res[$isgroup2] . "\">Reply To</a>] ";
+                                $replyTo = "[<a href=\"reply?c=" . $res[$isgroup2] . "#" . $res[0] . "\">Reply To</a>] ";
                             } else {
-                                $replyTo = "[<a href=\"" . $isgroup . "#" . $res[$isgroup2] . "\">Reply To</a>] ";
+                                $replyTo = "[<a href=\"" . $isgroup . "#" . $res[0] . "\">Reply To</a>] ";
                             }
                         }
 
@@ -686,23 +688,23 @@
 
                             if ($settings->enable_likes) {
                                 if ($_SESSION["id"] == $res[2] || $_SESSION["rank"] >= 2) {
-                                    echo "<form action=\"includes/comments/like\" method=\"post\"><a href=\"reply?c=" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"> <button type=\"submit\" name=\"submit\" class=\"button\">Like</button> <button type=\"submit\" name=\"delete\" class=\"button\">Delete</button></form>";
+                                    echo "<form action=\"includes/comments/like\" method=\"post\"><a href=\"reply?c=" . $res[0] . "#" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"> <button type=\"submit\" name=\"submit\" class=\"button\">Like</button> <button type=\"submit\" name=\"delete\" class=\"button\">Delete</button></form>";
                                 }
                                 elseif ($_SESSION["id"] == $res[2] || $_SESSION["rank"] == 1) {
-                                    echo "<form action=\"includes/comments/like\" method=\"post\"><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"><a href=\"reply?c=" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a> <button type=\"submit\" name=\"submit\" class=\"button\">Like</button> <button type=\"submit\" name=\"delete\" class=\"button\">Request Delete</button></form>";
+                                    echo "<form action=\"includes/comments/like\" method=\"post\"><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"><a href=\"reply?c=" . $res[0] . "#" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a> <button type=\"submit\" name=\"submit\" class=\"button\">Like</button> <button type=\"submit\" name=\"delete\" class=\"button\">Request Delete</button></form>";
                                 }
                                 else {
-                                    echo "<form action=\"includes/comments/like\" method=\"post\"><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"><a href=\"reply?c=" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a> <button type=\"submit\" name=\"submit\" class=\"button\">Like</button></form>";
+                                    echo "<form action=\"includes/comments/like\" method=\"post\"><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"><a href=\"reply?c=" . $res[0] . "#" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a> <button type=\"submit\" name=\"submit\" class=\"button\">Like</button></form>";
                                 }
                             } else {
                                 if ($_SESSION["id"] == $res[2] || $_SESSION["rank"] >= 2) {
-                                    echo "<form action=\"includes/comments/like\" method=\"post\"><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"><a href=\"reply?c=" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a> <button type=\"submit\" name=\"delete\" class=\"button\">Delete</button></form>";
+                                    echo "<form action=\"includes/comments/like\" method=\"post\"><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"><a href=\"reply?c=" . $res[0] . "#" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a> <button type=\"submit\" name=\"delete\" class=\"button\">Delete</button></form>";
                                 }
                                 elseif ($_SESSION["id"] == $res[2] || $_SESSION["rank"] == 1) {
-                                    echo "<form action=\"includes/comments/like\" method=\"post\"><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"><a href=\"reply?c=" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a> <button type=\"submit\" name=\"delete\" class=\"button\">Request Delete</button></form>";
+                                    echo "<form action=\"includes/comments/like\" method=\"post\"><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"><a href=\"reply?c=" . $res[0] . "#" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a> <button type=\"submit\" name=\"delete\" class=\"button\">Request Delete</button></form>";
                                 }
                                 else {
-                                    echo "<form action=\"includes/comments/like\" method=\"post\"><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"><a href=\"reply?c=" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a></form>";
+                                    echo "<form action=\"includes/comments/like\" method=\"post\"><input type=hidden name=\"commentId\" value=" . $res[0] . "></input><input type=hidden name=\"return\" value=\".?\"><a href=\"reply?c=" . $res[0] . "#" . $res[0] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Reply</a></form>";
                                 }
                             }
                         }
@@ -737,6 +739,8 @@
                     if (isset($_GET["includefromprofile"])) {
                         if ($_GET["includefromprofile"] == $_SESSION["id"]) $say = "You have no comments";
                         else $say = "This user has no comments";
+                    } elseif (isset($_GET["mentions"]) || isset($_GET["hashtag"])) {
+                        $say = "No comments found";
                     }
                     echo $say;
                 }

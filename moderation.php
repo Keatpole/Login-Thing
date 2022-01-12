@@ -59,6 +59,8 @@
             
             if (isset($_GET["suggestions"])) {
                 
+                echo "<div class=\"comments\">";
+
                 echo "<h1>Suggestions</h1>";
 
                 if (!$settings->enable_suggestions) {
@@ -77,20 +79,20 @@
 
                                 if ($row["type"] == "DeleteComment") {
                                     $msg = getTable($conn, "messages", ["id", $row["targetsUid"]]);
-                                    echo "<h4><a href=\".#" . $row["id"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">Comment</a> - Type: Delete Comment - Suggester: <a href=\"user?u=" . $row["suggester"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["suggester"]])["uid"] . "</a></h4>";
-                                    echo "<a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\" href='includes/staff/approveSuggestion?uid=" . $row["targetsUid"] . "&id=" . $row["id"] . "&type=DeleteComment'>Accept</a> <a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\" href='includes/staff/refuseSuggestion?uid=" . $row["targetsUid"] . "&id=" . $row["id"] . "&type=DeleteComment'>Deny</a>";
+                                    echo "<h4 class=\"comment\"><a href=\"reply?c=" . $row["targetsUid"] . "#" . $row["targetsUid"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">Comment</a> - Type: Delete Comment - Suggester: <a href=\"user?u=" . $row["suggester"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["suggester"]])["uid"] . "</a></h4><hr style=\"border: 1px dotted black;\">";
+                                    echo "<a class=\"button comment\" style=\"font: 400 13.3333px Arial; font-size: 16px; background-color: #4CAF50; border: none; padding: 15px 56.2px;\" href='includes/staff/approveSuggestion?uid=" . $row["targetsUid"] . "&id=" . $row["id"] . "&type=DeleteComment'>Accept</a> <a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px; background-color: darkred;\" href='includes/staff/refuseSuggestion?uid=" . $row["targetsUid"] . "&id=" . $row["id"] . "&type=DeleteComment'>Deny</a>";
                                 }
                                 elseif ($row["type"] == "(Un)Mute") {
-                                    echo "<h4>Username: <a href=\"user?u=" . getTable($conn, "users", ["uid", $row["targetsUid"]])["id"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . $row["targetsUid"] . "</a> - Type: " . $row["type"] . " - Suggester: <a href=\"user?u=" . $row["suggester"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["suggester"]])["uid"] . "</a></h4><br>";
-                                    echo "<a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\" href='includes/staff/approveSuggestion?uid=" . $row["targetsUid"] . "&id=" . $row["id"] . "&type=" . $row["type"] . "'>Accept</a> <a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\" href='includes/staff/refuseSuggestion?uid=" . $row["targetsUid"] . "&id=" . $row["id"] . "&type=" . $row["type"] . "'>Deny</a>";
+                                    echo "<h4 class=\"comment\">Username: <a href=\"user?u=" . getTable($conn, "users", ["uid", $row["targetsUid"]])["id"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . $row["targetsUid"] . "</a> - Type: " . $row["type"] . " - Suggester: <a href=\"user?u=" . $row["suggester"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["suggester"]])["uid"] . "</a></h4><hr style=\"border: 1px dotted black;\">";
+                                    echo "<a class=\"button comment\" style=\"font: 400 13.3333px Arial; font-size: 16px; background-color: #4CAF50; border: none; padding: 15px 56.2px;\" href='includes/staff/approveSuggestion?uid=" . $row["targetsUid"] . "&id=" . $row["id"] . "&type=" . $row["type"] . "'>Accept</a> <a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px; background-color: darkred;\" href='includes/staff/refuseSuggestion?uid=" . $row["targetsUid"] . "&id=" . $row["id"] . "&type=" . $row["type"] . "'>Deny</a>";
                                 }
                                 elseif ($row["type"] == "-1") {
-                                    echo "<h4>Username: <a href=\"user?u=" . getTable($conn, "users", ["uid", $row["targetsUid"]])["id"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . $row["targetsUid"] . "</a> - Type: (Un)Ban - Suggester: <a href=\"user?u=" . $row["suggester"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["suggester"]])["uid"] . "</a></h4><br>";
-                                    echo "<a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\" href='includes/staff/approveSuggestion?uid=" . $row["targetsUid"] . "&id=" . $row["id"] . "&type=" . $row["type"] . "'>Accept</a> <a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\" href='includes/staff/refuseSuggestion?uid=" . $row["targetsUid"] . "&id=" . $row["id"] . "&type=" . $row["type"] . "'>Deny</a>";
+                                    echo "<h4 class=\"comment\">Username: <a href=\"user?u=" . getTable($conn, "users", ["uid", $row["targetsUid"]])["id"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . $row["targetsUid"] . "</a> - Type: (Un)Ban - Suggester: <a href=\"user?u=" . $row["suggester"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["suggester"]])["uid"] . "</a></h4><hr style=\"border: 1px dotted black;\">";
+                                    echo "<a class=\"button comment\" style=\"font: 400 13.3333px Arial; font-size: 16px; background-color: #4CAF50; border: none; padding: 15px 56.2px;\" href='includes/staff/approveSuggestion?uid=" . $row["targetsUid"] . "&id=" . $row["id"] . "&type=" . $row["type"] . "'>Accept</a> <a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px; background-color: darkred;\" href='includes/staff/refuseSuggestion?uid=" . $row["targetsUid"] . "&id=" . $row["id"] . "&type=" . $row["type"] . "'>Deny</a>";
                                 }
                                 else {
-                                    echo "<h4>Username: <a href=\"user?u=" . getTable($conn, "users", ["uid", $row["targetsUid"]])["id"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . $row["targetsUid"] . "</a> - Type: " . rankFromNum($row["type"]) . " - Suggester: <a href=\"user?u=" . $row["suggester"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["suggester"]])["uid"] . "</a></h4><br>";
-                                    echo "<a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\" href='includes/staff/approveSuggestion?uid=" . $row["targetsUid"] . "&id=" . $row["id"] . "&type=" . $row["type"] . "'>Accept</a> <a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\" href='includes/staff/refuseSuggestion?uid=" . $row["targetsUid"] . "&id=" . $row["id"] . "&type=" . $row["type"] . "'>Deny</a>";
+                                    echo "<h4 class=\"comment\">Username: <a href=\"user?u=" . getTable($conn, "users", ["uid", $row["targetsUid"]])["id"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . $row["targetsUid"] . "</a> - Type: " . rankFromNum($row["type"]) . " - Suggester: <a href=\"user?u=" . $row["suggester"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["suggester"]])["uid"] . "</a></h4><hr style=\"border: 1px dotted black;\">";
+                                    echo "<a class=\"button comment\" style=\"font: 400 13.3333px Arial; font-size: 16px; background-color: #4CAF50; border: none; padding: 15px 56.2px;\" href='includes/staff/approveSuggestion?uid=" . $row["targetsUid"] . "&id=" . $row["id"] . "&type=" . $row["type"] . "'>Accept</a> <a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px; background-color: darkred;\" href='includes/staff/refuseSuggestion?uid=" . $row["targetsUid"] . "&id=" . $row["id"] . "&type=" . $row["type"] . "'>Deny</a>";
                                 }
 
                                 exit();
@@ -100,15 +102,15 @@
                         } else {
                             if ($row["type"] == "DeleteComment") {
                                 $msg = getTable($conn, "messages", ["id", $row["targetsUid"]]);
-                                echo "<h4><a href=\".#" . $row["id"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">Comment</a><a style='color: black;text-decoration:none;' href='?suggestions&id=" . $row["id"] . "'> - Type: Delete Comment - Suggester: <a href=\"user?u=" . $row["suggester"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["suggester"]])["uid"] . "</a></a></h4><br>";
+                                echo "<h4 class=\"comment\"><a href=\"reply?c=" . $row["targetsUid"] . "#" . $row["targetsUid"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">Comment</a><a style='color: black;text-decoration:none;' href='?suggestions&id=" . $row["id"] . "'> - Type: Delete Comment - Suggester: <a href=\"user?u=" . $row["suggester"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["suggester"]])["uid"] . "</a></a></h4>";
 
                             }
                             elseif ($row["type"] == "(Un)Mute") {
-                                echo "<h4>Username: <a href=\"user?u=" . getTable($conn, "users", ["uid", $row["targetsUid"]])["id"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . $row["targetsUid"] . "</a> - Type: " . $row["type"] . " - Suggester: <a href=\"user?u=" . $row["suggester"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["suggester"]])["uid"] . "</a></h4><br>";
-                                echo "<a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\" href='includes/staff/approveSuggestion?uid=" . $row["targetsUid"] . "&id=" . $row["id"] . "&type=" . $row["type"] . "'>Accept</a> <a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\" href='includes/staff/refuseSuggestion?uid=" . $row["targetsUid"] . "&id=" . $row["id"] . "&type=" . $row["type"] . "'>Deny</a>";
+                                echo "<h4>Username: <a href=\"user?u=" . getTable($conn, "users", ["uid", $row["targetsUid"]])["id"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . $row["targetsUid"] . "</a> - Type: " . $row["type"] . " - Suggester: <a href=\"user?u=" . $row["suggester"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["suggester"]])["uid"] . "</a></h4>";
+                                echo "<a class=\"button comment\" style=\"font: 400 13.3333px Arial; font-size: 16px;\" href='includes/staff/approveSuggestion?uid=" . $row["targetsUid"] . "&id=" . $row["id"] . "&type=" . $row["type"] . "'>Accept</a> <a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\" href='includes/staff/refuseSuggestion?uid=" . $row["targetsUid"] . "&id=" . $row["id"] . "&type=" . $row["type"] . "'>Deny</a>";
                             }
                             else {
-                                echo "<h4><a style='color: black;text-decoration:none;' href='?suggestions&id=" . $row["id"]. "'>Username: <a href=\"user?u=" . getTable($conn, "users", ["uid", $row["targetsUid"]])["id"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . $row["targetsUid"] . "</a><a style='color: black;text-decoration:none;' href='?suggestions&id=" . $row["id"]. "'> - Type: " . rankFromNum($row["type"]) . " - Suggester: <a href=\"user?u=" . $row["suggester"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["suggester"]])["uid"] . "</a></a></h4><br>";
+                                echo "<h4 class=\"comment\"><a style='color: black;text-decoration:none;' href='?suggestions&id=" . $row["id"]. "'>Username: <a href=\"user?u=" . getTable($conn, "users", ["uid", $row["targetsUid"]])["id"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . $row["targetsUid"] . "</a><a style='color: black;text-decoration:none;' href='?suggestions&id=" . $row["id"]. "'> - Type: " . rankFromNum($row["type"]) . " - Suggester: <a href=\"user?u=" . $row["suggester"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["suggester"]])["uid"] . "</a></a></h4><br>";
                             }
                         }
 
@@ -116,6 +118,8 @@
                 } else {
                     echo "<h4>0 suggestions</h4>";
                 }
+
+                echo "</div>";
 
                 exit();
                 
@@ -126,6 +130,8 @@
                     echo "<p>Reporting is temporarily disabled.</p>";
                     exit();
                 }
+
+                echo "<div class=\"comments\">";
     
                 echo "<h1>Reports</h1>";
                 echo "<p>Click a report to view it</p>";
@@ -139,16 +145,16 @@
                         if (isset($_GET["id"])) {
                             if ($row["id"] == $_GET["id"]) {
     
-                                echo "<h4>Username: <a href=\"user?u=" . $row["target"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["target"]])["uid"] . "</a> - Reason: " . $row["reason"] . " - Reporter: <a href=\"user?u=" . $row["reporter"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["reporter"]])["uid"] . "</a> " . $details . " </h4><br>";
-                                echo "<a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\" href='includes/staff/approveReport?target=" . $row["target"] . "&id=" . $row["id"] . "&reason=" . $row["reason"] . "&action=-1" . "'>Ban</a> ";
-                                echo "<a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\" href='includes/staff/approveReport?target=" . $row["target"] . "&id=" . $row["id"] . "&reason=" . $row["reason"] . "&action=4" . "'>Mute</a> ";
+                                echo "<h4 class=\"comment\">Username: <a href=\"user?u=" . $row["target"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["target"]])["uid"] . "</a> - Reason: " . $row["reason"] . " - Reporter: <a href=\"user?u=" . $row["reporter"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["reporter"]])["uid"] . "</a> " . $details . " </h4><hr style=\"border: 1px dotted black;\">";
+                                echo "<a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px; background-color: darkred;\" href='includes/staff/approveReport?target=" . $row["target"] . "&id=" . $row["id"] . "&reason=" . $row["reason"] . "&action=-1" . "'>Ban</a> ";
+                                echo "<a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px; background-color: darkred;\" href='includes/staff/approveReport?target=" . $row["target"] . "&id=" . $row["id"] . "&reason=" . $row["reason"] . "&action=4" . "'>Mute</a> ";
                                 echo "<a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\" href='includes/staff/refuseReport?target=" . $row["target"] . "&id=" . $row["id"] . "&reason=" . $row["reason"] . "'>Ignore</a> ";
                                 exit();
     
                             }
                             
                         } else {
-                            echo "<h4><a style='color: black;text-decoration:none;' href='?reports&id=" . $row["id"]. "'>Username: <a href=\"user?u=" . $row["target"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["target"]])["uid"] . "</a><a style='color: black;text-decoration:none;' href='?reports&id=" . $row["id"] . "'> - Reason: " . $row["reason"] . " - Reporter: <a href=\"user?u=" . $row["reporter"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["reporter"]])["uid"] . "</a> <a style='color: black;text-decoration:none;' href='?reports&id=" . $row["id"]. "'>" . $details . " </a></h4><br>";
+                            echo "<h4 class=\"comment\"><a style='color: black;text-decoration:none;' href='?reports&id=" . $row["id"]. "'>Username: <a href=\"user?u=" . $row["target"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["target"]])["uid"] . "</a><a style='color: black;text-decoration:none;' href='?reports&id=" . $row["id"] . "'> - Reason: " . $row["reason"] . " - Reporter: <a href=\"user?u=" . $row["reporter"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["reporter"]])["uid"] . "</a> <a style='color: black;text-decoration:none;' href='?reports&id=" . $row["id"]. "'>" . $details . " </a></h4><br>";
                         }
     
                     }
@@ -156,6 +162,8 @@
                     echo "<h4>0 reports</h4>";
                 }
     
+                echo "</div>";
+
                 exit();
             } elseif (isset($_GET["appeals"])) {
                 if (!$settings->enable_appeal) {
@@ -163,6 +171,8 @@
                     exit();
                 }
     
+                echo "<div class=\"comments\">";
+
                 echo "<h1>Appeals</h1>";
                 echo "<p>Click an appeal to view it</p>";
     
@@ -175,12 +185,12 @@
                         if (isset($_GET["id"])) {
                             if ($row["id"] == $_GET["id"]) {
     
-                                echo "<h4>Username: <a href=\"user?u=" . $row["appealer"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["appealer"]])["uid"] . "</a> - Reason: " . $row["reason"] . "</a> " . $details . " </h4><br>";
+                                echo "<h4 class=\"comment\">Username: <a href=\"user?u=" . $row["appealer"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["appealer"]])["uid"] . "</a> - Reason: " . $row["reason"] . "</a> " . $details . " </h4><hr style=\"border: 1px dotted black;\">";
                                 
                                 if ($row["punishment"] == "0") {
-                                    echo "<a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\" href='includes/staff/approveAppeal?target=" . $row["appealer"] . "&id=" . $row["id"] . "&reason=" . $row["reason"] . "&action=-1" . "'>Unban</a> ";
+                                    echo "<a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px; background-color: darkred;\" href='includes/staff/approveAppeal?target=" . $row["appealer"] . "&id=" . $row["id"] . "&reason=" . $row["reason"] . "&action=-1" . "'>Unban</a> ";
                                 } elseif ($row["punishment"] == "1") {
-                                    echo "<a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\" href='includes/staff/approveAppeal?target=" . $row["appealer"] . "&id=" . $row["id"] . "&reason=" . $row["reason"] . "&action=4" . "'>Unmute</a> ";
+                                    echo "<a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px; background-color: darkred;\" href='includes/staff/approveAppeal?target=" . $row["appealer"] . "&id=" . $row["id"] . "&reason=" . $row["reason"] . "&action=4" . "'>Unmute</a> ";
                                 }
                                 echo "<a class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\" href='includes/staff/refuseAppeal?target=" . $row["appealer"] . "&id=" . $row["id"] . "&reason=" . $row["reason"] . "'>Ignore</a> ";
                                 exit();
@@ -188,7 +198,7 @@
                             }
                             
                         } else {
-                            echo "<h4><a style='color: black;text-decoration:none;' href='?appeals&id=" . $row["id"]. "'>Username: <a href=\"user?u=" . $row["appealer"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["appealer"]])["uid"] . "</a><a style='color: black;text-decoration:none;' href='?appeals&id=" . $row["id"] . "'> - Reason: " . $row["reason"] . "</a> <a style='color: black;text-decoration:none;' href='?appeals&id=" . $row["id"]. "'>" . $details . " </a></h4><br>";
+                            echo "<h4 class=\"comment\"><a style='color: black;text-decoration:none;' href='?appeals&id=" . $row["id"]. "'>Username: <a href=\"user?u=" . $row["appealer"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["appealer"]])["uid"] . "</a><a style='color: black;text-decoration:none;' href='?appeals&id=" . $row["id"] . "'> - Reason: " . $row["reason"] . "</a> <a style='color: black;text-decoration:none;' href='?appeals&id=" . $row["id"]. "'>" . $details . " </a></h4><br>";
                         }
     
                     }
@@ -196,13 +206,18 @@
                     echo "<h4>0 appeals</h4>";
                 }
 
+                echo "</div>";
+
                 exit();
             } elseif (isset($_GET["log"])) {
-                echo "<h1>Log</h1>";
+
+                echo "<div class=\"comments\">";
     
                 $result = getTable($conn, "log");
     
                 if ($result->num_rows > 0) {
+                    echo "<h2>Log</h2>";
+
                     while($row = $result->fetch_assoc()) {
                         $type = "";
 
@@ -241,16 +256,20 @@
                         if (str_starts_with($type, "CID:")) {
                             $type = explode(":", $type)[1];
 
-                            $type_str = "Comment ID: " . $type;
+                            $type_str = "<a href=\"reply?c=" . $row["targetsUid"] . "#" . $row["targetsUid"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">Comment ID: " . $type . "</a>";
                         }
 
                         $action = ltrim(preg_replace('/([A-Z])/', ' $1', $row["action"]));
 
-                        echo "<h4>[" . $row["id"] . "] Username: <a href=\"user?u=" . $row["uid"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["uid"]])["uid"] . "</a> - Target: <a href=\"user?u=" . $row["targetsUid"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["targetsUid"]])["uid"] . "</a> - Action: " . $action . "</a> - " . $type_str . " </h4>";
+                        $target = (str_starts_with($type, "CID:") ? "Target: <a href=\"user?u=" . $row["targetsUid"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["targetsUid"]])["uid"] . "</a> - " : "");
+
+                        echo "<h4 class=\"comment\">[" . $row["id"] . "] Username: <a href=\"user?u=" . $row["uid"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["uid"]])["uid"] . "</a> - " . $target . "Action: " . $action . "</a> - " . $type_str . " </h4> ";
                     }
                 } else {
-                    echo "<h4>Log is empty</h4>";
+                    echo "<h2>Log is empty</h2>";
                 }
+
+                echo "</div>";
 
                 exit();
             } else {
