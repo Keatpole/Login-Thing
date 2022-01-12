@@ -40,17 +40,7 @@ if ($table["user1"] != $_SESSION["id"] && $table["user2"] != $_SESSION["id"]) {
     exit();
 }
 
-$sql = "DELETE FROM " . $newtype . " WHERE id=?;";
-
-$stmt = mysqli_stmt_init($conn);
-if (!mysqli_stmt_prepare($stmt, $sql)) {
-    header("location: ../../friends?error=stmtfailed");
-    exit();
-}
-
-mysqli_stmt_bind_param($stmt, "s", $id);
-mysqli_stmt_execute($stmt);
-mysqli_stmt_close($stmt);
+deleteTable($conn, $newtype, ["id", $id]);
 
 if (isset($_GET["return"])) {
     header("location: ../../" . $_GET["return"] . "?error=none");

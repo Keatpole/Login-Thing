@@ -15,40 +15,9 @@ $msgInfo = getTable($conn, "messages", ["id", $_POST["commentId"]]);
 if (isset($_POST["delete"])) {
         
     if ($_SESSION["id"] == $msgInfo["author"] || $_SESSION["rank"] >= 2) {
-
-        $sql = "INSERT INTO deletedmessages(msgid, message, author, likes, replyTo, createdate) VALUES (?, ?, ?, ?, ?, ?);";
-        $stmt = mysqli_stmt_init($conn);
-        if (!mysqli_stmt_prepare($stmt, $sql)) {
-            header("location: ../../.?error=stmtfailed");
-            exit();
-        }
-        mysqli_stmt_bind_param($stmt, "ssssss", $msgInfo["id"], $msgInfo["message"], $msgInfo["author"], $msgInfo["likes"], $msgInfo["replyTo"], $msgInfo["date"]);
-        mysqli_stmt_execute($stmt);
-        mysqli_stmt_close($stmt);
-
-        $sql = "DELETE FROM messages WHERE id=?";
-        $stmt = mysqli_stmt_init($conn);
-        if (!mysqli_stmt_prepare($stmt, $sql)) {
-            header("location: ../../.?error=stmtfailed");
-            exit();
-        }
-
-        mysqli_stmt_bind_param($stmt, "i", $_POST["commentId"]);
-        mysqli_stmt_execute($stmt);
-        mysqli_stmt_close($stmt);
-
-        $sql = "INSERT INTO log (uid, targetsUid, action, type) VALUES (?, ?, ?, ?);";
-        $stmt = mysqli_stmt_init($conn);
-        if (!mysqli_stmt_prepare($stmt, $sql)) {
-            header("location: ../../.?error=stmtfailed");
-            exit();
-        }
-        $action = "DeleteComment";
-        $type = "CID:" . $_POST["commentId"];
-        session_start();
-        mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["id"], $msgInfo["author"], $action, $type);
-        mysqli_stmt_execute($stmt);
-        mysqli_stmt_close($stmt);
+        insertTable($conn, "deletedmessages", [$msgInfo["id"], $msgInfo["message"], $msgInfo["author"], $msgInfo["likes"], $msgInfo["replyTo"], $msgInfo["date"]]);
+        deleteTable($conn, "messages", ["id", $_POST["commentId"]]);
+        logAction($conn, $_SESSION["id"], $msgInfo["author"], "DeleteComment", "CID:" . $_POST["commentId"]);
 
         if ($_POST["return"]) {
             header("location: ../../" . $_POST["return"] . "error=none");
@@ -58,28 +27,8 @@ if (isset($_POST["delete"])) {
         exit();
     }
     elseif ($_SESSION["rank"] == 1) {
-
-        $sql = "INSERT INTO modsuggestions(suggester, targetsUid, type) VALUES (?, ?);";
-        $stmt = mysqli_stmt_init($conn);
-        if (!mysqli_stmt_prepare($stmt, $sql)) {
-            header("location: ../../". $_POST["return"] ."error=stmtfailed");
-            exit();
-        }
-        $action = "DeleteComment";
-        mysqli_stmt_bind_param($stmt, "sss", $_SESSION["id"], $_POST["commentId"], $action);
-        mysqli_stmt_execute($stmt);
-        mysqli_stmt_close($stmt);
-
-        $sql = "INSERT INTO log (uid, targetsUid, action, type) VALUES (?, ?, ?, ?);";
-        $stmt = mysqli_stmt_init($conn);
-        if (!mysqli_stmt_prepare($stmt, $sql)) {
-            header("location: ../../moderation" . $_POST["return"] . "error=stmtfailed");
-            exit();
-        }
-        $type = "Mod";
-        mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["id"], $_POST["commentId"], $type, $action);
-        mysqli_stmt_execute($stmt);
-        mysqli_stmt_close($stmt);
+        insertTable($conn, "modsuggestions", [$_SESSION["id"], $_POST["commentId"], "DeleteComment"]);
+        logAction($conn, $_SESSION["id"], $_POST["commentId"], "Mod", $action);
 
         header("location: ../../" . $_POST["return"] . "error=none");
         exit();
@@ -110,31 +59,11 @@ foreach ($commentLikesInfo as $result) {
     }
 }
 
-$sql = "INSERT INTO messagelikes (msgid, userid) VALUES (?, ?);";
-$stmt = mysqli_stmt_init($conn);
-if (!mysqli_stmt_prepare($stmt, $sql)) {
-    header("location: ../../.?error=stmtfailed");
-    exit();
-}
-
-mysqli_stmt_bind_param($stmt, "ii", $_POST["commentId"], $_SESSION["id"]);
-mysqli_stmt_execute($stmt);
-mysqli_stmt_close($stmt);
+insertTable($conn, "messagelikes", [$_POST["commentId"], $_SESSION["id"]]);
 
 $commentLikes = getTable($conn, "messages", ["id", $_POST["commentId"]]);
 
-$sql = "UPDATE messages SET likes = ? WHERE id = ?;";
-$stmt = mysqli_stmt_init($conn);
-if (!mysqli_stmt_prepare($stmt, $sql)) {
-    header("location: ../../.?error=stmtfailed");
-    exit();
-}
-
-
-$newLikes = $commentLikes["likes"] + 1;
-mysqli_stmt_bind_param($stmt, "ii", $newLikes, $_POST["commentId"]);
-mysqli_stmt_execute($stmt);
-mysqli_stmt_close($stmt);
+updateTable($conn, "messages", "likes", $commentLikes["likes"] + 1, ["id", $_POST["commentId"]]);
 
 if (isset($_POST["return"])) {
     header("location: ../../" . $_POST["return"] . "error=none");

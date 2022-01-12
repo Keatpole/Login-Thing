@@ -34,18 +34,7 @@ if (uidExists($conn, $username, $email) !== false) {
     exit();
 }
 
-$sql = "INSERT INTO users (email, uid, pwd) VALUES (?, ?, ?);";
-$stmt = mysqli_stmt_init($conn);
-if (!mysqli_stmt_prepare($stmt, $sql)) {
-    header("location: ../../signup?error=stmtfailed");
-    exit();
-}
-
-$hashedPwd = password_hash($pwd, PASSWORD_DEFAULT);
-
-mysqli_stmt_bind_param($stmt, "sss", $email, $username, $hashedPwd);
-mysqli_stmt_execute($stmt);
-mysqli_stmt_close($stmt);
+insertTable($conn, "users", [$email, $username, password_hash($pwd, PASSWORD_DEFAULT)], ["rank", "verified", "deleted", "deletedate"]);
 
 header("location: ../../signup?error=none");
 exit();

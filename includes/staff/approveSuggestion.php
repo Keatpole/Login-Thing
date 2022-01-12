@@ -16,52 +16,15 @@ $id = $_GET["id"];
 
 $user = getTable($conn, "users", ["uid", $username]);
 
+deleteTable($conn, "modsuggestions", ["id", $id]);
+
 if ($_GET["type"] == "DeleteComment") {
 
     $msgInfo = getTable($conn, "messages", ["id", $username]);
 
-    $sql = "INSERT INTO deletedmessages(msgid, message, author, likes, createdate) VALUES (?, ?, ?, ?, ?);";
-    $stmt = mysqli_stmt_init($conn);
-    if (!mysqli_stmt_prepare($stmt, $sql)) {
-        header("location: ../../moderation?suggestions&error=stmtfailed");
-        exit();
-    }
-    mysqli_stmt_bind_param($stmt, "sssss", $msgInfo["id"], $msgInfo["message"], $msgInfo["author"], $msgInfo["likes"], $msgInfo["date"]);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_close($stmt);
-
-    $sql = "DELETE FROM messages WHERE id=?";
-    $stmt = mysqli_stmt_init($conn);
-    if (!mysqli_stmt_prepare($stmt, $sql)) {
-        header("location: ../../moderation?suggestions&error=stmtfailed");
-        exit();
-    }
-
-    mysqli_stmt_bind_param($stmt, "i", $username);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_close($stmt);
-
-    $sql = "DELETE FROM modsuggestions WHERE id = ?;";
-    $stmt = mysqli_stmt_init($conn);
-    if (!mysqli_stmt_prepare($stmt, $sql)) {
-        header("location: ../../moderation?suggestions&error=stmtfailed");
-        exit();
-    }
-    mysqli_stmt_bind_param($stmt, "s", $id);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_close($stmt);
-
-    $sql = "INSERT INTO log (uid, targetsUid, action, type) VALUES (?, ?, ?, ?);";
-    $stmt = mysqli_stmt_init($conn);
-    if (!mysqli_stmt_prepare($stmt, $sql)) {
-        header("location: ../../moderation?suggestions&error=stmtfailed");
-        exit();
-    }
-    $action = "ApproveSuggestion";
-    session_start();
-    mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["id"], $username, $action, $type);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_close($stmt);
+    insertTable($conn, "deletedmessages", [$msgInfo["id"], $msgInfo["message"], $msgInfo["author"], $msgInfo["likes"], $msgInfo["date"]]);
+    deleteTable($conn, "messages", ["id", $username]);    
+    logAction($conn, $_SESSION["id"], $username, "ApproveSuggestion", $type);
 
     header("location: ../../moderation?suggestions&error=none");
     exit();
@@ -75,52 +38,12 @@ elseif ($_GET["type"] == "(Un)Mute") {
     }
 
     if ($muted) {
-
-        $sql = "DELETE FROM mutes WHERE id = ?;";
-        $stmt = mysqli_stmt_init($conn);
-        if (!mysqli_stmt_prepare($stmt, $sql)) {
-            header("location: ../../moderation?error=stmtfailed");
-            exit();
-        }
-        mysqli_stmt_bind_param($stmt, "i", $v["id"]);
-        mysqli_stmt_execute($stmt);
-        mysqli_stmt_close($stmt);
-
+        deleteTable($conn, "mutes", ["id", $muted["id"]]);
     } else {
-
-        $sql = "INSERT INTO mutes (muter, target) VALUES (?, ?);";
-        $stmt = mysqli_stmt_init($conn);
-        if (!mysqli_stmt_prepare($stmt, $sql)) {
-            header("location: ../../moderation?error=stmtfailed");
-            exit();
-        }
-        mysqli_stmt_bind_param($stmt, "ss", $_SESSION["id"], $user["id"]);
-        mysqli_stmt_execute($stmt);
-        mysqli_stmt_close($stmt);
-
+        insertTable($conn, "mutes", [$_SESSION["id"], $user["id"]]);
     }
 
-    $sql = "DELETE FROM modsuggestions WHERE id = ?;";
-    $stmt = mysqli_stmt_init($conn);
-    if (!mysqli_stmt_prepare($stmt, $sql)) {
-        header("location: ../../moderation?suggestions&error=stmtfailed");
-        exit();
-    }
-    mysqli_stmt_bind_param($stmt, "s", $id);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_close($stmt);
-
-    $sql = "INSERT INTO log (uid, targetsUid, action, type) VALUES (?, ?, ?, ?);";
-    $stmt = mysqli_stmt_init($conn);
-    if (!mysqli_stmt_prepare($stmt, $sql)) {
-        header("location: ../../moderation?suggestions&error=stmtfailed");
-        exit();
-    }
-    $action = "ApproveSuggestion";
-    session_start();
-    mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["id"], $username, $action, $type);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_close($stmt);
+    logAction($conn, $_SESSION["id"], $username, "ApproveSuggestion", $type);
 
     header("location: ../../moderation?suggestions&error=none");
     exit();
@@ -134,75 +57,14 @@ elseif ($_GET["type"] == "-1") {
     }
 
     if ($banned) {
-
-        $sql = "DELETE FROM bans WHERE id = ?;";
-        $stmt = mysqli_stmt_init($conn);
-        if (!mysqli_stmt_prepare($stmt, $sql)) {
-            header("location: ../../moderation?error=stmtfailed");
-            exit();
-        }
-        mysqli_stmt_bind_param($stmt, "i", $v["id"]);
-        mysqli_stmt_execute($stmt);
-        mysqli_stmt_close($stmt);
-
-        $sql = "UPDATE users SET rank = ? WHERE id = ?;";
-        $stmt = mysqli_stmt_init($conn);
-        if (!mysqli_stmt_prepare($stmt, $sql)) {
-            header("location: ../../moderation?suggestions&error=stmtfailed");
-            exit();
-        }
-        $zero = "0";
-        mysqli_stmt_bind_param($stmt, "ss", $zero, $user["id"]);
-        mysqli_stmt_execute($stmt);
-        mysqli_stmt_close($stmt);
-
+        deleteTable($conn, "bans", ["id", $banned["id"]]);
+        updateTable($conn, "users", "rank", "0", ["id", $user["id"]]);
     } else {
-
-        $sql = "INSERT INTO bans (banner, target) VALUES (?, ?);";
-        $stmt = mysqli_stmt_init($conn);
-        if (!mysqli_stmt_prepare($stmt, $sql)) {
-            header("location: ../../moderation?error=stmtfailed");
-            exit();
-        }
-        mysqli_stmt_bind_param($stmt, "ss", $_SESSION["id"], $user["id"]);
-        mysqli_stmt_execute($stmt);
-        mysqli_stmt_close($stmt);
-
-        $sql = "UPDATE users SET rank = ? WHERE id = ?;";
-        $stmt = mysqli_stmt_init($conn);
-        if (!mysqli_stmt_prepare($stmt, $sql)) {
-            header("location: ../../moderation?suggestions&error=stmtfailed");
-            exit();
-        }
-        $zero = "-1";
-        mysqli_stmt_bind_param($stmt, "ss", $zero, $user["id"]);
-        mysqli_stmt_execute($stmt);
-        mysqli_stmt_close($stmt);
-
+        insertTable($conn, "bans", [$_SESSION["id"], $user["id"]]);
+        updateTable($conn, "users", "rank", "-1", ["id", $user["id"]]);
     }
-
-    $sql = "DELETE FROM modsuggestions WHERE id = ?;";
-    $stmt = mysqli_stmt_init($conn);
-    if (!mysqli_stmt_prepare($stmt, $sql)) {
-        header("location: ../../moderation?suggestions&error=stmtfailed");
-        exit();
-    }
-    mysqli_stmt_bind_param($stmt, "s", $id);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_close($stmt);
-
-    $sql = "INSERT INTO log (uid, targetsUid, action, type) VALUES (?, ?, ?, ?);";
-    $stmt = mysqli_stmt_init($conn);
-    if (!mysqli_stmt_prepare($stmt, $sql)) {
-        header("location: ../../moderation?suggestions&error=stmtfailed");
-        exit();
-    }
-    $action = "ApproveSuggestion";
-    $type = "(Un)Ban";
-    session_start();
-    mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["id"], $username, $action, $type);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_close($stmt);
+    
+    logAction($conn, $_SESSION["id"], $username, "ApproveSuggestion", "(Un)Ban");
 
     header("location: ../../moderation?suggestions&error=none");
     exit();
@@ -220,37 +82,8 @@ if ($user["rank"] >= 2 && $_SESSION["rank"] <= 2) {
     exit();
 }
 
-$sql = "UPDATE users SET rank = ? WHERE uid = ?;";
-$stmt = mysqli_stmt_init($conn);
-if (!mysqli_stmt_prepare($stmt, $sql)) {
-    header("location: ../../moderation?suggestions&error=stmtfailed");
-    exit();
-}
-mysqli_stmt_bind_param($stmt, "ss", $type, $username);
-mysqli_stmt_execute($stmt);
-mysqli_stmt_close($stmt);
-
-$sql = "DELETE FROM modsuggestions WHERE id = ?;";
-$stmt = mysqli_stmt_init($conn);
-if (!mysqli_stmt_prepare($stmt, $sql)) {
-    header("location: ../../moderation?suggestions&error=stmtfailed");
-    exit();
-}
-mysqli_stmt_bind_param($stmt, "s", $id);
-mysqli_stmt_execute($stmt);
-mysqli_stmt_close($stmt);
-
-$sql = "INSERT INTO log (uid, targetsUid, action, type) VALUES (?, ?, ?, ?);";
-$stmt = mysqli_stmt_init($conn);
-if (!mysqli_stmt_prepare($stmt, $sql)) {
-    header("location: ../../moderation?suggestions&error=stmtfailed");
-    exit();
-}
-$action = "ApproveSuggestion";
-session_start();
-mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["id"], $user["id"], $action, $type);
-mysqli_stmt_execute($stmt);
-mysqli_stmt_close($stmt);
+updateTable($conn, "users", "rank", $type, ["uid", $username]);
+logAction($conn, $_SESSION["id"], $user["id"], "ApproveSuggestion", $type);
 
 header("location: ../../moderation?suggestions&error=none");
 exit();

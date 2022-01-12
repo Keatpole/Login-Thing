@@ -14,17 +14,7 @@ if ($_SESSION["id"] != getTable($conn, "friendreq", ["id", $_POST["id"]])["user2
     exit();
 }
 
-$sql = "DELETE FROM friendreq WHERE id=?;";
-
-$stmt = mysqli_stmt_init($conn);
-if (!mysqli_stmt_prepare($stmt, $sql)) {
-    header("location: ../../friends?req&error=stmtfailed");
-    exit();
-}
-
-mysqli_stmt_bind_param($stmt, "s", $_POST["id"]);
-mysqli_stmt_execute($stmt);
-mysqli_stmt_close($stmt);
+deleteTable($conn, "friendreq", ["id", $_POST["id"]]);
 
 if ($_POST["return"]) {
     header("location: ../../" . $_POST["return"] . "error=none");

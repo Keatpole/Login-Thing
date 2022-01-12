@@ -17,20 +17,6 @@ foreach (getTable($conn, "mutes", "", true) as $v) {
     }
 }
 
-if (isset($_POST["replyid"])) {
-    $sql = "INSERT INTO messages(message, author, replyTo) VALUES (?, ?, ?)";
-} else {
-    $sql = "INSERT INTO messages(message, author) VALUES (?, ?)";
-}
-
-$stmt = mysqli_stmt_init($conn);
-if (!mysqli_stmt_prepare($stmt, $sql)) {
-    header("location: ../../.?error=stmtfailed");
-    exit();
-}
-
-session_start();
-
 $message = htmlspecialchars($_POST["message"], ENT_QUOTES, 'UTF-8');
 
 # if the message starts with a !, it's a command
@@ -172,13 +158,10 @@ if (str_starts_with($message, "!")) {
 }
 
 if (isset($_POST["replyid"])) {
-    mysqli_stmt_bind_param($stmt, "sis", $message, $_SESSION["id"], $_POST["replyid"]);
+    insertTable($conn, "messages", [$message, $_SESSION["id"], $_POST["replyid"]], ["likes"]);
 } else {
-    mysqli_stmt_bind_param($stmt, "si", $message, $_SESSION["id"]);
+    insertTable($conn, "messages", [$message, $_SESSION["id"]], ["likes", "replyTo"]);
 }
-
-mysqli_stmt_execute($stmt);
-mysqli_stmt_close($stmt);
 
 $return = (isset($_POST["return"]) ? $_POST["return"] : ".?");
 

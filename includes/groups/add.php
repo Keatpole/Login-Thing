@@ -43,20 +43,7 @@ if ($group["author"] != $_SESSION["id"]) {
     exit();
 }
 
-$sql = "UPDATE groups SET members=? WHERE id=?;";
-
-$stmt = mysqli_stmt_init($conn);
-if (!mysqli_stmt_prepare($stmt, $sql)) {
-    header("location: ../../groups?error=stmtfailed");
-    exit();
-}
-
-
-$newMembers = $group["members"] . "," . $_POST["user"];
-
-mysqli_stmt_bind_param($stmt, "si", $newMembers, $_POST["group"]);
-mysqli_stmt_execute($stmt);
-mysqli_stmt_close($stmt);
+updateTable($conn, "groups", "members", $group["members"] . "," . $_POST["user"], ["id", $_POST["group"]]);
 
 header("location: ../../groups?error=none");
 exit();

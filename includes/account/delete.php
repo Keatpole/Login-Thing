@@ -16,18 +16,10 @@ if (isset($_SESSION["rank"]) && $banned) {
     exit();
 }
 
-$sql = "UPDATE `users` SET `deleted`=1,`deletedate`=? WHERE id = ?;";
-$stmt = mysqli_stmt_init($conn);
-if (!mysqli_stmt_prepare($stmt, $sql)) {
-    header("location: ../../user?error=stmtfailed");
-    exit();
-}
-$current_date = date("Y-m-d H:i:s", strtotime("+1 Month"));
-mysqli_stmt_bind_param($stmt, "ss", $current_date, $_SESSION["id"]);
-mysqli_stmt_execute($stmt);
-mysqli_stmt_close($stmt);
 
-session_start();
+updateTable($conn, "users", "deleted", 1, ["id", $_SESSION["id"]]);
+updateTable($conn, "users", "deletedate", date("Y-m-d H:i:s", strtotime("+1 Month")), ["id", $_SESSION["id"]]);
+
 session_unset();
 session_destroy();
 

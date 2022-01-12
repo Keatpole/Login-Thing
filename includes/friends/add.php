@@ -15,16 +15,6 @@ if (!$settings->enable_friends) {
     exit();
 }
 
-$sql = "INSERT INTO friendreq(user1, user2) VALUES (?, ?);";
-
-$stmt = mysqli_stmt_init($conn);
-if (!mysqli_stmt_prepare($stmt, $sql)) {
-    header("location: ../../users?u=" . $_POST["user"] . "&error=stmtfailed");
-    exit();
-}
-
-mysqli_stmt_bind_param($stmt, "ss", $_SESSION["id"], $_POST["user"]);
-mysqli_stmt_execute($stmt);
-mysqli_stmt_close($stmt);
+insertTable($conn, "friendreq", [$_SESSION["id"], $_POST["user"]]);
 
 header("location: ../../user?u=" . $_POST["user"] . "&error=none");

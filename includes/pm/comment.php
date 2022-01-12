@@ -28,21 +28,7 @@ $user = getTable($conn, "users", ["id", $_POST["user"]]);
 
 $message = strtolower($_POST["message"]);
 
-$sql = "INSERT INTO privatemessages(message, author, receiver) VALUES (?, ?, ?)";
-
-$stmt = mysqli_stmt_init($conn);
-if (!mysqli_stmt_prepare($stmt, $sql)) {
-    header("location: ../../pm?u=" . $_POST["user"] . "&error=stmtfailed");
-    exit();
-}
-
-session_start();
-
-$message = htmlspecialchars($_POST["message"], ENT_QUOTES, 'UTF-8');
-
-mysqli_stmt_bind_param($stmt, "sss", $message, $_SESSION["id"], $_POST["user"]);
-mysqli_stmt_execute($stmt);
-mysqli_stmt_close($stmt);
+insertTable($conn, "privatemessages", [$message, $_SESSION["id"], $_POST["user"]]);
 
 header("location: ../../pm?u=" . $_POST["user"] . "&error=none");
 exit();

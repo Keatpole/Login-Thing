@@ -41,21 +41,9 @@ switch ($_POST["reason"]) {
 
 
 if (getTable($conn, "users", ["uid", $_POST["user"]]) != null) {
-
-    $sql = "INSERT INTO reports (reporter, target, reason, otherreason) VALUES (?, ?, ?, ?);";
-    $stmt = mysqli_stmt_init($conn);
-    if (!mysqli_stmt_prepare($stmt, $sql)) {
-        header("location: ../../report?error=stmtfailed");
-        exit();
-    }
-    mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["id"], getTable($conn, "users", ["uid", $_POST["user"]])["id"], $reason, $_POST["otherreason"]);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_close($stmt);
-
+    insertTable($conn, "reports", [$_SESSION["id"], getTable($conn, "users", ["uid", $_POST["user"]])["id"], $reason, $_POST["otherreason"]]);
     header("location: ../../report?error=none");
-
-}
-else {
+} else {
     header("location: ../../report?error=usernotfound");
     exit();
 }

@@ -27,6 +27,8 @@ if ($user["rank"] > 1 && $_SESSION["rank"] <= 2) {
     exit();
 }
 
+deleteTable($conn, "reports", ["id", $id]);
+
 if ($action == "-1") {
 
     $banned = false;
@@ -40,49 +42,9 @@ if ($action == "-1") {
         exit();
     }
 
-    $sql = "INSERT INTO bans (banner, target) VALUES (?, ?);";
-    $stmt = mysqli_stmt_init($conn);
-    if (!mysqli_stmt_prepare($stmt, $sql)) {
-        header("location: ../../moderation?error=stmtfailed");
-        exit();
-    }
-    mysqli_stmt_bind_param($stmt, "ss", $_SESSION["id"], $user["id"]);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_close($stmt);
-
-    $sql = "UPDATE users SET rank = ? WHERE id = ?;";
-    $stmt = mysqli_stmt_init($conn);
-    if (!mysqli_stmt_prepare($stmt, $sql)) {
-        header("location: ../../moderation?suggestions&error=stmtfailed");
-        exit();
-    }
-    $zero = "-1";
-    mysqli_stmt_bind_param($stmt, "ss", $zero, $user["id"]);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_close($stmt);
-
-    $sql = "DELETE FROM reports WHERE id = ?;";
-    $stmt = mysqli_stmt_init($conn);
-    if (!mysqli_stmt_prepare($stmt, $sql)) {
-        header("location: ../../moderation?reports&error=stmtfailed");
-        exit();
-    }
-    mysqli_stmt_bind_param($stmt, "s", $id);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_close($stmt);
-
-    $sql = "INSERT INTO log (uid, targetsUid, action, type) VALUES (?, ?, ?, ?);";
-    $stmt = mysqli_stmt_init($conn);
-    if (!mysqli_stmt_prepare($stmt, $sql)) {
-        header("location: ../../moderation?reports&error=stmtfailed");
-        exit();
-    }
-    $action = "ApproveReport";
-    $type = "Ban";
-    session_start();
-    mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["id"], $target, $action, $type);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_close($stmt);
+    insertTable($conn, "bans", [$_SESSION["id"], $user["id"]]);
+    updateTable($conn, "users", "rank", "-1", ["id", $user["id"]]);
+    logAction($conn, $_SESSION["id"], $target, "ApproveReport", "Ban");
 
     header("location: ../../moderation?reports&error=none");
     exit();
@@ -99,74 +61,15 @@ if ($action == "-1") {
         exit();
     }
 
-    $sql = "INSERT INTO mutes (muter, target) VALUES (?, ?);";
-    $stmt = mysqli_stmt_init($conn);
-    if (!mysqli_stmt_prepare($stmt, $sql)) {
-        header("location: ../../moderation?reports&error=stmtfailed");
-        exit();
-    }
-    mysqli_stmt_bind_param($stmt, "ss", $_SESSION["id"], $user["id"]);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_close($stmt);
-
-    $sql = "DELETE FROM reports WHERE id = ?;";
-    $stmt = mysqli_stmt_init($conn);
-    if (!mysqli_stmt_prepare($stmt, $sql)) {
-        header("location: ../../moderation?reports&error=stmtfailed");
-        exit();
-    }
-    mysqli_stmt_bind_param($stmt, "s", $id);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_close($stmt);
-
-    $sql = "INSERT INTO log (uid, targetsUid, action, type) VALUES (?, ?, ?, ?);";
-    $stmt = mysqli_stmt_init($conn);
-    if (!mysqli_stmt_prepare($stmt, $sql)) {
-        header("location: ../../moderation?reports&error=stmtfailed");
-        exit();
-    }
-    $action = "ApproveReport";
-    $type = "Mute";
-    session_start();
-    mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["id"], $target, $action, $type);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_close($stmt);
+    insertTable($conn, "mutes", [$_SESSION["id"], $user["id"]]);
+    logAction($conn, $_SESSION["id"], $target, "ApproveReport", "Mute");
 
     header("location: ../../moderation?reports&error=none");
     exit();
 }
 
-$sql = "UPDATE users SET rank = ? WHERE id = ?;";
-$stmt = mysqli_stmt_init($conn);
-if (!mysqli_stmt_prepare($stmt, $sql)) {
-    header("location: ../../moderation?reports&error=stmtfailed");
-    exit();
-}
-mysqli_stmt_bind_param($stmt, "ss", $action, $target);
-mysqli_stmt_execute($stmt);
-mysqli_stmt_close($stmt);
-
-$sql = "DELETE FROM reports WHERE id = ?;";
-$stmt = mysqli_stmt_init($conn);
-if (!mysqli_stmt_prepare($stmt, $sql)) {
-    header("location: ../../moderation?reports&error=stmtfailed");
-    exit();
-}
-mysqli_stmt_bind_param($stmt, "s", $id);
-mysqli_stmt_execute($stmt);
-mysqli_stmt_close($stmt);
-
-$sql = "INSERT INTO log (uid, targetsUid, action, type) VALUES (?, ?, ?, ?);";
-$stmt = mysqli_stmt_init($conn);
-if (!mysqli_stmt_prepare($stmt, $sql)) {
-    header("location: ../../moderation?reports&error=stmtfailed");
-    exit();
-}
-$action = "ApproveReport - " . rankFromNum($action);
-session_start();
-mysqli_stmt_bind_param($stmt, "ssss", $_SESSION["id"], $target, $action, $reason);
-mysqli_stmt_execute($stmt);
-mysqli_stmt_close($stmt);
+updateTable($conn, "users", "rank", $action, ["id", $target]);
+logAction($conn, $_SESSION["id"], $target, "ApproveReport - " . rankFromNum($action), $reason);
 
 header("location: ../../moderation?reports&error=none");
 exit();

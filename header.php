@@ -17,18 +17,8 @@
                 require_once "includes/other/functions.php";
 
                 foreach (mysqli_fetch_all(getTable($conn, "users")) as $res) {
-                    if ($res[6] == 1) {
-                        if (strtotime(date("Y-m-d H:i:s")) >= strtotime($res[7])) {
-                            $sql = "DELETE FROM users WHERE id = ?;";
-                            $stmt = mysqli_stmt_init($conn);
-                            if (!mysqli_stmt_prepare($stmt, $sql)) {
-                                header("location: .?error=stmtfailed");
-                                exit();
-                            }
-                            mysqli_stmt_bind_param($stmt, "s", $res[0]);
-                            mysqli_stmt_execute($stmt);
-                            mysqli_stmt_close($stmt);
-                        }
+                    if ($res[6] == 1 && strtotime(date("Y-m-d H:i:s")) >= strtotime($res[7])) {
+                        deleteTable($conn, "users", ["id", $res[0]]);
                     }
                 }
 

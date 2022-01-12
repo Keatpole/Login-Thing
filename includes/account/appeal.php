@@ -42,21 +42,9 @@ switch ($_POST["reason"]) {
 $punishment = $_POST["punishment"];
 
 if (getTable($conn, "users", ["uid", $_POST["user"]]) != null) {
-
-    $sql = "INSERT INTO appeals (appealer, reason, punishment, otherreason) VALUES (?, ?, ?, ?);";
-    $stmt = mysqli_stmt_init($conn);
-    if (!mysqli_stmt_prepare($stmt, $sql)) {
-        header("location: ../../appeal?error=stmtfailed");
-        exit();
-    }
-    mysqli_stmt_bind_param($stmt, "ssss", getTable($conn, "users", ["uid", $_POST["user"]])["id"], $reason, $punishment, $_POST["otherreason"]);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_close($stmt);
-
+    insertTable($conn, "appeals", [getTable($conn, "users", ["uid", $_POST["user"]])["id"], $reason, $punishment, $_POST["otherreason"]]);
     header("location: ../../appeal?error=none");
-
-}
-else {
+} else {
     header("location: ../../appeal?error=usernotfound");
     exit();
 }

@@ -15,30 +15,10 @@ if (isset($_GET["confirm"])) {
     require_once "../other/dbh.php";
     require_once "../other/functions.php";
 
-    $sql = "SHOW TABLES";
-    $stmt = mysqli_stmt_init($conn);
-    if (!mysqli_stmt_prepare($stmt, $sql)) {
-        header("location: ../../.?error=stmtfailed");
-        exit();
-    }
-    mysqli_stmt_execute($stmt);
-
-    foreach (mysqli_stmt_get_result($stmt) as $_ => $v) {
+    foreach (showTables($conn) as $_ => $v) {
         foreach ($v as $_ => $l) {
-            $sql = "DELETE FROM " . $l . ";";
-            $stmt = mysqli_stmt_init($conn);
-            if (!mysqli_stmt_prepare($stmt, $sql)) {
-                header("location: ../../.?error=stmtfailed");
-                exit();
-            }
-            mysqli_stmt_execute($stmt);
-            $sql = "ALTER TABLE " . $l . " AUTO_INCREMENT = 1;";
-            $stmt = mysqli_stmt_init($conn);
-            if (!mysqli_stmt_prepare($stmt, $sql)) {
-                header("location: ../../.?error=stmtfailed");
-                exit();
-            }
-            mysqli_stmt_execute($stmt);
+            deleteTable($conn, $l);
+            alterTable($conn, $l, "AUTO_INCREMENT = 1");
         }
     }
 
