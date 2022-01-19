@@ -28,7 +28,7 @@ $msgInfo = getTable($conn, "privatemessages", ["id", $_POST["commentId"]]);
 
 if ($_SESSION["id"] == $msgInfo["author"] || $_SESSION["rank"] >= 2) {
 
-    insertTable($conn, "deletedprivatemessages", [$msgInfo["id"], $msgInfo["message"], $msgInfo["author"], $msgInfo["receiver"], $msgInfo["date"]]);
+    insertTable($conn, "deletedprivatemessages", ["msgid" => $msgInfo["id"], "message" => $msgInfo["message"], "author" => $msgInfo["author"], "receiver" => $msgInfo["receiver"], "createdate" => $msgInfo["date"]]);
     deleteTable($conn, "privatemessages", ["id", $_POST["commentId"]]);
     logAction($conn, $_SESSION["id"], $msgInfo["author"], "DeletePrivateMessage", "CID:" . $_POST["commentId"]);
 

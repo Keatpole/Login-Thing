@@ -42,7 +42,17 @@ switch ($_POST["reason"]) {
 $punishment = $_POST["punishment"];
 
 if (getTable($conn, "users", ["uid", $_POST["user"]]) != null) {
-    insertTable($conn, "appeals", [getTable($conn, "users", ["uid", $_POST["user"]])["id"], $reason, $punishment, $_POST["otherreason"]]);
+
+    $target = getTable($conn, "users", ["uid", $_POST["user"]]);
+    
+    $thing = getTable($conn, "appeals", ["appealer", $target["id"]]);
+
+    if ($thing != null) {
+        header("location: ../../appeal?error=duplicateindb");
+        exit();
+    }
+
+    insertTable($conn, "appeals", ["appealer" => $target["id"], "reason" => $reason, "punishment" => $punishment, "otherreason" => $_POST["otherreason"]]);
     header("location: ../../appeal?error=none");
 } else {
     header("location: ../../appeal?error=usernotfound");

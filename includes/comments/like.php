@@ -15,7 +15,7 @@ $msgInfo = getTable($conn, "messages", ["id", $_POST["commentId"]]);
 if (isset($_POST["delete"])) {
         
     if ($_SESSION["id"] == $msgInfo["author"] || $_SESSION["rank"] >= 2) {
-        insertTable($conn, "deletedmessages", [$msgInfo["id"], $msgInfo["message"], $msgInfo["author"], $msgInfo["likes"], $msgInfo["replyTo"], $msgInfo["date"]]);
+        insertTable($conn, "deletedmessages", ["msgid" => $msgInfo["id"], "message" => $msgInfo["message"], "author" => $msgInfo["author"], "likes" => $msgInfo["likes"], "replyTo" => $msgInfo["replyTo"], "createdate" => $msgInfo["date"]]);
         deleteTable($conn, "messages", ["id", $_POST["commentId"]]);
         logAction($conn, $_SESSION["id"], $msgInfo["author"], "DeleteComment", "CID:" . $_POST["commentId"]);
 
@@ -27,7 +27,7 @@ if (isset($_POST["delete"])) {
         exit();
     }
     elseif ($_SESSION["rank"] == 1) {
-        insertTable($conn, "modsuggestions", [$_SESSION["id"], $_POST["commentId"], "DeleteComment"]);
+        insertTable($conn, "modsuggestions", ["suggester" => $_SESSION["id"], "targetsUid" => $_POST["commentId"], "type" => "DeleteComment"]);
         logAction($conn, $_SESSION["id"], $_POST["commentId"], "Mod - DeleteComment", "CID:" . $_POST["commentId"]);
 
         header("location: ../../" . $_POST["return"] . "error=none");
@@ -59,7 +59,7 @@ foreach ($commentLikesInfo as $result) {
     }
 }
 
-insertTable($conn, "messagelikes", [$_POST["commentId"], $_SESSION["id"]]);
+insertTable($conn, "messagelikes", ["msgid" => $_POST["commentId"], "userid" => $_SESSION["id"]]);
 
 $commentLikes = getTable($conn, "messages", ["id", $_POST["commentId"]]);
 

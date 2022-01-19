@@ -34,7 +34,7 @@ if (uidExists($conn, $username, $email) !== false) {
     exit();
 }
 
-insertTable($conn, "users", [$email, $username, password_hash($pwd, PASSWORD_DEFAULT)], ["rank", "verified", "deleted", "deletedate"]);
+insertTable($conn, "users", ["email" => $email, "uid" => $username, "pwd" => password_hash($pwd, PASSWORD_DEFAULT)]);
 
 header("location: ../../signup?error=none");
 exit();

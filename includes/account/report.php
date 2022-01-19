@@ -41,7 +41,16 @@ switch ($_POST["reason"]) {
 
 
 if (getTable($conn, "users", ["uid", $_POST["user"]]) != null) {
-    insertTable($conn, "reports", [$_SESSION["id"], getTable($conn, "users", ["uid", $_POST["user"]])["id"], $reason, $_POST["otherreason"]]);
+    $target = getTable($conn, "users", ["uid", $_POST["user"]]);
+    
+    $thing = getTable($conn, "reports", ["reporter", $_SESSION["id"]]);
+
+    if ($thing != null && $thing["reason"] == $reason) {
+        header("location: ../../appeal?error=duplicateindb");
+        exit();
+    }
+
+    insertTable($conn, "reports", ["reporter" => $_SESSION["id"], "target" => $target["id"], "reason" => $reason, "otherreason" => $_POST["otherreason"]]);
     header("location: ../../report?error=none");
 } else {
     header("location: ../../report?error=usernotfound");

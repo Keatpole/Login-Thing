@@ -22,7 +22,7 @@ if ($_GET["type"] == "DeleteComment") {
 
     $msgInfo = getTable($conn, "messages", ["id", $username]);
 
-    insertTable($conn, "deletedmessages", [$msgInfo["id"], $msgInfo["message"], $msgInfo["author"], $msgInfo["likes"], $msgInfo["date"]]);
+    insertTable($conn, "deletedmessages", ["msgid" => $msgInfo["id"], "message" => $msgInfo["message"], "author" => $msgInfo["author"], "likes" => $msgInfo["likes"], "replyTo" => $msgInfo["replyTo"], "createdate" => $msgInfo["date"]]);
     deleteTable($conn, "messages", ["id", $username]);    
     logAction($conn, $_SESSION["id"], $username, "ApproveSuggestion", $type);
 
@@ -40,7 +40,7 @@ elseif ($_GET["type"] == "(Un)Mute") {
     if ($muted) {
         deleteTable($conn, "mutes", ["id", $muted["id"]]);
     } else {
-        insertTable($conn, "mutes", [$_SESSION["id"], $user["id"]]);
+        insertTable($conn, "mutes", ["muter" => $_SESSION["id"], "target" => $user["id"]]);
     }
 
     logAction($conn, $_SESSION["id"], $username, "ApproveSuggestion", $type);
@@ -60,7 +60,7 @@ elseif ($_GET["type"] == "-1") {
         deleteTable($conn, "bans", ["id", $banned["id"]]);
         updateTable($conn, "users", "rank", "0", ["id", $user["id"]]);
     } else {
-        insertTable($conn, "bans", [$_SESSION["id"], $user["id"]]);
+        insertTable($conn, "bans", ["banner" => $_SESSION["id"], "target" => $user["id"]]);
         updateTable($conn, "users", "rank", "-1", ["id", $user["id"]]);
     }
     

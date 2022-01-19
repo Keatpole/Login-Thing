@@ -28,7 +28,14 @@ switch ($action) {
 }
 
 if ($user != null || $action != "DeleteComment") {
-    insertTable($conn, "modsuggestions", [$_SESSION["id"], $username, $action]);
+    $thing = getTable($conn, "modsuggestions", ["targetsUid", $username]);
+
+    if ($thing != null && $thing["type"] == $action) {
+        header("location: ../../moderation?error=duplicateindb");
+        exit();
+    }
+    
+    insertTable($conn, "modsuggestions", ["suggester" => $_SESSION["id"], "targetsUid" => $username, "type" => $action]);
     logAction($conn, $_SESSION["id"], $username, "Mod - DeleteComment", "CID:" . $username);
 } else {
     header("location: ../../moderation?error=usernotfound");

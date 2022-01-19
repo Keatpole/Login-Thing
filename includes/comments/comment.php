@@ -158,9 +158,9 @@ if (str_starts_with($message, "!")) {
 }
 
 if (isset($_POST["replyid"])) {
-    insertTable($conn, "messages", [$message, $_SESSION["id"], $_POST["replyid"]], ["likes"]);
+    insertTable($conn, "messages", ["message" => $message, "author" => $_SESSION["id"], "replyTo" => $_POST["replyid"]]);
 } else {
-    insertTable($conn, "messages", [$message, $_SESSION["id"]], ["likes", "replyTo"]);
+    insertTable($conn, "messages", ["message" => $message, "author" => $_SESSION["id"]]);
 }
 
 $return = (isset($_POST["return"]) ? $_POST["return"] : ".?");

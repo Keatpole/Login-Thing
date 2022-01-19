@@ -42,7 +42,7 @@ if ($action == "-1") {
         exit();
     }
 
-    insertTable($conn, "bans", [$_SESSION["id"], $user["id"]]);
+    insertTable($conn, "bans", ["banner" => $_SESSION["id"], "target" => $user["id"]]);
     updateTable($conn, "users", "rank", "-1", ["id", $user["id"]]);
     logAction($conn, $_SESSION["id"], $target, "ApproveReport", "Ban");
 
@@ -61,7 +61,7 @@ if ($action == "-1") {
         exit();
     }
 
-    insertTable($conn, "mutes", [$_SESSION["id"], $user["id"]]);
+    insertTable($conn, "mutes", ["muter" => $_SESSION["id"], "target" => $user["id"]]);
     logAction($conn, $_SESSION["id"], $target, "ApproveReport", "Mute");
 
     header("location: ../../moderation?reports&error=none");

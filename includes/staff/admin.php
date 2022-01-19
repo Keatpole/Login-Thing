@@ -29,7 +29,7 @@ if ($action == "3") {
 
     $msgInfo = getTable($conn, "messages", ["id", $username]);
 
-    insertTable($conn, "deletedmessages", [$msgInfo["id"], $msgInfo["message"], $msgInfo["author"], $msgInfo["likes"], $msgInfo["date"]]);
+    insertTable($conn, "deletedmessages", ["msgid" => $msgInfo["id"], "message" => $msgInfo["message"], "author" => $msgInfo["author"], "likes" => $msgInfo["likes"], "replyTo" => $msgInfo["replyTo"], "createdate" => $msgInfo["date"]]);
     deleteTable($conn, "messages", ["id", $username]);
     logAction($conn, $_SESSION["id"], $user["id"], "Admin", "DeleteComment");
 
@@ -60,7 +60,7 @@ elseif ($action == "5") {
         header("location: ../../moderation?error=none");
         exit();
     } else {
-        insertTable($conn, "mutes", [$_SESSION["id"], $user["id"]]);
+        insertTable($conn, "mutes", ["muter" => $_SESSION["id"], "target" => $user["id"]]);
         logAction($conn, $_SESSION["id"], $user["id"], "Admin", "Mute");
 
         header("location: ../../moderation?error=none");
@@ -92,7 +92,7 @@ elseif ($action == "-1") {
         header("location: ../../moderation?error=none");
         exit();
     } else {
-        insertTable($conn, "bans", [$_SESSION["id"], $user["id"]]);
+        insertTable($conn, "bans", ["banner" => $_SESSION["id"], "target" => $user["id"]]);
         updateTable($conn, "users", "rank", "-1", ["id", $user["id"]]);
         logAction($conn, $_SESSION["id"], $user["id"], "Admin", "Ban");
 

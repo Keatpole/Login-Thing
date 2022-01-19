@@ -61,46 +61,27 @@ function getTable($conn, $table, $where="", $multiple=false) {
     }
 }
 
-function insertTable($conn, $table, $colValues, $exclude=array()) {
-    $sql = "DESCRIBE " . $table . ";";
+function insertTable($conn, $table, $colValues) {
+    $sql = "INSERT INTO " . $table . " (";
+    $sql .= implode(", ", array_keys($colValues));
+    $sql .= ") VALUES (";
+    $sql .= implode(", ", array_fill(0, count($colValues), "?"));
+    $sql .= ");";
+
+    $values = array_values($colValues);
+    $values = array_map("htmlspecialchars", $values);
+
     $stmt = mysqli_stmt_init($conn);
     if (!mysqli_stmt_prepare($stmt, $sql)) {
-        header("location: ../../.?error=stmtfailed");
+        header("location: .?error=stmtfailed");
         exit();
     }
+
+    mysqli_stmt_bind_param($stmt, str_repeat("s", count($colValues)), ...$values);
     mysqli_stmt_execute($stmt);
-    $resultData = mysqli_stmt_get_result($stmt);
-    $cols = [];
-    while ($row = mysqli_fetch_assoc($resultData)) {
-        $cols[] = $row["Field"];
-    }
     mysqli_stmt_close($stmt);
 
-    $sql = "INSERT INTO " . $table . " (";
-    for ($i = 0; $i < count($cols); $i++) {
-        if ($cols[$i] == "id" || $cols[$i] == "date" || in_array($cols[$i], $exclude)) {
-            continue;
-        }
-        $sql .= "`" . $cols[$i] . "`, ";
-    }
-    $sql = substr($sql, 0, -2);
-    $sql .= ") VALUES ( ";
-    for ($i = 0; $i < count($colValues); $i++) {
-        $sql .= "\"" . $colValues[$i] . "\"";
-        if ($i < count($colValues) - 1) {
-            $sql .= ", ";
-        }
-    }
-    $sql .= ");";
-    
-    echo $sql;
-    $stmt = mysqli_stmt_init($conn);
-    if (!mysqli_stmt_prepare($stmt, $sql)) {
-        header("location: ../../.?error=stmtfailed");
-        exit();
-    }
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_close($stmt);
+    return mysqli_insert_id($conn);
 }
 
 function updateTable($conn, $table, $key, $value, $where="") {
@@ -174,7 +155,7 @@ function showTables($conn) {
 }
 
 function logAction($conn, $user, $target, $action, $type) {
-    insertTable($conn, "log", [$user, $target, $action, $type]);
+    insertTable($conn, "log", ["uid" => $user, "targetsUid" => $target, "action" => $action, "type" => $type]);
 }
 
 function rankFromNum($num) {

@@ -50,9 +50,9 @@ if (str_starts_with($message, "!")) {
         $message = htmlspecialchars($users, ENT_QUOTES, 'UTF-8');
 
         if (isset($_POST["replyid"])) {
-            insertTable($conn, "groupmessages", [$message, $_SESSION["id"], $_POST["replyid"], $_POST["groupid"]]);
+            insertTable($conn, "groupmessages", ["message" => $message, "author" => $_SESSION["id"], "replyTo" => $_POST["replyid"], "groupId" => $_POST["groupid"]]);
         } else {
-            insertTable($conn, "groupmessages", [$message, $_SESSION["id"], $_POST["groupid"]], ["replyTo"]);
+            insertTable($conn, "groupmessages", ["message" => $message, "author" => $_SESSION["id"], "groupId" => $_POST["groupid"]]);
         }
         
         header("location: ../../groups?g=" . $_POST["groupid"] . "&error=none");
@@ -69,11 +69,11 @@ if (str_starts_with($message, "!")) {
         $users = "Moderators: " . ($users == "" ? "None" : substr($users, 0, -2));    
         
         $message = htmlspecialchars($users, ENT_QUOTES, 'UTF-8');
-
+        
         if (isset($_POST["replyid"])) {
-            insertTable($conn, "groupmessages", [$message, $_SESSION["id"], $_POST["replyid"], $_POST["groupid"]]);
+            insertTable($conn, "groupmessages", ["message" => $message, "author" => $_SESSION["id"], "replyTo" => $_POST["replyid"], "groupId" => $_POST["groupid"]]);
         } else {
-            insertTable($conn, "groupmessages", [$message, $_SESSION["id"], $_POST["groupid"]], ["replyTo"]);
+            insertTable($conn, "groupmessages", ["message" => $message, "author" => $_SESSION["id"], "groupId" => $_POST["groupid"]]);
         }
         
         header("location: ../../groups?g=" . $_POST["groupid"] . "&error=none");
@@ -313,9 +313,9 @@ if (str_starts_with($message, "!")) {
 $message = htmlspecialchars($_POST["message"], ENT_QUOTES, 'UTF-8');
 
 if (isset($_POST["replyid"])) {
-    insertTable($conn, "groupmessages", [$message, $_SESSION["id"], $_POST["replyid"], $_POST["groupid"]]);
+    insertTable($conn, "groupmessages", ["message" => $message, "author" => $_SESSION["id"], "replyTo" => $_POST["replyid"], "groupId" => $_POST["groupid"]]);
 } else {
-    insertTable($conn, "groupmessages", [$message, $_SESSION["id"], $_POST["groupid"]], ["replyTo"]);
+    insertTable($conn, "groupmessages", ["message" => $message, "author" => $_SESSION["id"], "groupId" => $_POST["groupid"]]);
 }
 
 header("location: ../../groups?g=" . $_POST["groupid"] . "&error=none");

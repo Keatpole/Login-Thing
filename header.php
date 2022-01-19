@@ -161,6 +161,9 @@
                 case 'invaliduid':
                     $say = "Fill in a proper username!";
                     break;
+                case 'duplicateindb':
+                    $say = "Cannot submit duplicates!";
+                    break;
                 case 'targetisimmune':
                     $say = "The target is immune!";
                     break;

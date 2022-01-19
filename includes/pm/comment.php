@@ -28,7 +28,7 @@ $user = getTable($conn, "users", ["id", $_POST["user"]]);
 
 $message = strtolower($_POST["message"]);
 
-insertTable($conn, "privatemessages", [$message, $_SESSION["id"], $_POST["user"]]);
+insertTable($conn, "privatemessages", ["message" => $message, "author" => $_SESSION["id"], "receiver" => $_POST["user"]]);
 
 header("location: ../../pm?u=" . $_POST["user"] . "&error=none");
 exit();
