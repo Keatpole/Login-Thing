@@ -3,7 +3,7 @@
 $serverName = "localhost";
 $dbUsername = "root";
 $dbPassword = "";
-$dbName = "isak_login_thing";
+$dbName = "website";
 
 $conn = mysqli_connect($serverName, $dbUsername, $dbPassword, $dbName);
 

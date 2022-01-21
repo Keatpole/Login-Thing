@@ -41,10 +41,13 @@
             echo "<a href=\".?mentions=" . $user["uid"] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Mentions</a> ";
 
             if (isset($_GET["deleteConfirm"])) {
-                echo "<a href='includes/account/delete'><button class='button'>Confirm Account Deletion</button></a>";
+                echo "<a href='includes/account/delete'><button class='button'>Confirm Account Deletion</button></a> ";
             } else {
-                echo "<a href='?deleteConfirm'><button class='button'>Delete Account</button></a>";
+                echo "<a href='?deleteConfirm'><button class='button'>Delete Account</button></a> ";
             }
+
+            echo "<a href=\"appeal\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Appeal</a> ";
+
         } else {
             if ($_GET["u"] == $_SESSION["id"]) {
                 $sb = "";

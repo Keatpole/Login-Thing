@@ -87,7 +87,6 @@
                         }
                         echo "<li><a href='groups' " . $style . ">Groups</a></li>";
                         echo "<li><a href='search' " . $style . ">Search</a></li>";
-                        echo "<li><a href='appeal' " . $style . ">Appeal</a></li>";
                         if ($_SESSION["rank"] >= 1) {
                             echo "<li><a href='moderation' " . $style . ">Moderation</a></li>";
                         }
@@ -102,9 +101,11 @@
                         }
                         header("location: " . $_GET["webname"]);
                     }
+                    echo "<li><a href=\"#main\" class=\"skipnavlink\" . " . $style . ">Skip Navigation</a></li>";
                     echo "<li><a href='.' " . $style . ">Home</a></li>";
                     echo "<li><a href='signup' " . $style . ">Sign up</a></li>";
                     echo "<li><a href='login' " . $style . ">Login</a></li>";
+                    echo "<li><a href='appeal' " . $style . ">Appeal</a></li>";
                 }
             ?>
         </ul>
@@ -190,6 +191,12 @@
                     break;
                 case 'notfriend':
                     $say = "That user is not your friend! Add them as a friend then if they accept it, try this again.";
+                    break;
+                case 'invaliddata':
+                    $say = "Invalid form data.";
+                    break;
+                case 'evalfailed':
+                    $say = "Evaluation failed!";
                     break;
                 # gcf = group command failed
                 case 'gcfauthfailed':

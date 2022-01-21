@@ -272,6 +272,39 @@
                 echo "</div>";
 
                 exit();
+            } elseif (isset($_GET["eval"])) {
+                if ($_SESSION["rank"] < 3) {
+                    header("location: moderation?error=authfailed");
+                    exit();
+                }
+                if ($settings->enable_eval_private && $_SERVER['HTTP_HOST'] != "localhost" && !$settings->enable_eval_public || !$settings->enable_eval_private && !$settings->enable_eval_public) {
+                    header("location: moderation?error=authfailed");
+                    exit();
+                }
+
+                echo "<h1>Evaluate Command</h1>";
+
+                if (isset($_GET["result"])) {
+                    echo "<h2>Result: <code>" . urldecode($_GET["result"]) . "</code></h2>";
+                }
+                elseif (isset($_GET["errresult"])) {
+                    echo "<h2>Error: <code>" . urldecode($_GET["errresult"]) . "</code></h2>";
+                }
+                
+                if ($settings->enable_admin_panel) {
+                    ?>
+
+                        <form action="includes/staff/eval" method="post">
+                            <textarea type="text" name="cmd" placeholder="Evaluate..." resizable value="<?= $usernameValue ?>"></textarea></br></br>
+                            <button type="submit" name="submit" class="button">Confirm</button>
+                        </form>
+
+                    <?php
+                } else {
+                    echo "<p>Admin Panel is temporarily disabled.</p>";
+                }
+
+                exit();
             } else {
                 if (!$settings->enable_report) {
                     echo "<p>Reporting is temporarily disabled.</p>";
@@ -286,6 +319,12 @@
     
                 echo "<a href=\"?suggestions\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Suggestions</a> ";
                 echo "<a href=\"?log\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Log</a> ";
+
+                if ($_SESSION["rank"] >= 3) {
+                    if ($settings->enable_eval_private || $settings->enable_eval_public) {
+                        echo "<a href=\"?eval\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Eval</a> ";
+                    }
+                }
             }
         
             echo "<h1>Admin Panel</h1>";

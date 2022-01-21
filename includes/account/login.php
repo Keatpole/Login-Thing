@@ -23,11 +23,6 @@ if ($user === null) {
     exit();
 }
 
-if ($user["deleted"]) {
-    header("location: ../../login?error=userdeleted");
-    exit();
-}
-
 $pwdHashed = $user["pwd"];
 $checkPwd = password_verify($pwd, $pwdHashed);
 
@@ -36,6 +31,11 @@ if (!$checkPwd) {
     exit();
 }
 else {
+    if ($user["deleted"]) {
+        header("location: ../../login?error=userdeleted");
+        exit();
+    }
+
     session_start();
 
     $_SESSION["uid"] = $user["uid"];

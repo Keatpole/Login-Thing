@@ -73,7 +73,7 @@ function insertTable($conn, $table, $colValues) {
 
     $stmt = mysqli_stmt_init($conn);
     if (!mysqli_stmt_prepare($stmt, $sql)) {
-        header("location: .?error=stmtfailed");
+        header("location: ../../.?error=stmtfailed");
         exit();
     }
 

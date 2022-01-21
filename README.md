@@ -12,7 +12,7 @@ Now start XAMPP in administrator mode. Once it is opened click the `X` next to `
 
 Once the `X` next to them is a checkmark, click `Start` next to them. Once you have done that [Click Here](http://localhost:80/phpmyadmin).
 
-Once the website pops up, click `New` to the left side of the website. Where it says `Database name`, put in `isak_login_thing` exactly and press `Create`. Once it's done, click `isak_login_thing` to the left side of the screen, under `New`. Now click `Import` at the top of the screen. Once you are there click the `Choose` button and navigate to your XAMPP folder. Once you are there open up your `htdocs` and then `Login-Thing-main`. Inside there should be a file called `.ht-isak_login_thing.sql`, select it.
+Once the website pops up, click `New` to the left side of the website. Where it says `Database name`, put in `website` exactly and press `Create`. Once it's done, click `website` to the left side of the screen, under `New`. Now click `Import` at the top of the screen. Once you are there click the `Choose` button and navigate to your XAMPP folder. Once you are there open up your `htdocs` and then `Login-Thing-main`. Inside there should be a file called `.ht-website.sql`, select it.
 
 Once it is done, [Click Here](http://localhost:80/Login-Thing-main) and the website should open.
 
