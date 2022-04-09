@@ -103,8 +103,8 @@
 
                 <form action="includes/groups/add" method="post">
                     <input type="hidden" name="group" value="<?= $i["id"] ?>">
-                    <input type="hidden" name="user" value="<?= $_GET["u"] ?>">
-                    <button type="submit" name="submit" class="button">Add <?= getTable($conn, "users", ["id", $_GET["u"]])["uid"] ?> to group <?= $i["name"] ?>.</button>
+                    <input type="hidden" name="user" value="<?= htmlspecialchars($_GET["u"], ENT_QUOTES, "UTF-8") ?>">
+                    <button type="submit" name="submit" class="button">Add <?= htmlspecialchars(getTable($conn, "users", ["id", $_GET["u"]])["uid"], ENT_QUOTES, "UTF-8") ?> to group <?= $i["name"] ?>.</button>
                 </form></br>
 
             <?php

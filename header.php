@@ -246,7 +246,7 @@
                     header("location: " . $_GET["webname"]);
                     break;
             }
-            echo "<p style='color: red;'>" . $say . "</p>";
+            echo "<p style='color: red;'>" . htmlspecialchars($say, ENT_QUOTES, "UTF-8") . "</p>";
 
         }
         if (isset($_GET["refresh"])) header("refresh: " . $_GET["refresh"]);

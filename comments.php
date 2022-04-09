@@ -66,7 +66,7 @@
                 if ($settings->enable_posting_comments) {
 
                     if ($muted) {
-                        echo "<p>You have been muted by " . getTable($conn, "users", ["id", $muted["muter"]])["uid"]  . " at " . $muted["date"] . "</p>";
+                        echo "<p>You have been muted by " . htmlspecialchars(getTable($conn, "users", ["id", $muted["muter"]])["uid"], ENT_QUOTES, "UTF-8")  . " at " . htmlspecialchars($muted["date"], ENT_QUOTES, "UTF-8") . "</p>";
                     } else {
 
                         ?>
@@ -90,7 +90,7 @@
             elseif (isset($_GET["includefromgroup"])) {
                 $group = getTable($conn, "groups", ["id", $_GET["includefromgroup"]]);
 
-                echo "<h4 class='center'>You're viewing group " . $group["name"] . "</h4>";
+                echo "<h4 class='center'>You're viewing group " . htmlspecialchars($group["name"], ENT_QUOTES, "UTF-8") . "</h4>";
 
                 echo "<h6 class='center'>Comment \"!help\" for a list of commands.</h6>";
 
@@ -102,7 +102,7 @@
                     <form action="includes/groups/comment" method="post">
 
                         <?php
-                            echo "<input name=\"groupid\" type=hidden value=\"" . $_GET["includefromgroup"] . "\" />";
+                            echo "<input name=\"groupid\" type=hidden value=\"" . htmlspecialchars($_GET["includefromgroup"], ENT_QUOTES, "UTF-8") . "\" />";
                             echo "<input name=\"message\" id=\"inputmsg\" style=\"line-height: 3.3em\" placeholder=\"What's on your mind?\" />";
                         ?>
 
@@ -120,7 +120,7 @@
 
             }
             elseif (isset($_GET["includefrompm"])) {
-                echo "<h4 class='center'>You're private messaging " . $pming["uid"] . "</h4>";
+                echo "<h4 class='center'>You're private messaging " . htmlspecialchars($pming["uid"], ENT_QUOTES, "UTF-8") . "</h4>";
 
                 if ($settings->enable_posting_comments) {
 
@@ -131,7 +131,7 @@
 
                         <?php
 
-                            echo "<input name=\"user\" type=hidden value=\"" . $_GET["includefrompm"] . "\" />";
+                            echo "<input name=\"user\" type=hidden value=\"" . htmlspecialchars($_GET["includefrompm"], ENT_QUOTES, "UTF-8") . "\" />";
                             echo "<input name=\"message\" id=\"inputmsg\" style=\"line-height: 3.3em\" placeholder=\"What's on your mind?\" />";
 
 
@@ -160,8 +160,8 @@
 
                         <form action="includes/comments/comment" method="post">
                             <input name="message" id="inputmsg" style="line-height: 3.3em" placeholder="Reply..." />
-                            <input type="hidden" name="replyid" value="<?= $_GET["specific"] ?>">
-                            <input type="hidden" name="return" value="reply?c=<?= $_GET["specific"] ?>#<?= $_GET["specific"] ?>&">
+                            <input type="hidden" name="replyid" value="<?= htmlspecialchars($_GET["specific"], ENT_QUOTES, "UTF-8") ?>">
+                            <input type="hidden" name="return" value="reply?c=<?= htmlspecialchars($_GET["specific"], ENT_QUOTES, "UTF-8") ?>#<?= htmlspecialchars($_GET["specific"], ENT_QUOTES, "UTF-8") ?>&">
                             <button class="button" type="submit" name="submit">Post</button>
                         </form>
 
@@ -311,7 +311,7 @@
                             }
                         }
 
-                        echo "<p>" . $replyTo . $result . "</p>";
+                        echo "<p>" . htmlspecialchars($replyTo . $result, ENT_QUOTES, "UTF-8") . "</p>";
 
                         if (!isset($_GET["includefromgroup"]) && !isset($_GET["includefrompm"]) && !isset($_GET["specific"])) {
                             echo "<p class=\"commentlikes\">" . $res[3] . " Likes"  . "</p>";
@@ -481,7 +481,7 @@
                                 }
                             }
 
-                            echo "<p>" . $replyTo . $result . "</p>";
+                            echo "<p>" . htmlspecialchars($replyTo . $result, ENT_QUOTES, "UTF-8") . "</p>";
 
                             if (!isset($_GET["includefromgroup"]) && !isset($_GET["includefrompm"]) && !isset($_GET["specific"])) {
                                 echo "<p class=\"commentlikes\">" . $res[3] . " Likes"  . "</p>";
@@ -681,7 +681,7 @@
                             }
                         }
 
-                        echo "<p>" . $replyTo . $result . "</p>";
+                        echo "<p>" . htmlspecialchars($replyTo . $result, ENT_QUOTES, "UTF-8") . "</p>";
 
                         if (!isset($_GET["includefromgroup"]) && !isset($_GET["includefrompm"]) && !isset($_GET["specific"])) {
                             echo "<p class=\"commentlikes\">" . $res[3] . " Likes"  . "</p>";

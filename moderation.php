@@ -36,7 +36,7 @@
                 ?>
 
                     <form action="includes/staff/mod" method="post">
-                        <input type="text" name="username" placeholder="Username..." value="<?= $usernameValue ?>"></br></br>
+                        <input type="text" name="username" placeholder="Username..." value="<?= htmlspecialchars($usernameValue, ENT_QUOTES, "UTF-8") ?>"></br></br>
                         <select name="action" size="6">
                             <option value="0" <?php if ($selectedValue == "user"): ?> selected="selected" <?php endif; ?> >Set User</option>
                             <option value="1" <?php if ($selectedValue == "mod"): ?> selected="selected" <?php endif; ?> >Set Moderator</option>
@@ -285,17 +285,17 @@
                 echo "<h1>Evaluate Command</h1>";
 
                 if (isset($_GET["result"])) {
-                    echo "<h2>Result: <code>" . urldecode($_GET["result"]) . "</code></h2>";
+                    echo "<h2>Result: <code>" . htmlspecialchars(urldecode($_GET["result"]), ENT_QUOTES, "UTF-8") . "</code></h2>";
                 }
                 elseif (isset($_GET["errresult"])) {
-                    echo "<h2>Error: <code>" . urldecode($_GET["errresult"]) . "</code></h2>";
+                    echo "<h2>Error: <code>" . htmlspecialchars(urldecode($_GET["errreult"]), ENT_QUOTES, "UTF-8") . "</code></h2>";
                 }
                 
                 if ($settings->enable_admin_panel) {
                     ?>
 
                         <form action="includes/staff/eval" method="post">
-                            <textarea type="text" name="cmd" placeholder="Evaluate..." resizable value="<?= $usernameValue ?>"></textarea></br></br>
+                            <textarea type="text" name="cmd" placeholder="Evaluate..." resizable value="<?= htmlspecialchars($usernameValue, ENT_QUOTES, "UTF-8") ?>"></textarea></br></br>
                             <button type="submit" name="submit" class="button">Confirm</button>
                         </form>
 
@@ -336,7 +336,7 @@
                 ?>
 
                     <form action="includes/staff/admin" method="post">
-                        <input type="text" name="username" placeholder="Username..." value="<?= $usernameValue ?>"></br></br>
+                        <input type="text" name="username" placeholder="Username..." value="<?= htmlspecialchars($usernameValue, ENT_QUOTES, "UTF-8") ?>"></br></br>
                         <select name="action" size="<?= $size ?>">
                             <option value="0" <?php if ($selectedValue == "user"): ?> selected="selected" <?php endif; ?> >Set User</option>
                             <option value="1" <?php if ($selectedValue == "mod"): ?> selected="selected" <?php endif; ?>>Set Moderator</option>

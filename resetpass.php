@@ -33,7 +33,7 @@
             ?>
                 <form action="includes/account/resetPassword" method="post">
                     <?php
-                        echo "<input type=\"hidden\" name=\"token\" value=\"" . $_GET["t"] . "\">";
+                        echo "<input type=\"hidden\" name=\"token\" value=\"" . htmlspecialchars($_GET["t"], ENT_QUOTES, "UTF-8") . "\">";
                     ?>
                     <input type="password" name="pwd" placeholder="New Password..."></br>
                     <input type="password" name="pwdRepeat" placeholder="Repeat Password..."></br></br>
@@ -43,7 +43,7 @@
                 <h2>Change Username</h2>
                 <form action="includes/account/changeUsername" method="post">
                     <?php
-                        echo "<input type=\"hidden\" name=\"token\" value=\"" . $_GET["t"] . "\">";
+                        echo "<input type=\"hidden\" name=\"token\" value=\"" . htmlspecialchars($_GET["t"], ENT_QUOTES, "UTF-8") . "\">";
                     ?>
                     <input name="uid" placeholder="New Username..."></br>
                     <input name="uidRepeat" placeholder="Repeat Username..."></br></br>
@@ -51,7 +51,7 @@
                 </form>
                 </br></br>
                 <?php
-                echo "<a href=\"?t=" . $_GET["t"] . "&invalidate\" style=\"color: green;\">Invalidate Token</a>";
+                echo "<a href=\"?t=" . htmlspecialchars($_GET["t"], ENT_QUOTES, "UTF-8") . "&invalidate\" style=\"color: green;\">Invalidate Token</a>";
                 ?>
             <?php
         }

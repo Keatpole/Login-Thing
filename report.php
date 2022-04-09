@@ -26,7 +26,7 @@
                 <form action="includes/account/report" method="post">
                     <?php
                         if (isset($_GET["u"])) {
-                            echo "<input type=\"text\" name=\"user\" value=\"" . getTable($conn, "users", ["id", $_GET["u"]])["uid"] . "\"></br></br>";
+                            echo "<input type=\"text\" name=\"user\" value=\"" . getTable($conn, "users", ["id", htmlspecialchars($_GET["u"], ENT_QUOTES, "UTF-8")])["uid"] . "\"></br></br>";
                         } else {
                             echo "<input type=\"text\" name=\"user\" placeholder=\"Username...\"></br></br>";
                         }

@@ -17,7 +17,7 @@ foreach (getTable($conn, "mutes", "", true) as $v) {
     }
 }
 
-$message = htmlspecialchars($_POST["message"], ENT_QUOTES, 'UTF-8');
+$message = htmlspecialchars($_POST["message"], ENT_QUOTES, "UTF-8");
 
 # if the message starts with a !, it's a command
 if (str_starts_with($message, "!")) {

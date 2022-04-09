@@ -24,7 +24,7 @@ if ($thing1 != null && $thing1["user2"] == $_SESSION["id"] || $thing2 != null &&
 }
 
 insertTable($conn, "friends", ["user1" => $_POST["user"], "user2" => $_SESSION["id"]]);
-deleteTable($conn, "friends", ["id", $_POST["id"]]);
+deleteTable($conn, "friendreq", ["id", $_POST["id"]]);
 
 if ($_POST["return"]) {
     header("location: ../../" . $_POST["return"] . "error=none");

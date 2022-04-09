@@ -22,7 +22,7 @@ class Settings {
     public $enable_eval_private = 1; # if eval should work for everyone with owner rank but only on localhost, if you don't know what this is, set it to 0
     public $enable_eval_public = 0; # if eval should work for everyone with owner rank, if you don't know what this is, keep it at 0
 
-    public $enable_public = 0; # if the site should be public or not, if this is set to 0, the site will only work on "localhost"
+    public $enable_public = 1; # if the site should be public or not, if this is set to 0, the site will only work on "localhost"
 }
 
 $settings = new Settings();
