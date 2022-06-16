@@ -22,9 +22,27 @@ if (isset($_GET["confirm"])) {
         }
     }
 
-    insertTable($conn, "users", ["email" => "a@a.a", "uid" => "Test", "pwd" => password_hash("123", PASSWORD_DEFAULT)]);
-    updateTable($conn, "users", "rank", 3, ["uid", "Test"]);
-    updateTable($conn, "users", "verified", 1, ["uid", "Test"]);
+    $email = "a@a.a";
+    $uid = "Test";
+    $pwd = "123";
+    $rank = 3;
+    $verified = 1;
 
-    header("location: ../account/logout");
+    insertTable($conn, "users", ["email" => $email, "uid" => $uid, "pwd" => password_hash($pwd, PASSWORD_DEFAULT)]);
+    updateTable($conn, "users", "rank", $rank, ["uid", $uid]);
+    updateTable($conn, "users", "verified", $rank, ["uid", $uid]);
+
+    # Log out
+    session_unset();
+    session_destroy();
+    session_start();
+
+    # Log in as Test
+    $_SESSION["uid"] = $uid;
+    $_SESSION["id"] = 1;
+    $_SESSION["rank"] = $rank;
+    
+    $_SESSION["passtoken"] = null;
+
+    #header("location: ../account/logout");
 }
