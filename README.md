@@ -20,6 +20,6 @@ Click `Login` and for the username write `Test` and the password is `123`. This 
 If you want to change some settings, open the XAMPP folder, open `htdocs` `Login-Thing-main` `includes` `other` and open `settings.php` in notepad.
 
 ### Enable Reset Password
-If you want password resetting to work, create a gmail account. Once you are logged in, [Click Here](https://myaccount.google.com/security) and make sure that `2-Step Verification` is off, then [Click Here](https://myaccount.google.com/u/0/lesssecureapps) and enable it.
+If you want password resetting to work, ~~create a gmail account. Once you are logged in, [Click Here](https://myaccount.google.com/security) and make sure that `2-Step Verification` is off, then [Click Here](https://myaccount.google.com/u/0/lesssecureapps) and enable it.~~ (After May 30th, 2022; This no longer works. Try to find an alternative.)
 
-Then navigate to your XAMPP folder and open the folder called `sendmail` inside there should be a file called `sendmail.ini` open it change `smtp_server` to be equal to `smtp.gmail.com` then set `smtp_port` to `587`, scroll all the way down and find `force_sender` and set it to the email you created, for example `example@gmail.com` then find `auth_username` and set it to the email you created and set `auth_password` to the password.
+Then navigate to your XAMPP folder and open the folder called `sendmail` inside there should be a file called `sendmail.ini` open it change `smtp_server` to be equal to ~~`smtp.gmail.com`~~ then set `smtp_port` to ~~`587`~~, scroll all the way down and find `force_sender` and set it to the email you created, for example ~~`example@gmail.com`~~ then find `auth_username` and set it to the email you created and set `auth_password` to the password.
