@@ -11,6 +11,7 @@ class Settings {
     public $enable_posting_comments = 1; # If users can post comments
     public $enable_viewing_comments = 1; # If users can view comments
     public $enable_likes = 1; # If users can like comments
+    public $hide_replies = 0; # If replies are hidden. If enabled, replies can only be seen be clicking "Reply" on a comment, as for now, having this option enabled disable deleting replies as a side effect.
 
     public $enable_random_comments = 0; # If random comments are enabled, there will be a random chance of seeing a comment.
     public $random_comment_chance = 3; # 1 in x chance the comment being skipped
@@ -22,7 +23,7 @@ class Settings {
     public $enable_eval_private = 1; # if eval should work for everyone with owner rank but only on localhost, if you don't know what this is, set it to 0
     public $enable_eval_public = 0; # if eval should work for everyone with owner rank, if you don't know what this is, keep it at 0
 
-    public $enable_public = 1; # if the site should be public or not, if this is set to 0, the site will only work on "localhost"
+    public $enable_public = 0; # if the site should be public or not, if this is set to 0, the site will only work on "localhost"
 }
 
 $settings = new Settings();

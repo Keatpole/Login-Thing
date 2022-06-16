@@ -22,5 +22,9 @@ if (isset($_GET["confirm"])) {
         }
     }
 
+    insertTable($conn, "users", ["email" => "a@a.a", "uid" => "Test", "pwd" => password_hash("123", PASSWORD_DEFAULT)]);
+    updateTable($conn, "users", "rank", 3, ["uid", "Test"]);
+    updateTable($conn, "users", "verified", 1, ["uid", "Test"]);
+
     header("location: ../account/logout");
 }

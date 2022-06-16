@@ -17,6 +17,7 @@ if (isset($_POST["delete"])) {
     if ($_SESSION["id"] == $msgInfo["author"] || $_SESSION["rank"] >= 2) {
         insertTable($conn, "deletedmessages", ["msgid" => $msgInfo["id"], "message" => $msgInfo["message"], "author" => $msgInfo["author"], "likes" => $msgInfo["likes"], "replyTo" => $msgInfo["replyTo"], "createdate" => $msgInfo["date"]]);
         deleteTable($conn, "messages", ["id", $_POST["commentId"]]);
+        deleteTable($conn, "messages", ["replyTo", $_POST["commentId"]]);
         logAction($conn, $_SESSION["id"], $msgInfo["author"], "DeleteComment", "CID:" . $_POST["commentId"]);
 
         if ($_POST["return"]) {
