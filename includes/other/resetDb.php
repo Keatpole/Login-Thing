@@ -25,12 +25,12 @@ if (isset($_GET["confirm"])) {
     $email = "a@a.a";
     $uid = "Test";
     $pwd = "123";
-    $rank = 3;
+    $rank = 3; # Owner
     $verified = 1;
 
     insertTable($conn, "users", ["email" => $email, "uid" => $uid, "pwd" => password_hash($pwd, PASSWORD_DEFAULT)]);
     updateTable($conn, "users", "rank", $rank, ["uid", $uid]);
-    updateTable($conn, "users", "verified", $rank, ["uid", $uid]);
+    updateTable($conn, "users", "verified", $verified, ["uid", $uid]);
 
     # Log out
     session_unset();
@@ -44,5 +44,5 @@ if (isset($_GET["confirm"])) {
     
     $_SESSION["passtoken"] = null;
 
-    #header("location: ../account/logout");
+    header("location: ../..");
 }

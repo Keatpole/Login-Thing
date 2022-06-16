@@ -630,13 +630,6 @@
                             $contin = false;
                         }
 
-                        # Hide replies to comments
-                        if ($res[(isset($_GET["includefromgroup"]) ? 3 : 4)] != null) {
-                            if ($settings->hide_replies) {
-                                $contin = false;
-                            }
-                        }
-
                         if (!$contin) continue;
 
                         echo "<div id=" . $res[0] . " class=\"comment\" tabindex=\"-1\">";
