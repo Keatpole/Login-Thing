@@ -84,7 +84,7 @@ function insertTable($conn, $table, $colValues) {
     return mysqli_insert_id($conn);
 }
 
-function updateTable($conn, $table, $key, $value, $where="") {
+function updateTable($conn, $table, $key, $value, $where="", $bind_types="ss") {
     if ($where == "") {
         $sql = "UPDATE " . $table . " SET " . $key . " = ?;";
         $stmt = mysqli_stmt_init($conn);
@@ -102,7 +102,7 @@ function updateTable($conn, $table, $key, $value, $where="") {
             header("location: ../../.?error=stmtfailed");
             exit();
         }
-        mysqli_stmt_bind_param($stmt, "ss", $value, $where[1]);
+        mysqli_stmt_bind_param($stmt, $bind_types, $value, $where[1]);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
     }
@@ -174,4 +174,19 @@ function rankFromNum($num) {
         default:
             return "Unknown (" . $num . ")";
     }
+}
+
+function sqldate_to_date($date, $only_show_date = false, $show_format = true) {
+    $date = explode(" ", $date);
+
+    $time = " @ " . $date[1];
+    $format = " (D/M/Y @ H:M:S)";
+
+    if ($only_show_date) {
+        $time = "";
+        $format = " (D/M/Y)";
+    }
+    if (!$show_format) $format = "";
+
+    return join("/", array_reverse(explode("-", $date[0]))) . $time . $format;
 }

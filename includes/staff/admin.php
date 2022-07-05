@@ -69,8 +69,8 @@ elseif ($action == "5") {
 
 }
 elseif ($action == "6") {
-    updateTable($conn, "users", "deleted", 0, ["id", $user["id"]]);
-    updateTable($conn, "users", "deletedate", "NULL", ["id", $user["id"]]);
+    updateTable($conn, "users", "deleted", 0, ["id", $user["id"]], "is");
+    updateTable($conn, "users", "deletedate", null, ["id", $user["id"]]);
     logAction($conn, $_SESSION["id"], $user["id"], "Admin", "Undelete");
 
     header("location: ../../moderation?error=none");

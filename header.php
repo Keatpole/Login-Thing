@@ -16,9 +16,12 @@
                 require_once "includes/other/dbh.php";
                 require_once "includes/other/functions.php";
 
-                foreach (mysqli_fetch_all(getTable($conn, "users")) as $res) {
+                foreach (mysqli_fetch_all(getTable($conn, "users", "", true)) as $res) {
                     if ($res[6] == 1 && strtotime(date("Y-m-d H:i:s")) >= strtotime($res[7])) {
                         deleteTable($conn, "users", ["id", $res[0]]);
+                    }
+                    elseif ($res[6] == 0 && $res[7]) {
+                        updateTable($conn, "users", "deletedate", null, ["id", $res[0]]);
                     }
                 }
 
@@ -57,7 +60,7 @@
                         $banner = getTable($conn, "users", ["id", $v["banner"]]);
 
                         echo "<li><a href='includes/account/logout' " . $style . ">Log out</a></li>";
-                        echo "<h1>You have been banned by " . $banner["uid"] . " (" . rankFromNum($banner["rank"]) . ") on [" . join("/", array_reverse(explode("-", $v["date"]))) . " (D/M/Y)]</h1>";
+                        echo "<h1>You have been banned by " . $banner["uid"] . " (" . rankFromNum($banner["rank"]) . ") on [" . sqldate_to_date($v["date"]) . "]</h1>";
 
                         die();
                     } else {
@@ -126,9 +129,6 @@
                 case '404':
                     $say = "Page not found!";
                     break;
-                case '404r':
-                    header("location: http://{$_SERVER['HTTP_HOST']}/LoginThing/.?error=404");
-                    break;
                 case 'alreadyliked':
                     $say = "You already liked this comment!";
                     break;
@@ -184,7 +184,8 @@
                     $say = "That user is not banned!";
                     break;
                 case 'userdeleted':
-                    $say = "That account has been deleted!";
+                    #$say = "That account has been deleted!";
+                    echo "<p style='color: green;'>The account has been deleted. Log back in before <" . sqldate_to_date(urldecode($_GET["deletedate"]), true, true) . "> to recover your account.</p>";
                     break;
                 case 'stmtfailed':
                     $say = "Something went wrong! (error code: stmtfailed-" . $_GET["webname"] . ")";
@@ -194,6 +195,9 @@
                     break;
                 case 'invaliddata':
                     $say = "Invalid form data.";
+                    break;
+                case 'sessionexpired':
+                    $say = "You got logged out due to the session expiring.";
                     break;
                 case 'evalfailed':
                     $say = "Evaluation failed!";

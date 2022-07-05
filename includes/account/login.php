@@ -32,11 +32,19 @@ if (!$checkPwd) {
 }
 else {
     if ($user["deleted"]) {
-        header("location: ../../login?error=userdeleted");
-        exit();
+        #header("location: ../../login?error=userdeleted");
+        #exit();
+
+        # Undelete the user
+        updateTable($conn, "users", "deleted", 0, ["uid", $username], "is");
     }
 
     session_start();
+
+    $token = bin2hex(random_bytes(36));
+    setcookie("token", $token, time() + 31536000, "/");
+
+    insertTable($conn, "sessions", ["userid" => $user["id"], "token" => password_hash($token, PASSWORD_DEFAULT), "ip" => $_SERVER['REMOTE_ADDR'], "proxyip" => $_SERVER['HTTP_X_FORWARDED_FOR']]);
 
     $_SESSION["uid"] = $user["uid"];
     $_SESSION["id"] = $user["id"];

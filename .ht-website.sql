@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 16, 2022 at 02:04 PM
+-- Generation Time: Jul 05, 2022 at 11:10 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.1
 
@@ -257,6 +257,21 @@ CREATE TABLE `reports` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `sessions`
+--
+
+CREATE TABLE `sessions` (
+  `id` int(11) NOT NULL,
+  `userid` int(11) NOT NULL,
+  `token` varchar(255) NOT NULL,
+  `ip` varchar(255) NOT NULL,
+  `proxyip` varchar(255) NOT NULL,
+  `date` date NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -277,7 +292,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `email`, `uid`, `pwd`, `rank`, `verified`, `deleted`, `deletedate`, `date`) VALUES
-(1, 'a@a.a', 'Test', '$2y$10$ab2aL.hDhs5rQaZJfDnVLeLqTuhiAqmzMabvVx9DxFqTayQ0iuYxu', 3, 1, b'0', NULL, '2022-06-16 14:02:18');
+(1, 'a@a.a', 'Test', '$2y$10$yT8JtUTxJjszz71tcU.hKOj0G7nUXlJbJBUv5Q.E46usG4wlwFuOK', 3, 1, b'0', NULL, '2022-07-05 23:09:59');
 
 --
 -- Indexes for dumped tables
@@ -377,6 +392,12 @@ ALTER TABLE `privatemessages`
 -- Indexes for table `reports`
 --
 ALTER TABLE `reports`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `sessions`
+--
+ALTER TABLE `sessions`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -483,6 +504,12 @@ ALTER TABLE `privatemessages`
 -- AUTO_INCREMENT for table `reports`
 --
 ALTER TABLE `reports`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `sessions`
+--
+ALTER TABLE `sessions`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
