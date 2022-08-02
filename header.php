@@ -27,6 +27,32 @@
 
                 $style = "style=\"font: 400 13.3333px Arial; font-size: 16px;\"";
 
+                if (isset($_COOKIE["token"])) {
+                    $found = false;
+
+                    foreach (mysqli_fetch_all(getTable($conn, "sessions", "", true)) as $res) {
+                        $hash = $res[2];
+                    
+                        $verify = password_verify($_COOKIE["token"], $hash);
+                    
+                        if ($verify) {
+                            $found = true;
+                            $user = getTable($conn, "users", ["id", $res[1]]);
+
+                            $_SESSION["uid"] = $user["uid"];
+                            $_SESSION["id"] = $user["id"];
+                            $_SESSION["rank"] = $user["rank"];
+                            
+                            $_SESSION["passtoken"] = null;
+                            break;
+                        }
+                    }
+
+                    if (!$found) {
+                        header("location: includes/account/logout.php?error=sessionexpired");
+                    }
+                }
+
                 if (isset($_SESSION["uid"])) {
 
                     $user = getTable($conn, "users", ["id", $_SESSION["id"]]);
