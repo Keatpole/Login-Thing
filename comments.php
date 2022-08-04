@@ -318,7 +318,7 @@
                             }
                         }
 
-                        echo "<p>" . $replyTo . htmlspecialchars($result, ENT_QUOTES, "UTF-8") . "</p>";
+                        echo "<p>" . $replyTo . htmlspecialchars_decode($result, ENT_QUOTES) . "</p>";
 
                         if (!isset($_GET["includefromgroup"]) && !isset($_GET["includefrompm"]) && !isset($_GET["specific"])) {
                             echo "<p class=\"commentlikes\">" . $res[3] . " Likes"  . "</p>";
@@ -501,7 +501,7 @@
                                 }
                             }
 
-                            echo "<p>" . $replyTo . htmlspecialchars($result, ENT_QUOTES, "UTF-8") . "</p>";
+                            echo "<p>" . $replyTo . htmlspecialchars_decode($result, ENT_QUOTES) . "</p>";
 
                             if (!isset($_GET["includefromgroup"]) && !isset($_GET["includefrompm"]) && !isset($_GET["specific"])) {
                                 echo "<p class=\"commentlikes\">" . $res[3] . " Likes"  . "</p>";
@@ -560,6 +560,8 @@
 
                     $isgroup = (isset($_GET["includefromgroup"]) ? "group" : "");
                     $ispm = (isset($_GET["includefrompm"]) ? "private" : "");
+
+                    $has = false;
 
                     if (!isset($_GET["specific"])) {
                         if (isset($_GET["includefromprofile"]) || isset($_GET["includefromgroup"]) || isset($_GET["includefrompm"])) {
@@ -707,7 +709,7 @@
                             }
                         }
 
-                        echo "<p>" . $replyTo . htmlspecialchars($result, ENT_QUOTES, "UTF-8") . "</p>";
+                        echo "<p>" . $replyTo . htmlspecialchars_decode($result, ENT_QUOTES) . "</p>";
 
                         if (!isset($_GET["includefromgroup"]) && !isset($_GET["includefrompm"]) && !isset($_GET["specific"])) {
                             echo "<p class=\"commentlikes\">" . $res[3] . " Likes"  . "</p>";

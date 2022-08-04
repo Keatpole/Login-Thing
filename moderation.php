@@ -329,8 +329,8 @@
         
             echo "<h1>Admin Panel</h1>";
 
-            if ($_SESSION["rank"] >= 3) $size = 8;
-            else $size = 6;
+            $size = 6;
+            if ($_SESSION["rank"] >= 3) $size = 9;
             
             if ($settings->enable_admin_panel) {
                 ?>
@@ -347,6 +347,7 @@
                             <?php
                                 if ($_SESSION["rank"] >= 3) {
                                     echo "<option value='4' " . ($selectedValue == "unv" ? "selected=\"selected\"" : "") . ">(Un)Verify</option>";
+                                    echo "<option value='7' " . ($selectedValue == "rec" ? "selected=\"selected\"" : "") . ">Recover Account</option>";
                                     echo "<option value='2' " . ($selectedValue == "admin" ? "selected=\"selected\"" : "") . ">Set Admin</option>";
                                 }
                             ?>

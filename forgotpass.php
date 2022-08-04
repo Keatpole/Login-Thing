@@ -18,8 +18,8 @@
             echo "<p>Resetting your password is temporarily disabled.</p>";
         } else {
             ?>
-                <form action="includes/account/forgotPass" method="post">
-                    <input type="text" name="email" placeholder="Username/Email..."></br></br>
+                <form action="modhelp" method="post">
+                    <input type="text" name="uid" placeholder="Username/Email..."></br></br>
                     <button type="submit" name="submit" class="button">Reset</button>
                 </form>
             <?php

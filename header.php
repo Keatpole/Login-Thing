@@ -38,18 +38,31 @@
                         if ($verify) {
                             $found = true;
                             $user = getTable($conn, "users", ["id", $res[1]]);
+                            if ($user) {
+                                $_SESSION["uid"] = $user["uid"];
+                                $_SESSION["id"] = $user["id"];
+                                $_SESSION["rank"] = $user["rank"];
+                                
+                                $_SESSION["passtoken"] = null;
 
-                            $_SESSION["uid"] = $user["uid"];
-                            $_SESSION["id"] = $user["id"];
-                            $_SESSION["rank"] = $user["rank"];
-                            
-                            $_SESSION["passtoken"] = null;
-                            break;
+                                updateTable($conn, "sessions", "lastdate", date("Y-m-d H:i:s"), ["id", $res[0]], "si");
+                                break;
+                            } else {
+                                header("location: includes/account/logout");
+                            }
                         }
                     }
 
                     if (!$found) {
                         header("location: includes/account/logout.php?error=sessionexpired");
+                    }
+                }
+
+                if (isset($_SESSION["ptid"]) && $_SESSION["ptid"] && strtotime(date("Y-m-d H:i:s")) >= strtotime(getTable($conn, "passwordtokens", ["id", $_SESSION["ptid"]])["expiredate"])) {
+                    deleteTable($conn, "passwordtokens", ["id", $_SESSION["ptid"]]);
+                    $_SESSION["ptid"] = null;
+                    if ($_GET["webname"] == "resetpass") {
+                        header("location: login?error=invalidtoken");
                     }
                 }
 
@@ -64,13 +77,6 @@
                     }
 
                     $_SESSION["rank"] = getTable($conn, "users", ["uid", $_SESSION["uid"]])["rank"];
-
-                    if (isset($_SESSION["passtoken"]) && $_SESSION["passtoken"][2] && strtotime(date("F j, Y, H:i")) >= strtotime($_SESSION["passtoken"][2])) {
-                        $_SESSION["passtoken"] = null;
-                        if ($_GET["webname"] == "resetpass") {
-                            header("location: login?error=invalidtoken");
-                        }
-                    }
 
                     $banned = null;
 

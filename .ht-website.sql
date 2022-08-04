@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 05, 2022 at 11:10 PM
+-- Generation Time: Aug 04, 2022 at 06:07 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.1
 
@@ -228,6 +228,20 @@ CREATE TABLE `mutes` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `passwordtokens`
+--
+
+CREATE TABLE `passwordtokens` (
+  `id` int(11) NOT NULL,
+  `userid` int(11) NOT NULL,
+  `token` varchar(255) NOT NULL,
+  `expiredate` datetime NOT NULL,
+  `date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `privatemessages`
 --
 
@@ -266,7 +280,8 @@ CREATE TABLE `sessions` (
   `token` varchar(255) NOT NULL,
   `ip` varchar(255) NOT NULL,
   `proxyip` varchar(255) NOT NULL,
-  `date` date NOT NULL DEFAULT current_timestamp()
+  `lastdate` datetime NOT NULL DEFAULT current_timestamp(),
+  `date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -292,7 +307,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `email`, `uid`, `pwd`, `rank`, `verified`, `deleted`, `deletedate`, `date`) VALUES
-(1, 'a@a.a', 'Test', '$2y$10$yT8JtUTxJjszz71tcU.hKOj0G7nUXlJbJBUv5Q.E46usG4wlwFuOK', 3, 1, b'0', NULL, '2022-07-05 23:09:59');
+(1, 'a@a.a', 'Test', '$2y$10$gNEg6P8H6kGBnpDqufOMneF7lFUv9JcLBw7ML06j3WjQ8ib3Q3D06', 3, 1, b'0', NULL, '2022-08-04 18:06:41');
 
 --
 -- Indexes for dumped tables
@@ -380,6 +395,12 @@ ALTER TABLE `modsuggestions`
 -- Indexes for table `mutes`
 --
 ALTER TABLE `mutes`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `passwordtokens`
+--
+ALTER TABLE `passwordtokens`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -492,6 +513,12 @@ ALTER TABLE `modsuggestions`
 -- AUTO_INCREMENT for table `mutes`
 --
 ALTER TABLE `mutes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `passwordtokens`
+--
+ALTER TABLE `passwordtokens`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --

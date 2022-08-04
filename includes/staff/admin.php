@@ -76,6 +76,10 @@ elseif ($action == "6") {
     header("location: ../../moderation?error=none");
     exit();
 }
+elseif ($action == "7") {
+    header("location: ../account/recoverAcc?u=" . $username);
+    exit();
+}
 elseif ($action == "-1") {
 
     $banned = null;

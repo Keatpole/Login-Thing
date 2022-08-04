@@ -13,7 +13,7 @@ session_start();
 $uid = $_POST["uid"];
 $uidRepeat = $_POST["uidRepeat"];
 
-if (password_verify($_POST["token"], $_SESSION["passtoken"][0])) {
+if (password_verify($_POST["token"], getTable($conn, "passwordtokens", ["id", $_SESSION["ptid"]])["token"])) {
 
     if ($uid !== $uidRepeat) {
         header("location: ../../resetpass?t=" . $_POST["token"] . "&error=pwdmatch");
@@ -33,9 +33,10 @@ if (password_verify($_POST["token"], $_SESSION["passtoken"][0])) {
         exit();
     }
 
-    updateTable($conn, "users", "uid", $uid, ["id", $_SESSION["passtoken"][1]]);
+    updateTable($conn, "users", "uid", $uid, ["id", $_SESSION["ptid"]]);
+    deleteTable($conn, "passwordtokens", ["id", $_SESSION["ptid"]]);
 
-    $_SESSION["passtoken"] = null;
+    $_SESSION["ptid"] = null;
 
 } else {
     header("location: ../../login?error=invalidtoken");

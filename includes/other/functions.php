@@ -1,6 +1,18 @@
 <?php
 
 require_once "settings.php";
+require_once "dbh.php";
+
+if (isset($_SESSION["tempacc"]) && $_SESSION["tempacc"] && !in_array($_GET["webname"], ["modhelp", "groups", "resetpass"])) {
+    if (isset($prevent_temp_logout) && $prevent_temp_logout) {
+        
+    } else {
+        deleteTable($conn, "groups", ["id", $_SESSION["modhelpgroup"]]);
+        deleteTable($conn, "groupmessages", ["groupId", $_SESSION["modhelpgroup"]]);
+        header("location: includes/account/logout");
+        exit();
+    }
+}
 
 if (!$settings->enable_public && $_SERVER['HTTP_HOST'] != "localhost") {
     #echo "<link rel=\"stylesheet\" href=\"../../style.css\">";
@@ -176,11 +188,31 @@ function rankFromNum($num) {
     }
 }
 
-function sqldate_to_date($date, $only_show_date = false, $show_format = true) {
+function login($conn, $id, $cookies = true) {
+    $user = getTable($conn, "users", ["id", $id]);
+
+    if ($cookies) {
+        $token = bin2hex(random_bytes(36));
+        setcookie("token", $token, time() + 31536000, "/");
+
+        $proxyip = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : "";
+        $proxyip = $proxyip ? $proxyip : "";
+
+        $_SESSION["sessionid"] = insertTable($conn, "sessions", ["userid" => $user["id"], "token" => password_hash($token, PASSWORD_DEFAULT), "ip" => $_SERVER['REMOTE_ADDR'], "proxyip" => $proxyip]);
+    }
+
+    $_SESSION["uid"] = $user["uid"];
+    $_SESSION["id"] = $user["id"];
+    $_SESSION["rank"] = $user["rank"];
+    
+    $_SESSION["passtoken"] = null;
+}
+
+function sqldate_to_date($date, $only_show_date = false, $show_format = true, $separator = " @ ") {
     $date = explode(" ", $date);
 
-    $time = " @ " . $date[1];
-    $format = " (D/M/Y @ H:M:S)";
+    $time = $separator . $date[1];
+    $format = " (D/M/Y" . $separator . "H:M:S)";
 
     if ($only_show_date) {
         $time = "";

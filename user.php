@@ -45,11 +45,11 @@
                 }
             }
 
-            echo "<h4>Logged in locations: " . strval($sessions) . "</h4>";
+            echo "<h4>Logged in locations: " . strval($sessions) . " (Click on Sessions to log out of other locations)</h4>";
             
             echo "<a href=\".?mentions=" . $user["uid"] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Mentions</a> ";
             echo "<a href=\"appeal\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Appeal</a> ";
-            echo "<a href=\"includes/account/logout?expire_all_sessions\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Logout All</a> ";
+            echo "<a href=\"sessions\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Sessions</a> ";
             if (isset($_GET["deleteConfirm"])) {
                 echo "<a href='includes/account/delete'><button class='button'>Confirm Account Deletion</button></a> ";
             } else {

@@ -10,9 +10,10 @@
         $_GET["webname"] = basename(__FILE__, '.php');
         include_once 'header.php';
 
-        if (isset($_GET["t"]) && password_verify($_GET["t"], $_SESSION["passtoken"][0])) {
+        if (isset($_GET["t"]) && password_verify($_GET["t"], getTable($conn, "passwordtokens", ["id", $_SESSION["ptid"]])["token"])) {
             if (isset($_GET["invalidate"])) {
-                $_SESSION["passtoken"] = null;
+                deleteTable($conn, "passwordtokens", ["id", $_SESSION["ptid"]]);
+                $_SESSION["ptid"] = null;
                 header("location: login?error=none");
                 exit();
             }

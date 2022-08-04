@@ -124,6 +124,20 @@ if (str_starts_with($message, "!")) {
 
     }
 
+    # "recover" command sends the user to "../../moderation?u=<username>&sel=rec"
+    if ($command == "recover") {
+        $result = getTable($conn, "users", ["uid", $message]);
+
+        if ($result === null) {
+            header("location: ../../.?error=usernotfound");
+            exit();
+        }
+
+        header("location: ../../moderation?u=" . $result["uid"] . "&sel=rec");
+        exit();
+
+    }
+
     # "undelete" command sends the user to "../../moderation?u=<username>&sel=undel"
     if ($command == "undelete") {
         $result = getTable($conn, "users", ["uid", $message]);

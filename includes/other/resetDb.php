@@ -37,12 +37,5 @@ if (isset($_GET["confirm"])) {
     session_destroy();
     session_start();
 
-    # Log in as Test
-    $_SESSION["uid"] = $uid;
-    $_SESSION["id"] = 1;
-    $_SESSION["rank"] = $rank;
-    
-    $_SESSION["passtoken"] = null;
-
     header("location: ../..");
 }

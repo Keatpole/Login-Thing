@@ -2,8 +2,12 @@
 
 session_start();
 
+$prevent_temp_logout = true;
+
 require_once '../other/functions.php';
 require_once '../other/dbh.php';
+
+$prevent_temp_logout = false;
 
 if (!isset($_SESSION["rank"]) || !isset($_POST["submit"]) || !$settings->enable_posting_comments) {
     header("location: ../../groups?g=" . $_POST["groupid"]);
