@@ -20,9 +20,4 @@ if (isset($_SESSION["rank"]) && $banned) {
 updateTable($conn, "users", "deleted", 1, ["id", $_SESSION["id"]]);
 updateTable($conn, "users", "deletedate", date("Y-m-d H:i:s", strtotime("+1 Month")), ["id", $_SESSION["id"]]);
 
-$date = getTable($conn, "users", ["id", $_SESSION["id"]])["deletedate"];
-
-session_unset();
-session_destroy();
-
-header("location: ../../.?error=userdeleted&deletedate=" . urlencode($date));
+header("location: logout?error=userdeleted");

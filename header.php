@@ -217,7 +217,7 @@
                     break;
                 case 'userdeleted':
                     #$say = "That account has been deleted!";
-                    echo "<p style='color: green;'>The account has been deleted. Log back in before <" . sqldate_to_date(urldecode($_GET["deletedate"]), true, true) . "> to recover your account.</p>";
+                    echo "<p style='color: green;'>Your account has been deleted. Log back in within <1 Month> to recover your account.</p>";
                     break;
                 case 'stmtfailed':
                     $say = "Something went wrong! (error code: stmtfailed-" . $_GET["webname"] . ")";
