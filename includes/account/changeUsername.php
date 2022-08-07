@@ -33,7 +33,7 @@ if (password_verify($_POST["token"], getTable($conn, "passwordtokens", ["id", $_
         exit();
     }
 
-    updateTable($conn, "users", "uid", $uid, ["id", $_SESSION["ptid"]]);
+    updateTable($conn, "users", "uid", $uid, ["id", getTable($conn, "passwordtokens", ["id", $_SESSION["ptid"]])["userid"]]);
     deleteTable($conn, "passwordtokens", ["id", $_SESSION["ptid"]]);
 
     $_SESSION["ptid"] = null;
