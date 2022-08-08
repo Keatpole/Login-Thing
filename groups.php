@@ -11,7 +11,7 @@
         $_GET["webname"] = basename(__FILE__, '.php');
         include_once 'header.php';
 
-        if (!isset($_SESSION["uid"])) {
+        if (!isset($_SESSION["id"])) {
             header("location: .?error=nologin");
             exit();
         }

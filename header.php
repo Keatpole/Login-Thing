@@ -66,7 +66,7 @@
                     }
                 }
 
-                if (isset($_SESSION["uid"])) {
+                if (isset($_SESSION["id"])) {
 
                     $user = getTable($conn, "users", ["id", $_SESSION["id"]]);
 
@@ -76,7 +76,7 @@
                         exit();
                     }
 
-                    $_SESSION["rank"] = getTable($conn, "users", ["uid", $_SESSION["uid"]])["rank"];
+                    $_SESSION["rank"] = getTable($conn, "users", ["id", $_SESSION["id"]])["rank"];
 
                     $banned = null;
 

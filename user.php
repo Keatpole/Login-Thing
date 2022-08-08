@@ -10,7 +10,7 @@
         $_GET["webname"] = basename(__FILE__, '.php');
         include_once 'header.php';
         
-        if (!isset($_SESSION["uid"])) {
+        if (!isset($_SESSION["id"])) {
             header("location: .?error=nologin");
             exit();
         }
@@ -21,7 +21,7 @@
 
             $currentUser = $_SESSION["id"];
 
-            $user = getTable($conn, "users", ["uid", $_SESSION["uid"]]);
+            $user = getTable($conn, "users", ["id", $_SESSION["id"]]);
 
             $verified = ($user["verified"] ? "<p style=\"display: inline;color: #ccaa00;\" title=\"Verified\">✔</p>" : "");
 

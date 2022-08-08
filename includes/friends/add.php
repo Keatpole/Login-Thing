@@ -5,7 +5,7 @@ session_start();
 require_once "../other/functions.php";
 require_once "../other/dbh.php";
 
-if (!isset($_SESSION["uid"]) || !isset($_POST["submit"])) {
+if (!isset($_SESSION["id"]) || !isset($_POST["submit"])) {
     header("location: ../../.");
     exit();
 }

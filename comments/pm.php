@@ -15,7 +15,7 @@
             header("location: ../.?error=404");
         }
 
-        if (!isset($_SESSION["uid"])) {
+        if (!isset($_SESSION["id"])) {
             header("location: ../.?error=404");
         }
 

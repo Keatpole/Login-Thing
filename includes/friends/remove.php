@@ -5,7 +5,7 @@ session_start();
 require_once "../other/dbh.php";
 require_once "../other/functions.php";
 
-if (!isset($_SESSION["uid"])) {
+if (!isset($_SESSION["id"])) {
     header("location: ../../.");
     exit();
 }

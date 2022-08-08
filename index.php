@@ -10,13 +10,13 @@
         $_GET["webname"] = basename(__FILE__, '.php');
         include_once 'header.php';
 
-        if (isset($_SESSION["uid"])) {
+        if (isset($_SESSION["id"])) {
 
             echo "<h4 class='center'>Welcome back, " . $_SESSION["uid"] . "</h4>";
             
             include_once "comments/default.php";
 
-        } elseif (!isset($_SESSION["uid"])) {
+        } else {
             ?>
             
                 <h1 class='center'>Welcome</h1></br>
