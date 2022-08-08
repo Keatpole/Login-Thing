@@ -39,15 +39,17 @@
                             $found = true;
                             $user = getTable($conn, "users", ["id", $res[1]]);
                             if ($user) {
-                                $_SESSION["uid"] = $user["uid"];
-                                $_SESSION["id"] = $user["id"];
-                                $_SESSION["rank"] = $user["rank"];
-                                
-                                $_SESSION["passtoken"] = null;
+                                if (!isset($_SESSION["id"])) {
+                                    $_SESSION["uid"] = $user["uid"];
+                                    $_SESSION["id"] = $user["id"];
+                                    $_SESSION["rank"] = $user["rank"];
 
+                                    $_SESSION["sessionid"] = $res[0];
+                                }
+                                
                                 updateTable($conn, "sessions", "lastdate", date("Y-m-d H:i:s"), ["id", $res[0]], "si");
                                 break;
-                            } else {
+                            } elseif(isset($_SESSION["id"])) {
                                 header("location: includes/account/logout");
                             }
                         }

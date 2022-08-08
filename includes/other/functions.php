@@ -204,8 +204,6 @@ function login($conn, $id, $cookies = true) {
     $_SESSION["uid"] = $user["uid"];
     $_SESSION["id"] = $user["id"];
     $_SESSION["rank"] = $user["rank"];
-    
-    $_SESSION["passtoken"] = null;
 }
 
 function sqldate_to_date($date, $only_show_date = false, $show_format = true, $separator = " @ ") {
