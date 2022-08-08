@@ -83,8 +83,9 @@
 
             $verified = ($user["verified"] ? "<p style=\"display: inline;color: #ccaa00;\" title=\"Verified\">✔</p>" : "");
 
-            echo "<h1>" . htmlspecialchars($user["uid"] . $verified, ENT_QUOTES, "UTF-8") . "'s Profile</h1>";
-            echo "<h4>Rank: " . rankFromNum(htmlspecialchars($user["rank"], ENT_QUOTES, "UTF-8")) . "</h4>";
+            echo "<h1>" . htmlspecialchars_decode($user["uid"] . $verified, ENT_QUOTES) . "'s Profile</h1>";
+            echo "<h4>Email: " . htmlspecialchars_decode($user["email"], ENT_QUOTES) . "</h4>";
+            echo "<h4>Rank: " . rankFromNum(htmlspecialchars_decode($user["rank"], ENT_QUOTES)) . "</h4>";
 
             $btnId = null;
             $btnShow = true;
@@ -155,10 +156,8 @@
 
         }
 
-        #echo "<h1>Comments:</h1>";
-
-        $_GET["includefromprofile"] = $currentUser;
-        include_once "comments.php";
+        $_GET["u"] = $currentUser;
+        include_once "comments/profile.php";
             
     ?>
         

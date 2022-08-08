@@ -22,8 +22,7 @@
             exit();
         }
 
-        $_GET["specific"] = $_GET["c"];
-        include_once 'comments.php';
+        include_once 'comments/specific.php';
     ?>
 </body>
 </html>

@@ -11,10 +11,6 @@ class Settings {
     public $enable_posting_comments = 1; # If users can post comments
     public $enable_viewing_comments = 1; # If users can view comments
     public $enable_likes = 1; # If users can like comments
-    public $hide_replies = 1; # If replies are hidden. If enabled, replies can only be seen be clicking "Reply" on a comment, as for now, having this option enabled, disabled deleting replies as a side effect.
-
-    public $enable_random_comments = 0; # If random comments are enabled, there will be a random chance of seeing a comment.
-    public $random_comment_chance = 3; # 1 in x chance the comment being skipped
     
     public $enable_suggestions = 1; # If admins can accept suggestions
     public $enable_mod_panel = 1; # If the mod panel should be enabled
@@ -42,10 +38,6 @@ $dev->enable_appeal = 1;
 $dev->enable_posting_comments = 1;
 $dev->enable_viewing_comments = 1;
 $dev->enable_likes = 1;
-$dev->hide_replies = 1;
-
-$dev->enable_random_comments = 0;
-$dev->random_comment_chance = 3;
 
 $dev->enable_suggestions = 1;
 $dev->enable_mod_panel = 1;
@@ -69,10 +61,6 @@ $prod->enable_appeal = 1;
 $prod->enable_posting_comments = 1;
 $prod->enable_viewing_comments = 1;
 $prod->enable_likes = 1;
-$prod->hide_replies = 1;
-
-$prod->enable_random_comments = 0;
-$prod->random_comment_chance = 3;
 
 $prod->enable_suggestions = 1;
 $prod->enable_mod_panel = 1;

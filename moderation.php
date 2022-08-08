@@ -261,7 +261,7 @@
 
                         $action = ltrim(preg_replace('/([A-Z])/', ' $1', $row["action"]));
 
-                        $target = (str_starts_with($type, "CID:") ? "Target: <a href=\"user?u=" . $row["targetsUid"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["targetsUid"]])["uid"] . "</a> - " : "");
+                        $target = (!str_starts_with($type, "CID:") ? "Target: <a href=\"user?u=" . $row["targetsUid"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["targetsUid"]])["uid"] . "</a> - " : "");
 
                         echo "<h4 class=\"comment\">[" . $row["id"] . "] Username: <a href=\"user?u=" . $row["uid"] . "\" target=\"_blank\" style=\"text-decoration: none; color: green;\">" . getTable($conn, "users", ["id", $row["uid"]])["uid"] . "</a> - " . $target . "Action: " . $action . "</a> - " . $type_str . " </h4> ";
                     }
