@@ -138,20 +138,6 @@ if (str_starts_with($message, "!")) {
 
     }
 
-    # "undelete" command sends the user to "../../moderation?u=<username>&sel=undel"
-    if ($command == "undelete") {
-        $result = getTable($conn, "users", ["uid", $message]);
-
-        if ($result === null) {
-            header("location: ../../.?error=usernotfound");
-            exit();
-        }
-
-        header("location: ../../moderation?u=" . $result["uid"] . "&sel=undel");
-        exit();
-
-    }
-
     # "verify" command sends the user to "../../moderation?u=<username>&sel=unv"
     if ($command == "verify" || $command == "unverify") {
         $result = getTable($conn, "users", ["uid", $message]);

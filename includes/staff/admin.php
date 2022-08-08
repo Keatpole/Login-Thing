@@ -69,14 +69,6 @@ elseif ($action == "5") {
 
 }
 elseif ($action == "6") {
-    updateTable($conn, "users", "deleted", 0, ["id", $user["id"]], "is");
-    updateTable($conn, "users", "deletedate", null, ["id", $user["id"]]);
-    logAction($conn, $_SESSION["id"], $user["id"], "Admin", "Undelete");
-
-    header("location: ../../moderation?error=none");
-    exit();
-}
-elseif ($action == "7") {
     header("location: ../account/recoverAcc?u=" . $username);
     exit();
 }

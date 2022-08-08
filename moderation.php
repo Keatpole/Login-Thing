@@ -329,8 +329,8 @@
         
             echo "<h1>Admin Panel</h1>";
 
-            $size = 6;
-            if ($_SESSION["rank"] >= 3) $size = 9;
+            $size = 5;
+            if ($_SESSION["rank"] >= 3) $size = 8;
             
             if ($settings->enable_admin_panel) {
                 ?>
@@ -341,13 +341,12 @@
                             <option value="0" <?php if ($selectedValue == "user"): ?> selected="selected" <?php endif; ?> >Set User</option>
                             <option value="1" <?php if ($selectedValue == "mod"): ?> selected="selected" <?php endif; ?>>Set Moderator</option>
                             <option value="3" <?php if ($selectedValue == "delc"): ?> selected="selected" <?php endif; ?>>Delete Comment</option>
-                            <option value="6" <?php if ($selectedValue == "undel"): ?> selected="selected" <?php endif; ?>>Undelete</option>
                             <option value="5" <?php if ($selectedValue == "unm"): ?> selected="selected" <?php endif; ?>>(Un)Mute</option>
                             <option value="-1"<?php if ($selectedValue == "unb"): ?> selected="selected" <?php endif; ?>>(Un)Ban</option>
                             <?php
                                 if ($_SESSION["rank"] >= 3) {
                                     echo "<option value='4' " . ($selectedValue == "unv" ? "selected=\"selected\"" : "") . ">(Un)Verify</option>";
-                                    echo "<option value='7' " . ($selectedValue == "rec" ? "selected=\"selected\"" : "") . ">Recover Account</option>";
+                                    echo "<option value='6' " . ($selectedValue == "rec" ? "selected=\"selected\"" : "") . ">Recover Account</option>";
                                     echo "<option value='2' " . ($selectedValue == "admin" ? "selected=\"selected\"" : "") . ">Set Admin</option>";
                                 }
                             ?>
