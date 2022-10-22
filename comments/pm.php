@@ -70,7 +70,7 @@
 
             $has = false;
 
-            foreach (mysqli_fetch_all(getTable($conn, "privatemessages")) as $res) {                
+            foreach (mysqli_fetch_all(getTable($conn, "privatemessages", "", true)) as $res) {                
                 if ($res[2] != $_GET["u"]) continue;
                 else $has = true;
             }
@@ -81,7 +81,7 @@
 
             $hasreply = false;
 
-            foreach (mysqli_fetch_all(getTable($conn, "privatemessages")) as $res) {
+            foreach (mysqli_fetch_all(getTable($conn, "privatemessages", "", true)) as $res) {
                 if ($res[3] == $_SESSION["id"] && $res[2] == $_GET["u"] || $res[3] == $_GET["u"] && $res[2] == $_SESSION["id"]) {}
                 else continue;
 

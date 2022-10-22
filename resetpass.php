@@ -24,14 +24,16 @@
         }
         
     ?>
-    
-    <h2>Reset Password</h2>
 
     <?php
         if (!$settings->enable_reset_pass) {
             echo "<p>Resetting your password is temporarily disabled.</p>";
         } else {
             ?>
+                <h3>The staff has verified your identity.</h3>
+                <h3>Performing any of these actions will result in your modhelp ticket being closed.</h3></br>
+
+                <h2>Reset Password</h2>
                 <form action="includes/account/resetPassword" method="post">
                     <?php
                         echo "<input type=\"hidden\" name=\"token\" value=\"" . htmlspecialchars($_GET["t"], ENT_QUOTES, "UTF-8") . "\">";

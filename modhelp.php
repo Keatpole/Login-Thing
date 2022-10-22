@@ -18,21 +18,16 @@
 
         $user = getTable($conn, "users", ["uid", $_POST["uid"]]);
         $user = !$user ? getTable($conn, "users", ["email", $_POST["uid"]]) : $user;
+        $user = !$user ? getTable($conn, "users", ["uid", $_GET["uid"]]) : $user;
 
-        $staff = "";
-        foreach (mysqli_fetch_all(getTable($conn, "users", ["rank", 1], true)) as $res) {
-            $staff .= $res[0] . ",";
-        }
-        $staff .= $user["id"];
-
-        $group = getTable($conn, "groups", ["id", insertTable($conn, "groups", ["name" => "Mod Help (" . $user["uid"] . ")", "author" => $user["id"], "members" => $staff, "mods" => substr($staff, 0, -2)])]);
+        $group = getTable($conn, "modhelpgroups", ["id", insertTable($conn, "modhelpgroups", ["name" => "Mod Help (" . $user["uid"] . ")"])]);
 
         login($conn, $user["id"], false);
         $_SESSION["tempacc"] = true;
         $_SESSION["rank"] = 0;
         $_SESSION["modhelpgroup"] = $group["id"];
 
-        header("location: groups?g=" . $group["id"]);
+        header("location: groups?mhg=" . $group["id"]);
 
     ?>
 

@@ -34,7 +34,6 @@ $msgInfo = getTable($conn, "groupmessages", ["id", $_POST["commentId"]]);
 
 if ($_SESSION["id"] == $msgInfo["author"] || $_SESSION["rank"] >= 2 || getTable($conn, "groups", ["id", $_POST["groupid"]])["author"] == $_SESSION["id"] || $mod) {
 
-    insertTable($conn, "deletedgroupmessages", ["msgid" => $msgInfo["id"], "message" => $msgInfo["message"], "author" => $msgInfo["author"], "replyTo" => $msgInfo["replyTo"], "groupId" => $msgInfo["groupId"], "createdate" => $msgInfo["date"]]);
     deleteTable($conn, "groupmessages", ["id", $_POST["commentId"]]);
     deleteTable($conn, "groupmessages", ["replyTo", $_POST["commentId"]]);
     logAction($conn, $_SESSION["id"], $msgInfo["author"], "DeleteGroupComment", "CID:" . $_POST["commentId"]);

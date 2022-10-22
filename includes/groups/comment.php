@@ -18,7 +18,7 @@ $group = getTable($conn, "groups", ["id", $_POST["groupid"]]);
 
 $access = false;
 foreach (explode(",", $group["members"]) as $v) {
-    if ($v == $_SESSION["id"] || $_SESSION["rank"] >= 2) {
+    if ($v == $_SESSION["id"] || $_SESSION["rank"] >= 2 || $_SESSION["modhelpgroup"] == $group["id"]) {
         $access = true;
         break;
     }
@@ -29,7 +29,7 @@ if (!$access) {
 }
 
 $mod = false;
-foreach (explode(",", getTable($conn, "groups", ["id", $_POST["groupid"]])["mods"]) as $v) {
+foreach (explode(",", $group["mods"]) as $v) {
     if ($v == $_SESSION["id"]) {
         $mod = true;
         break;
@@ -40,6 +40,14 @@ $message = strtolower($_POST["message"]);
 
 // Commands
 if (str_starts_with($message, "!")) {
+    $rank = "Member";
+
+    if ($group["author"] == $_SESSION["id"] || $_SESSION["rank"] >= 3) {
+        $rank = "Author";
+    }
+    elseif ($mod) {
+        $rank = "Mod";
+    }
 
     // User commands:
     if (str_starts_with($message, "!members")) {
@@ -123,21 +131,12 @@ if (str_starts_with($message, "!")) {
         }
     }
 
-    $rank = "Member";
-
-    // Admin commands
-    if ($group["author"] == $_SESSION["id"] || $_SESSION["rank"] >= 3) {
-        $rank = "Author";
-    }
-    elseif ($mod) {
-        $rank = "Mod";
-    }
-
     if ($rank == "Member") {
         header("location: ../../groups?g=" . $_POST["groupid"] . "&error=gcfauthfailed");
         exit();
     }
 
+    // Admin commands
     if (str_starts_with($message, "!add") && $rank == "Author") {
 
         $target = getTable($conn, "users", ["uid", explode("!add ", $message)[1]]);

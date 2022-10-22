@@ -22,7 +22,6 @@ if ($_GET["type"] == "DeleteComment") {
 
     $msgInfo = getTable($conn, "messages", ["id", $username]);
 
-    insertTable($conn, "deletedmessages", ["msgid" => $msgInfo["id"], "message" => $msgInfo["message"], "author" => $msgInfo["author"], "likes" => $msgInfo["likes"], "replyTo" => $msgInfo["replyTo"], "createdate" => $msgInfo["date"]]);
     deleteTable($conn, "messages", ["id", $username]);    
     logAction($conn, $_SESSION["id"], $username, "ApproveSuggestion", $type);
 

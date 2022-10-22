@@ -19,19 +19,56 @@
             header("location: ../.?error=404");
         }
 
-        echo "<h4 class='center'>You're viewing a comment</h4>";
+        $group = getTable($conn, "modhelpgroups", ["id", $_GET["g"]]);
+
+        if ($group == null) {
+            header("location: groups");
+            exit();
+        }
+
+        $isowner = 0;
+        if ($_SESSION["rank"] <= 0) {
+            if (isset($_SESSION["modhelpgroup"])) {
+                if ($_SESSION["modhelpgroup"] != $group["id"]) {
+                    header("location: groups");
+                    exit();
+                }
+                $isowner = 1;
+            }
+            else {
+                header("location: groups");
+                exit();
+            }
+        }
+
+        if ($group["verified"] && $isowner) {
+            $rng = bin2hex(random_bytes(36));
+            $ptid = insertTable($conn, "passwordtokens", ["userid" => $user["id"], "token" => password_hash($rng, PASSWORD_DEFAULT), "expiredate" => date("Y-m-d H:i:s", time() + 3600)]);
+
+            $_SESSION["ptid"] = $ptid;
+            header("location: resetpass?t=" . $rng);
+            exit();
+        }
+
+        echo "<h4 class='center'>You're viewing modhelp group " . htmlspecialchars($group["name"], ENT_QUOTES, "UTF-8") . "</h4>";
+
+        echo "<h6 class='center'>Comment \"!help\" for a list of commands.</h6>";
 
         if ($settings->enable_posting_comments) {
 
 
             ?>
 
-                <form action="includes/comments/comment" method="post">
-                    <input name="message" id="inputmsg" style="line-height: 3.3em" placeholder="Reply..." />
-                    <input type="hidden" name="replyid" value="<?= htmlspecialchars($_GET["c"], ENT_QUOTES, "UTF-8") ?>">
-                    <input type="hidden" name="return" value="reply?c=<?= htmlspecialchars($_GET["c"], ENT_QUOTES, "UTF-8") ?>#<?= htmlspecialchars($_GET["c"], ENT_QUOTES, "UTF-8") ?>&">
-                    <button class="button" type="submit" name="submit">Post</button>
-                </form>
+            <form action="includes/modhelp/comment" method="post">
+
+                <?php
+                    echo "<input name=\"groupid\" type=hidden value=\"" . htmlspecialchars($_GET["g"], ENT_QUOTES, "UTF-8") . "\" />";
+                    echo "<input name=\"message\" id=\"inputmsg\" style=\"line-height: 3.3em\" placeholder=\"What do you need help with?\" />";
+                ?>
+
+                <button class="button" type="submit" name="submit">Post</button></br></br>
+
+            </form>
 
             <?php
 
@@ -40,10 +77,6 @@
         else {
             echo "<p>Posting comments is temporarily disabled.</p>";
         }
-
-        if (!$settings->enable_likes) {
-            echo "<p>Likes are temporarily disabled.</p>";
-        }
         
         if ($settings->enable_viewing_comments) {
 
@@ -51,16 +84,22 @@
 
             $has = false;
 
-            $hasreply = false;
-
-            foreach (mysqli_fetch_all(getTable($conn, "messages", "", true)) as $res) {
-                if ($res[4] != "0") {
-                    $hasreply = true;
-                    break;
-                }
+            foreach (mysqli_fetch_all(getTable($conn, "modhelpmessages", "", true)) as $res) {
+                if ($res[4] != $_GET["g"]) continue;
+                else $has = true;
             }
 
-            foreach (mysqli_fetch_all(getTable($conn, "messages", "", true)) as $res) {
+            if ($has) {
+                echo "<h2>Comments:</h2>";
+            }
+
+            $hasreply = false;
+
+            foreach (mysqli_fetch_all(getTable($conn, "modhelpmessages", "", true)) as $res) {
+                if ($res[4] != $_GET["g"]) {
+                    continue;
+                }
+
                 $contin = true;
 
                 if (isset($_GET["hashtag"])) {    
@@ -81,10 +120,6 @@
                             $contin = true;
                         }
                     }
-                }
-
-                if ($res[0] != $_GET["c"] && $res[4] != $_GET["c"]) {
-                    $contin = false;
                 }
 
                 if (!$contin) continue;
@@ -121,10 +156,15 @@
                     $admin = ($user["rank"] >= 1 ? " <img src=\"img/admin.png\" alt=\"" . rankFromNum($user["rank"]) . "\" title=\"" . rankFromNum($user["rank"]) . "\">" : "");
                     $isyou = ($_SESSION["id"] == $res[2] ? " (You)" : "");
 
+                    if ($isowner) {
+                        $verified = "";
+                        $admin = "";
+                    }
+
                     echo "<h2>" . $commentId . "<a style=\"color: green;\" href=\"user?u=" . $res[2] . "\">" . $user["uid"] . "</a>" . $admin . $verified . $muted . $banned . $isyou . ":</h2>";
                 
                 }
-                                
+                
                 $result = "";
                 foreach (explode(" ", $res[1]) as $v) {
                     if (str_starts_with($v, "@")) {
@@ -136,7 +176,7 @@
                         }
                     }
                     elseif (str_starts_with($v, "#")) {
-                        $result .= "<a style=\"color: red;\" href=\"?hashtag=" . urlencode(strtolower(substr($v, 1))) . "\">" . $v . "</a>";
+                        $result .= "<a style=\"color: red;\" href=\"groups?mhg=" . $_GET["g"] . "&hashtag=" . urlencode(strtolower(substr($v, 1))) . "\">" . $v . "</a>";
                     }
                     else {
                         $result .= $v;
@@ -146,18 +186,20 @@
 
                 $replyTo = "";
 
+                if ($res[3] != null) {
+                    $replyTo = "[<a href=\"groups?mhg=" . $_GET["g"] . "#" . $res[0] . "\">Reply To</a>] ";
+                }
+
                 echo "<p>" . $replyTo . htmlspecialchars_decode($result, ENT_QUOTES) . "</p>";
 
-                echo "</div>";
+                echo "<form action=\"includes/groups/deleteComment\" method=\"post\"><input type=hidden name=\"groupid\" value=" . $res[4] . "><input type=hidden name=\"commentId\" value=" . $res[0] . "></input> <button type=\"submit\" name=\"delete\" class=\"button\">Delete</button></form>";
 
-                if ($res[0] == $_GET["c"] && $hasreply) {
-                    echo "<hr style=\"border: 1px dotted black;\">";
-                }
+                echo "</div>";
 
             }
 
             if (!$has) {
-                echo "No comments found.";
+                echo "This modhelp group has no comments";
             }
 
             echo "</div>";

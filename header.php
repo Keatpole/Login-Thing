@@ -13,6 +13,16 @@
             <?php
 
                 session_start();
+
+                if (isset($_SESSION["tempacc"]) && $_SESSION["tempacc"]) {
+                    if ($_GET["webname"] != "groups" && $_GET["webname"] != "resetpass") {
+                        print_r($_GET["webname"]);
+                        sleep(2);
+                        header("location: groups?mhg=" . $_SESSION["modhelpgroup"]);
+                        exit();
+                    }
+                }
+                
                 require_once "includes/other/dbh.php";
                 require_once "includes/other/functions.php";
 
@@ -78,7 +88,7 @@
                         exit();
                     }
 
-                    $_SESSION["rank"] = getTable($conn, "users", ["id", $_SESSION["id"]])["rank"];
+                    if (!isset($_SESSION["tempacc"])) $_SESSION["rank"] = getTable($conn, "users", ["id", $_SESSION["id"]])["rank"];
 
                     $banned = null;
 
@@ -110,7 +120,7 @@
                         echo "<li><a href='user' " . $style . ">Profile</a></li>";
 
                         $has = false;
-                        foreach (mysqli_fetch_all(getTable($conn, "friendreq")) as $res) {
+                        foreach (mysqli_fetch_all(getTable($conn, "friendreq", "", true)) as $res) {
                             if ($res[2] == $_SESSION["id"]) {
                                 if (getTable($conn, "users", ["id", $res[1]]) != null) {
                                     echo "<li><a href='friends' style=\"font: 400 13.3333px Arial; font-size: 16px; background-color: darkred;\">Friends</a></li>";
@@ -119,10 +129,20 @@
                                 }
                             }
                         }
-                        if (!$has) {
-                            echo "<li><a href='friends' style=\"font: 400 13.3333px Arial; font-size: 16px;\">Friends</a></li>";
+                        if (!$has) echo "<li><a href='friends' style=\"font: 400 13.3333px Arial; font-size: 16px;\">Friends</a></li>";
+
+                        if ($user["rank"] < 3) echo "<li><a href='groups' " . $style . ">Groups</a></li>";
+                        else {
+                            $has = false;
+                            foreach (getTable($conn, "modhelpgroups", "", true) as $g) {
+                                if ($g["ownerbumps"] > 0) {
+                                    echo "<li><a href='groups?mhg=" . $g["id"] . "' style=\"font: 400 13.3333px Arial; font-size: 16px; background-color: darkred;\">Bumped Help Group!</a></li>";
+                                    $has = true;
+                                    break;
+                                }
+                            }
+                            if (!$has) echo "<li><a href='groups' style=\"font: 400 13.3333px Arial; font-size: 16px;\">Groups</a></li>";
                         }
-                        echo "<li><a href='groups' " . $style . ">Groups</a></li>";
                         echo "<li><a href='search' " . $style . ">Search</a></li>";
                         if ($_SESSION["rank"] >= 1) {
                             echo "<li><a href='moderation' " . $style . ">Moderation</a></li>";
@@ -276,6 +296,15 @@
                 case 'gchelpmember':
                     echo "<p>Commands: !leave - Leaves the group, !members - Displays a list of members</p>";
                     break;
+                case 'mhgchelpstaff':
+                    echo "<p>Commands: !close - Closes the ticket, !bump - Bumps the ticket, !ownerbump - Alerts an owner to the ticket, !vote - Approve the ticket. Only do this if the ticket is a password reset.</p>";
+                    break;
+                case 'mhgchelpmember':
+                    echo "<p>Commands: !close - Closes the ticket, !bump - Bumps the ticket</p>";
+                    break;
+                case 'mhgcfvote':
+                    $say = "You have already voted this";
+                    break;
                 default:
                     if ($_GET["webname"] == "index") {
                         header("location: .");
@@ -287,6 +316,7 @@
             echo "<p style='color: red;'>" . htmlspecialchars($say, ENT_QUOTES, "UTF-8") . "</p>";
 
         }
+        if (isset($_GET["msg"])) echo "<p>" . htmlspecialchars($_GET["msg"], ENT_QUOTES, "UTF-8") . "</p>";
         if (isset($_GET["refresh"])) header("refresh: " . $_GET["refresh"]);
     ?>
 

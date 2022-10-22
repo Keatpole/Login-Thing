@@ -213,7 +213,7 @@
 
                 echo "<div class=\"comments\">";
     
-                $result = getTable($conn, "log");
+                $result = getTable($conn, "log", "", true);
     
                 if ($result->num_rows > 0) {
                     echo "<h2>Log</h2>";

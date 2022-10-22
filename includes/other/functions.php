@@ -7,8 +7,8 @@ if (isset($_SESSION["tempacc"]) && $_SESSION["tempacc"] && !in_array($_GET["webn
     if (isset($prevent_temp_logout) && $prevent_temp_logout) {
         
     } else {
-        deleteTable($conn, "groups", ["id", $_SESSION["modhelpgroup"]]);
-        deleteTable($conn, "groupmessages", ["groupId", $_SESSION["modhelpgroup"]]);
+        deleteTable($conn, "modhelpgroups", ["id", $_SESSION["modhelpgroup"]]);
+        deleteTable($conn, "modhelpmessages", ["groupId", $_SESSION["modhelpgroup"]]);
         header("location: includes/account/logout");
         exit();
     }
@@ -18,6 +18,13 @@ if (!$settings->enable_public && $_SERVER['HTTP_HOST'] != "localhost") {
     #echo "<link rel=\"stylesheet\" href=\"../../style.css\">";
     die("<h1>This website is not public at the moment.</h1>");
 }
+
+$session_started = session_status() == PHP_SESSION_ACTIVE;
+if (!$session_started) session_start();
+
+$_USER = null;
+
+if (isset($_SESSION["id"])) $_USER = getTable($conn, "users", ["id", $_SESSION["id"]]);
 
 function uidExists($conn, $username, $email) {
     $sql = "SELECT * FROM users WHERE uid = ? OR email = ?;";
@@ -52,8 +59,10 @@ function getTable($conn, $table, $where="", $multiple=false) {
             exit();
         }
         mysqli_stmt_execute($stmt);
-        return mysqli_stmt_get_result($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        if (!$multiple) $result = mysqli_fetch_assoc($result);
         mysqli_stmt_close($stmt);
+        return $result;
     } else {
         $sql = "SELECT * FROM " . $table . " WHERE " . $where[0] . " = ?;";
         $stmt = mysqli_stmt_init($conn);
@@ -64,12 +73,11 @@ function getTable($conn, $table, $where="", $multiple=false) {
         mysqli_stmt_bind_param($stmt, "s", $where[1]);
         mysqli_stmt_execute($stmt);
 
-        if ($multiple) {
-            return mysqli_stmt_get_result($stmt);
-        } else {
-            return mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
-        }
+        $result = mysqli_stmt_get_result($stmt);
+        if (!$multiple) $result = mysqli_fetch_assoc($result);
+
         mysqli_stmt_close($stmt);
+        return $result;
     }
 }
 

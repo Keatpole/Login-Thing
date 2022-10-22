@@ -22,7 +22,7 @@
 
         $sessions = 0;
         $ids = [];
-        foreach (mysqli_fetch_all(getTable($conn, "sessions")) as $res) {
+        foreach (mysqli_fetch_all(getTable($conn, "sessions", "", true)) as $res) {
             if ($res[1] == $_SESSION["id"]) {
                 $sessions++;
                 $ids[] = $res[0];

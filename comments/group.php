@@ -28,7 +28,7 @@
 
         $access = false;
         foreach (explode(",", $group["members"]) as $v) {
-            if ($v == $_SESSION["id"] || $_SESSION["rank"] >= 2) {
+            if ($v == $_SESSION["id"] || $_SESSION["rank"] >= 2 || $_SESSION["modhelpgroup"] == $group["id"]) {
                 $access = true;
                 break;
             }
@@ -74,7 +74,7 @@
 
             $has = false;
 
-            foreach (mysqli_fetch_all(getTable($conn, "groupmessages")) as $res) {
+            foreach (mysqli_fetch_all(getTable($conn, "groupmessages", "", true)) as $res) {
                 if ($res[4] != $_GET["g"]) continue;
                 else $has = true;
             }
@@ -85,7 +85,7 @@
 
             $hasreply = false;
 
-            foreach (mysqli_fetch_all(getTable($conn, "groupmessages")) as $res) {
+            foreach (mysqli_fetch_all(getTable($conn, "groupmessages", "", true)) as $res) {
                 if ($res[4] != $_GET["g"]) {
                     continue;
                 }

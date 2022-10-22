@@ -61,7 +61,7 @@
 
             $comments_h2_displayed = false;
 
-            foreach (mysqli_fetch_all(getTable($conn, "messages")) as $res) {
+            foreach (mysqli_fetch_all(getTable($conn, "messages", "", true)) as $res) {
 
                 $has = true;
                 $comments_h2_displayed = true;

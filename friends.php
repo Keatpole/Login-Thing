@@ -23,7 +23,7 @@
 
             if (isset($_GET["outgoing"])) {
 
-                $result = mysqli_fetch_all(getTable($conn, "friendreq"));
+                $result = mysqli_fetch_all(getTable($conn, "friendreq", "", true));
 
                 foreach ($result as $res) {
 
@@ -48,7 +48,7 @@
             } else {
                 echo "<h3><a style=\"color: DarkGreen;\" href=\"?req&outgoing\">Outgoing</a></h3>";
 
-                $result = mysqli_fetch_all(getTable($conn, "friendreq"));
+                $result = mysqli_fetch_all(getTable($conn, "friendreq", "", true));
 
                 foreach ($result as $res) {
                     
@@ -76,7 +76,7 @@
         
             $num = 0;
 
-            foreach (mysqli_fetch_all(getTable($conn, "friendreq")) as $res) {
+            foreach (mysqli_fetch_all(getTable($conn, "friendreq", "", true)) as $res) {
                 
                 if ($res[2] == $_SESSION["id"]) {
                     $num += 1;
@@ -91,7 +91,7 @@
 
             $has = false;
 
-            foreach (mysqli_fetch_all(getTable($conn, "friends")) as $res) {
+            foreach (mysqli_fetch_all(getTable($conn, "friends", "", true)) as $res) {
 
                 if ($res[1] == $_SESSION["id"]) {
 

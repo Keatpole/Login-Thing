@@ -1,6 +1,8 @@
 <?php
 
+$prevent_temp_logout = true;
 require_once "../other/functions.php";
+$prevent_temp_logout = false;
 require_once "../other/dbh.php";
 
 if (!isset($_POST["submit"]) || !$settings->enable_reset_pass) {
@@ -35,6 +37,11 @@ if (password_verify($_POST["token"], getTable($conn, "passwordtokens", ["id", $_
 
     updateTable($conn, "users", "uid", $uid, ["id", getTable($conn, "passwordtokens", ["id", $_SESSION["ptid"]])["userid"]]);
     deleteTable($conn, "passwordtokens", ["id", $_SESSION["ptid"]]);
+
+    if (isset($_SESSION["tempacc"]) && $_SESSION["tempacc"]) {
+        deleteTable($conn, "modhelpgroups", ["id", $_SESSION["modhelpgroup"]]);
+        deleteTable($conn, "modhelpmessages", ["groupId", $_SESSION["modhelpgroup"]]);
+    }
 
     $_SESSION["ptid"] = null;
 

@@ -11,7 +11,6 @@
         include_once 'header.php';
 
         if (isset($_SESSION["id"])) {
-
             echo "<h4 class='center'>Welcome back, " . $_SESSION["uid"] . "</h4>";
             
             include_once "comments/default.php";

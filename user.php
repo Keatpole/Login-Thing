@@ -29,7 +29,7 @@
             echo "<h4>Rank: " . rankFromNum($_SESSION["rank"]) . "</h4>";
 
             $friends = 0;
-            foreach (mysqli_fetch_all(getTable($conn, "friends")) as $res) {
+            foreach (mysqli_fetch_all(getTable($conn, "friends", "", true)) as $res) {
                 if ($res[1] == $_SESSION["id"] || $res[2] == $_SESSION["id"]) {
                     if (getTable($conn, "users", ["id", $res[1]]) != null && getTable($conn, "users", ["id", $res[2]]) != null) {
                         $friends++;
@@ -39,7 +39,7 @@
             echo "<h4>Friends: " . strval($friends) . "</h4>";
 
             $sessions = 0;
-            foreach (mysqli_fetch_all(getTable($conn, "sessions")) as $res) {
+            foreach (mysqli_fetch_all(getTable($conn, "sessions", "", true)) as $res) {
                 if ($res[1] == $_SESSION["id"]) {
                     $sessions++;
                 }
@@ -50,6 +50,7 @@
             echo "<a href=\".?mentions=" . $user["uid"] . "\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Mentions</a> ";
             echo "<a href=\"appeal\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Appeal</a> ";
             echo "<a href=\"sessions\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Sessions</a> ";
+            echo "<a href=\"seccodes\" class=\"button\" style=\"font: 400 13.3333px Arial; font-size: 16px;\">Security Codes</a> ";
             if (isset($_GET["deleteConfirm"])) {
                 echo "<a href='includes/account/delete'><button class='button'>Confirm Account Deletion</button></a> ";
             } else {
@@ -94,7 +95,7 @@
 
             $friends = 0;
 
-            foreach (mysqli_fetch_all(getTable($conn, "friendreq")) as $res) {
+            foreach (mysqli_fetch_all(getTable($conn, "friendreq", "", true)) as $res) {
                 if ($res[1] == $_SESSION["id"]) {
                     if ($res[1] == $_GET["u"] || $res[2] == $_GET["u"]) {
                         $btnId = $res[0];
@@ -108,7 +109,7 @@
                     $sentReq = $res;
                 }
             }
-            foreach (mysqli_fetch_all(getTable($conn, "friends")) as $res) {
+            foreach (mysqli_fetch_all(getTable($conn, "friends", "", true)) as $res) {
                 if ($res[1] == $_SESSION["id"] || $res[2] == $_SESSION["id"]) {
                     if ($res[1] == $_GET["u"] || $res[2] == $_GET["u"]) {
                         $btnId = $res[0];

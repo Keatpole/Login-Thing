@@ -29,7 +29,7 @@
 
             $has = false;
 
-            foreach (mysqli_fetch_all(getTable($conn, "messages")) as $res) {
+            foreach (mysqli_fetch_all(getTable($conn, "messages", "", true)) as $res) {
                 if ($res[2] != $_GET["u"]) continue;
                 else $has = true;
             }
@@ -40,7 +40,7 @@
 
             $hasreply = false;
 
-            foreach (mysqli_fetch_all(getTable($conn, "messages")) as $res) {
+            foreach (mysqli_fetch_all(getTable($conn, "messages", "", true)) as $res) {
                 if ($res[2] != $_GET["u"]) {
                     continue;
                 }

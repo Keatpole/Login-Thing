@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.1.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 04, 2022 at 06:07 PM
--- Server version: 10.4.22-MariaDB
--- PHP Version: 8.1.1
+-- Generation Time: Oct 12, 2022 at 10:37 AM
+-- Server version: 10.4.18-MariaDB
+-- PHP Version: 8.0.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -46,56 +46,6 @@ CREATE TABLE `bans` (
   `id` int(11) NOT NULL,
   `banner` int(255) NOT NULL,
   `target` int(255) NOT NULL,
-  `date` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `deletedgroupmessages`
---
-
-CREATE TABLE `deletedgroupmessages` (
-  `id` int(11) NOT NULL,
-  `msgid` int(255) NOT NULL,
-  `message` varchar(250) NOT NULL,
-  `author` int(255) NOT NULL,
-  `replyTo` int(255) NOT NULL,
-  `groupId` int(255) NOT NULL,
-  `createdate` datetime NOT NULL,
-  `date` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `deletedmessages`
---
-
-CREATE TABLE `deletedmessages` (
-  `id` int(11) NOT NULL,
-  `msgid` int(255) NOT NULL,
-  `message` varchar(250) NOT NULL,
-  `author` int(255) NOT NULL,
-  `likes` bigint(255) NOT NULL DEFAULT 0,
-  `replyTo` int(255) NOT NULL,
-  `createdate` datetime NOT NULL,
-  `date` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `deletedprivatemessages`
---
-
-CREATE TABLE `deletedprivatemessages` (
-  `id` int(11) NOT NULL,
-  `msgid` int(255) NOT NULL,
-  `message` varchar(250) NOT NULL,
-  `author` int(255) NOT NULL,
-  `receiver` int(255) NOT NULL,
-  `createdate` datetime NOT NULL,
   `date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -201,6 +151,38 @@ CREATE TABLE `messages` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `modhelpgroups`
+--
+
+CREATE TABLE `modhelpgroups` (
+  `id` int(11) NOT NULL,
+  `name` varchar(128) NOT NULL,
+  `bumps` int(11) NOT NULL DEFAULT 0,
+  `ownerbumps` int(11) NOT NULL DEFAULT 0,
+  `verified` int(11) NOT NULL DEFAULT 0,
+  `votes` int(11) NOT NULL DEFAULT 0,
+  `votees` text NOT NULL DEFAULT '',
+  `date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `modhelpmessages`
+--
+
+CREATE TABLE `modhelpmessages` (
+  `id` int(11) NOT NULL,
+  `message` text NOT NULL,
+  `author` int(11) NOT NULL,
+  `replyTo` int(11) DEFAULT NULL,
+  `groupId` int(11) NOT NULL,
+  `date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `modsuggestions`
 --
 
@@ -271,6 +253,19 @@ CREATE TABLE `reports` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `securitycodes`
+--
+
+CREATE TABLE `securitycodes` (
+  `id` int(11) NOT NULL,
+  `uuid` int(11) NOT NULL,
+  `questions` text NOT NULL DEFAULT '',
+  `answers` text NOT NULL DEFAULT ''
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `sessions`
 --
 
@@ -307,7 +302,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `email`, `uid`, `pwd`, `rank`, `verified`, `deleted`, `deletedate`, `date`) VALUES
-(1, 'a@a.a', 'Test', '$2y$10$gNEg6P8H6kGBnpDqufOMneF7lFUv9JcLBw7ML06j3WjQ8ib3Q3D06', 3, 1, b'0', NULL, '2022-08-04 18:06:41');
+(1, 'a@a.a', 'Test', '$2y$10$40ztWQnbCEr6edXJ9fW25eH04x8KwWdBQbQNeK4Yu.C1wQVk40IUO', 3, 1, b'0', NULL, '2022-10-12 09:28:38');
 
 --
 -- Indexes for dumped tables
@@ -323,24 +318,6 @@ ALTER TABLE `appeals`
 -- Indexes for table `bans`
 --
 ALTER TABLE `bans`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `deletedgroupmessages`
---
-ALTER TABLE `deletedgroupmessages`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `deletedmessages`
---
-ALTER TABLE `deletedmessages`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `deletedprivatemessages`
---
-ALTER TABLE `deletedprivatemessages`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -386,6 +363,18 @@ ALTER TABLE `messages`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `modhelpgroups`
+--
+ALTER TABLE `modhelpgroups`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `modhelpmessages`
+--
+ALTER TABLE `modhelpmessages`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `modsuggestions`
 --
 ALTER TABLE `modsuggestions`
@@ -416,6 +405,12 @@ ALTER TABLE `reports`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `securitycodes`
+--
+ALTER TABLE `securitycodes`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `sessions`
 --
 ALTER TABLE `sessions`
@@ -441,24 +436,6 @@ ALTER TABLE `appeals`
 -- AUTO_INCREMENT for table `bans`
 --
 ALTER TABLE `bans`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `deletedgroupmessages`
---
-ALTER TABLE `deletedgroupmessages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `deletedmessages`
---
-ALTER TABLE `deletedmessages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `deletedprivatemessages`
---
-ALTER TABLE `deletedprivatemessages`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -504,6 +481,18 @@ ALTER TABLE `messages`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `modhelpgroups`
+--
+ALTER TABLE `modhelpgroups`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `modhelpmessages`
+--
+ALTER TABLE `modhelpmessages`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `modsuggestions`
 --
 ALTER TABLE `modsuggestions`
@@ -531,6 +520,12 @@ ALTER TABLE `privatemessages`
 -- AUTO_INCREMENT for table `reports`
 --
 ALTER TABLE `reports`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `securitycodes`
+--
+ALTER TABLE `securitycodes`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --

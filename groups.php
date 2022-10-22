@@ -16,6 +16,13 @@
             exit();
         }
 
+        if (isset($_SESSION["modhelpgroup"])) {
+            if (!isset($_GET["mhg"]) && $_GET["mhg"] != $_SESSION["modhelpgroup"]) {
+                header("location: group?mhg=" . $_SESSION["modhelpgroup"]);
+                exit();
+            }
+        }
+
         $groups = getTable($conn, "groups", "", true);
 
         if (isset($_GET["g"])) {
@@ -24,6 +31,14 @@
 
             exit();
 
+        }
+
+        if (isset($_GET["mhg"])) {
+            $_GET["g"] = $_GET["mhg"];
+
+            include_once "comments/modhelp.php";
+
+            exit();
         }
 
     ?>
@@ -111,12 +126,38 @@
 
     }
 
+    $admin_h2_displayed = false;
+
+    if ($_SESSION["rank"] >= 1) {
+        $sql = "SELECT * FROM `modhelpgroups` ORDER BY `bumps` DESC;";
+        $stmt = mysqli_stmt_init($conn);
+        if (!mysqli_stmt_prepare($stmt, $sql)) {
+            header("location: ./?error=stmtfailed");
+            exit();
+        }
+        mysqli_stmt_execute($stmt);
+        $_groups = mysqli_stmt_get_result($stmt);
+        mysqli_stmt_close($stmt);
+
+        foreach ($_groups as $i) {
+            if ($_SESSION["rank"] <= 0) continue;
+
+            if (!$admin_h2_displayed) {
+                echo "</br></br></br><h2>Admin</h2>";
+                $admin_h2_displayed = true;
+            }
+            
+            ?>
+
+                <button class="button"><a style="color: white; text-decoration: none;" href="?mhg=<?= $i["id"] ?>">View group <?= $i["name"] ?>.</a></button>
+
+            <?php
+        }
+    }
+
     if ($_SESSION["rank"] >= 2 && $has) {
-        
-        $admin_h2_displayed = false;
 
-        foreach ($groups as $i) {
-
+        foreach ($groups as $i) {      
             $in = false;
             foreach (explode(",", $i["members"]) as $v) {
                 if ($v == $_SESSION["id"]) {
